@@ -1,4 +1,4 @@
-# Yuno SDK for Flutter
+# Yuno SDK - Flutter
 <?code-excerpt path-base="example/lib"?>
 
 
