@@ -1,4 +1,4 @@
-# Shared preferences plugin
+# Yuno SDK for Flutter
 <?code-excerpt path-base="example/lib"?>
 
 
