@@ -1,0 +1,37 @@
+name: yuno_sdk
+description: "A new Flutter plugin project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  yuno_sdk_android:
+    path: ../yuno_sdk_android
+  yuno_sdk_foundation:
+   path: ../yuno_sdk_foundation
+  yuno_sdk_platform_interface:
+   path: ../yuno_sdk_platform_interface
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+
+
+flutter:
+
+  plugin:
+    platforms:
+      android:
+        default_package: yuno_sdk_android
+      ios:
+        default_package: yuno_sdk_foundation
+
