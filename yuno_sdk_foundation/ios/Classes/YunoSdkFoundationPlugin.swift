@@ -1,5 +1,7 @@
 import Flutter
 import UIKit
+import YunoSDK
+
 
 public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
