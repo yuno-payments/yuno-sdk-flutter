@@ -18,6 +18,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://yunopayments.jfrog.io/artifactory/snapshots-libs-release" }
     }
 }
 
@@ -50,8 +51,10 @@ android {
     }
 
     dependencies {
+        implementation 'com.yuno.payments:android-sdk:1.11.1'
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
+
     }
 
     testOptions {
@@ -66,3 +69,5 @@ android {
         }
     }
 }
+
+

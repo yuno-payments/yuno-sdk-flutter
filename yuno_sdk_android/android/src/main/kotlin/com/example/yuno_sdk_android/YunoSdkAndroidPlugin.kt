@@ -1,5 +1,6 @@
 package com.example.yuno_sdk_android
 
+import android.view.View
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -7,6 +8,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.embedding.engine.FlutterEngine
+import com.yuno.payments.features.payment.startPayment
+
 
 /** YunoSdkAndroidPlugin */
 class YunoSdkAndroidPlugin: FlutterPlugin, MethodCallHandler {
@@ -32,4 +36,22 @@ class YunoSdkAndroidPlugin: FlutterPlugin, MethodCallHandler {
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
+
+
+
+//  override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+//    super.configureFlutterEngine(flutterEngine)
+//    MethodChannel(
+//      flutterEngine.dartExecutor.binaryMessenger,
+//      "yuno_sdk_android"
+//    ).setMethodCallHandler { call, result ->
+//      when(call.method){
+//        "getPlatformVersion" -> {
+//
+//          result.success("Android ${android.os.Build.VERSION.RELEASE}")
+//        }
+//      }
+//
+//    }
+//  }
 }
