@@ -36,22 +36,4 @@ class YunoSdkAndroidPlugin: FlutterPlugin, MethodCallHandler {
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
-
-
-
-//  override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-//    super.configureFlutterEngine(flutterEngine)
-//    MethodChannel(
-//      flutterEngine.dartExecutor.binaryMessenger,
-//      "yuno_sdk_android"
-//    ).setMethodCallHandler { call, result ->
-//      when(call.method){
-//        "getPlatformVersion" -> {
-//
-//          result.success("Android ${android.os.Build.VERSION.RELEASE}")
-//        }
-//      }
-//
-//    }
-//  }
 }

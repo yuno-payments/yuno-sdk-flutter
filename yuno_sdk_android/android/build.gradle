@@ -54,7 +54,6 @@ android {
         implementation 'com.yuno.payments:android-sdk:1.11.1'
         testImplementation("org.jetbrains.kotlin:kotlin-test")
         testImplementation("org.mockito:mockito-core:5.0.0")
-
     }
 
     testOptions {
