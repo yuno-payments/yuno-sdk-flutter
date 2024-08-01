@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yuno_sdk_core/commons/lib/src/result.dart';
+import 'package:yuno_sdk_core/commons/src/result.dart';
 
 
 void main() {
