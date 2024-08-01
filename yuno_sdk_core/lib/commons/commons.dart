@@ -1,1 +1,1 @@
-export 'lib/lib.dart';
+export 'src/src.dart';
