@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'yuno_sdk_platform_interface_platform_interface.dart';
+
 
 /// An implementation of [YunoSdkPlatformInterfacePlatform] that uses method channels.
 class MethodChannelYunoSdkPlatformInterface extends YunoSdkPlatformInterfacePlatform {
