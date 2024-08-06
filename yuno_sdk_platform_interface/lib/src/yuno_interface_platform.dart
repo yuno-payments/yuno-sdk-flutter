@@ -1,4 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:yuno_sdk_platform_interface/src/yuno_method_channel.dart';
 
 
 
@@ -23,9 +24,7 @@ abstract interface class YunoPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-
   Future<void> initialize();
-  Future<void> paymentMethodsAvailable();
-  Future<void> startPaymentLite();
+
   
 }
