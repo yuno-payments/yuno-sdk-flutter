@@ -1,8 +1,13 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:yuno_sdk_platform_interface/src/yuno_method_channel.dart';
 
-
-
+/// {@template commons_YunoPlatform}
+/// ## YunoPlatform
+/// You can access to the instance using direct the static method
+/// ```
+/// final instance = YunoPlatform.instance;
+/// ```
+/// {@endtemplate}
 abstract interface class YunoPlatform extends PlatformInterface {
   /// Constructs a YunoSdkPlatformInterfacePlatform.
   YunoPlatform() : super(token: _token);
@@ -24,7 +29,9 @@ abstract interface class YunoPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  
   Future<void> initialize();
 
   
+
 }

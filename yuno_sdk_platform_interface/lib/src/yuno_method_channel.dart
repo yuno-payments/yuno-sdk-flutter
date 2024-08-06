@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_platform_interface/src/yuno_interface_platform.dart';
 
-/// An implementation of [YunoPlatform] that uses method channels.
 class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
 
@@ -21,15 +19,19 @@ class YunoMethodChannel implements YunoPlatform {
 
 
   @override
-  Future<void> initialize() async{
-    
+  Future<void> initialize() {
+    //TODO: implemented method
+      throw UnimplementedError();
   }
   
- 
-  
-
 }
 
+/// {@template commons_YunoMethodChannelFactory}
+/// ## YunoMethodChannelFactory
+/// ```
+///  static YunoPlatform _instance = const YunoMethodChannelFactory().create();
+/// ```
+/// {@endtemplate}
 class YunoMethodChannelFactory {
   const YunoMethodChannelFactory();
 
