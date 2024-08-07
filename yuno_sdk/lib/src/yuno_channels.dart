@@ -1,6 +1,6 @@
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-class Yuno {
+class YunoChannels {
 
     static YunoPlatform? __platform;
       static YunoPlatform get _platform {
@@ -8,6 +8,6 @@ class Yuno {
     return __platform!;
   }
 
-  static get inizialise async => await _platform.initialize();
+  static Future<void> inizialise() async => await _platform.initialize();
 
 }
