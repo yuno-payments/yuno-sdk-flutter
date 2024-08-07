@@ -8,6 +8,7 @@ class YunoChannels {
     return __platform!;
   }
 
-  static Future<void> inizialise() async => await _platform.initialize();
+  static Future<void> liteInit() async => await _platform.liteInitialize();
+  static Future<void> fullInit() async => await _platform.liteInitialize();
 
 }

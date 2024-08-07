@@ -16,13 +16,21 @@ class YunoMethodChannel implements YunoPlatform {
   final MethodChannel _methodChannel;
   final bool _platformIsIos;
   final bool _platformIsAndroid;
-
-
+  
   @override
-  Future<void> initialize() {
-    //TODO: implemented method
-      throw UnimplementedError();
+  Future<void> liteInitialize() {
+    // TODO: implement liteInitialize
+    throw UnimplementedError();
   }
+  
+  @override
+  Future<void> fullInitialize() {
+    // TODO: implement fullInitialize
+    throw UnimplementedError();
+  }
+
+
+ 
   
 }
 
