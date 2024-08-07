@@ -30,7 +30,8 @@ abstract interface class YunoPlatform extends PlatformInterface {
   }
 
   
-  Future<void> initialize();
+  Future<void> liteInitialize();
+  Future<void> fullInitialize();
 
   
 

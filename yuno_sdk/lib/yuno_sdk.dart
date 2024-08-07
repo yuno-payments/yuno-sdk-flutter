@@ -8,6 +8,7 @@ class Yuno {
     return __platform!;
   }
 
-  static get inizialise async => await _platform.initialize();
+  static Future<void> liteInit() async => await _platform.liteInitialize();
+  static Future<void> fullInit() async => await _platform.liteInitialize();
 
 }
