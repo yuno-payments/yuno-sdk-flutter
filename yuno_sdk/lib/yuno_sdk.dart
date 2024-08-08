@@ -9,6 +9,6 @@ class Yuno {
   }
 
   static Future<void> liteInit() async => await _platform.liteInitialize();
-  static Future<void> fullInit() async => await _platform.liteInitialize();
+  static Future<void> fullInit() async => await _platform.fullInitialize();
 
 }
