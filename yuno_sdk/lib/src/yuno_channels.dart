@@ -1,4 +1,4 @@
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'internals.dart';
 
 class YunoChannels {
   static YunoPlatform? __platform;
@@ -9,21 +9,24 @@ class YunoChannels {
 
   static Future<void> init({
     required String apiKey,
+    required YunoSdkType sdkType,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
 
-    //TODO: implemented validtion  depend is Full or Lite
-    await _platform.liteInitialize(
+    if (sdkType == YunoSdkType.full) {
+      await _platform.fullInitialize(
+        apiKey: apiKey,
+        iosConfig: iosConfig,
+        androidConfig: androidConfig,
+      );
+    }else{
+      await _platform.liteInitialize(
       apiKey: apiKey,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );
-
-    await _platform.liteInitialize(
-      apiKey: apiKey,
-      iosConfig: iosConfig,
-      androidConfig: androidConfig,
-    );
+    }
+  
   }
 }

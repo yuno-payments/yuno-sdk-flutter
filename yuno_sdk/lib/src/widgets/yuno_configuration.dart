@@ -29,6 +29,7 @@ class _YunoState extends State<Yuno> {
         apiKey: widget.apiKey,
         iosConfig: widget.iosConfig,
         androidConfig: widget.androidConfig,
+        sdkType: widget.sdkType
       );
     });
   }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
@@ -18,15 +19,12 @@ class YunoMethodChannel implements YunoPlatform {
   final bool _platformIsIos;
   final bool _platformIsAndroid;
 
-  @override
-  Future<void> fullInitialize({
-    required String apiKey,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
-  }) {
-    // TODO: implement fullInitialize
-    throw UnimplementedError();
-  }
+
+  @visibleForTesting
+  bool get isIos => _platformIsIos;
+  @visibleForTesting
+  bool get isAndroid => _platformIsAndroid;
+  
 
   @override
   Future<void> liteInitialize({
@@ -37,6 +35,18 @@ class YunoMethodChannel implements YunoPlatform {
     // TODO: implement liteInitialize
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> fullInitialize({
+    required String apiKey,
+    IosConfig? iosConfig,
+    AndroidConfig? androidConfig,
+  }) {
+    // TODO: implement fullInitialize
+    throw UnimplementedError();
+  }
+
+
 }
 
 /// {@template commons_YunoMethodChannelFactory}
