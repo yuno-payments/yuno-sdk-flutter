@@ -30,9 +30,17 @@ abstract interface class YunoPlatform extends PlatformInterface {
   }
 
   
+/// {@template commons_liteInitialize}
+/// ## Method: liteInitialize()
+/// Help us to initilize lite in Android and IOS for Yuno SDK
+///{@tool snippet}
+/// ```dart
+/// 
+/// ```
+/// {@end-tool}
+/// {@endtemplate}
   Future<void> liteInitialize();
   Future<void> fullInitialize();
 
-  
 
 }

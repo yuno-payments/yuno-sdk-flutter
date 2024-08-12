@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_platform_interface/src/yuno_interface_platform.dart';
 
@@ -16,6 +17,12 @@ class YunoMethodChannel implements YunoPlatform {
   final MethodChannel _methodChannel;
   final bool _platformIsIos;
   final bool _platformIsAndroid;
+
+
+  @visibleForTesting
+  bool get isIos => _platformIsIos;
+  @visibleForTesting
+  bool get isAndroid => _platformIsAndroid;
   
   @override
   Future<void> liteInitialize() {
@@ -29,8 +36,6 @@ class YunoMethodChannel implements YunoPlatform {
     throw UnimplementedError();
   }
 
-
- 
   
 }
 
