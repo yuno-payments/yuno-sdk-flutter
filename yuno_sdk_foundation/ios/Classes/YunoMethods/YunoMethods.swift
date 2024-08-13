@@ -5,6 +5,7 @@
 //  Created by steven on 10/08/24.
 //
 
+import Flutter
 import Foundation
 import YunoSDK
 
@@ -36,7 +37,7 @@ class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
     
     
-    func initialize(app:AppConfiguration){
+    private func initialize(app:AppConfiguration){
         let appearance = app.configuration?.appearance;
         let configuration = app.configuration;
         let cardFormType = CardFlow(rawValue: configuration?.cardflow ?? "oneStep")
@@ -64,4 +65,33 @@ class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
         Yuno.startCheckout(with: self)
     }
     
+}
+
+
+extension YunoMethods {
+    
+     func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        guard let args = call.arguments as? [String:Any] else{
+            return  result(FlutterError(code: "4", message: "Invalid arguments", details: "Arguments are invalid"))
+        }
+        
+        do{
+            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
+            let decoder = JSONDecoder()
+            let app = try decoder.decode(AppConfiguration.self, from: jsonData)
+            
+            if app.apiKey.isEmpty || app.countryCode.isEmpty {
+                return result(FlutterError(code: "3", message: "Missing API Key or Country Code", details: "Missing params"))
+            }
+            
+            self.initialize(app: app )
+     
+            return result(true)
+            
+        }catch{
+         return   result(FlutterError(code: "0", message: "Unexpected Exception", details: "Something went wrong"))
+        }
+     
+    }
 }
