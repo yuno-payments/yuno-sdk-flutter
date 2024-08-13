@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-
 void main() {
   group('YunoMethodChannel Tests', () {
     late MethodChannel methodChannel;
@@ -40,7 +39,8 @@ void main() {
         platformIsAndroid: true,
       );
 
-      expect(() => yunoMethodChannel.liteInitialize(apiKey: ''), throwsUnimplementedError);
+      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
+          throwsUnimplementedError);
     });
 
     test('fullInitialize throws UnimplementedError', () {
@@ -50,7 +50,8 @@ void main() {
         platformIsAndroid: false,
       );
 
-      expect(() => yunoMethodChannel.fullInitialize(apiKey: ''), throwsUnimplementedError);
+      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
+          throwsUnimplementedError);
     });
   });
 }

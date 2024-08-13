@@ -31,14 +31,9 @@ abstract interface class YunoPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<void> liteInitialize({
+  Future<void> initialize({
     required String apiKey,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
-  });
-  
-  Future<void> fullInitialize({
-    required String apiKey,
+    required String countryCode,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   });

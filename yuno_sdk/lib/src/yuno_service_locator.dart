@@ -1,17 +1,18 @@
-import 'package:yuno_sdk_core/commons/src/injector.dart';
+import 'internals.dart';
 
-class YunoServiceLocator {
-  static final _instance = Injector();
-
-
-  Future<void> init()async{
-
-    
+extension Sl on Never {
+  static Future<void> init({required YunoSdkType sdkType}) async {
+    _instance.registerLazySingleton<YunoChannels>(
+      () => YunoChannelMethods(
+        sdkType: sdkType,
+      ),
+    );
   }
 
-  Future<void> destroy()async{
+  static Future<void> destroy() async {
     _instance.unregister();
   }
-  
-}
 
+  static final _instance = Injector();
+  static Injector get instance => _instance;
+}

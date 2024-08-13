@@ -1,1 +1,1 @@
-export 'yuno_configuration.dart';
+export 'yuno_provider.dart';

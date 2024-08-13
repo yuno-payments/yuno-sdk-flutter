@@ -26,51 +26,62 @@ sealed class YunoException implements Exception {
   final int preffix;
 }
 
-
 /// {@template commons_Errors}
 /// # YunoUnexpectedException
-/// 
+///
 /// This type of error occurs when something went wrong and the origin is unknown.
 /// {@endtemplate}
 class YunoUnexpectedException extends YunoException {
   YunoUnexpectedException({
-     super.msg = 'Unexpected Exception',
-     super.preffix = 0,
+    super.msg = 'Unexpected Exception',
+    super.preffix = 0,
   });
 }
 
 /// {@template commons_Errors}
 /// # YunoMethodNotImplemented
-/// 
+///
 /// This type of error occurs when a method is not implemented.
 /// {@endtemplate}
 class YunoMethodNotImplemented extends YunoException {
   YunoMethodNotImplemented({
-     super.msg = 'Method not implemented',
-     super.preffix = 1,
+    super.msg = 'Method not implemented',
+    super.preffix = 1,
   });
 }
 
 /// {@template commons_Errors}
 /// # YunoTimeout
-/// 
+///
 /// This type of error occurs when occurs a timeout.
 /// {@endtemplate}
 class YunoTimeout extends YunoException {
   YunoTimeout({
-     super.msg = 'Timeout',
-     super.preffix = 2,
+    super.msg = 'Timeout',
+    super.preffix = 2,
   });
 }
 
 /// {@template commons_Errors}
 /// # YunoMissingParam
-/// 
+///
 /// This type of error occurs when missing one or multiple params.
 /// {@endtemplate}
 class YunoMissingParam extends YunoException {
   YunoMissingParam({
-     super.msg = 'Missing Params',
-     super.preffix = 3,
+    super.msg = 'Missing Params',
+    super.preffix = 3,
+  });
+}
+
+/// {@template commons_Errors}
+/// # YunoInvalidArguments
+///
+/// This type of error occurs when an argument is invalid.
+/// {@endtemplate}
+class YunoInvalidArguments extends YunoException {
+  YunoInvalidArguments({
+    super.msg = 'Invalid argument',
+    super.preffix = 4,
   });
 }

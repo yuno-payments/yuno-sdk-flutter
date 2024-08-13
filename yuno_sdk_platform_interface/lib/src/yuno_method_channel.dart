@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-
 class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
 
@@ -15,38 +14,35 @@ class YunoMethodChannel implements YunoPlatform {
         _platformIsAndroid = platformIsAndroid,
         _platformIsIos = platformIsIos;
 
-  final MethodChannel _methodChannel;
-  final bool _platformIsIos;
-  final bool _platformIsAndroid;
-
-
   @visibleForTesting
   bool get isIos => _platformIsIos;
   @visibleForTesting
   bool get isAndroid => _platformIsAndroid;
-  
+
+  final MethodChannel _methodChannel;
+  final bool _platformIsIos;
+  final bool _platformIsAndroid;
 
   @override
-  Future<void> liteInitialize({
+  Future<void> initialize({
     required String apiKey,
+    required String countryCode,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
-  }) {
-    // TODO: implement liteInitialize
-    throw UnimplementedError();
+  }) async {
+    final mapper = isAndroid
+        ? Parser.toMap(
+            apiKey: apiKey,
+            countryCode: countryCode,
+            configuration: androidConfig?.toMap(),
+          )
+        : Parser.toMap(
+            apiKey: apiKey,
+            countryCode: countryCode,
+            configuration: iosConfig?.toMap(),
+          );
+    await _methodChannel.invokeMethod('initialize', mapper);
   }
-
-  @override
-  Future<void> fullInitialize({
-    required String apiKey,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
-  }) {
-    // TODO: implement fullInitialize
-    throw UnimplementedError();
-  }
-
-
 }
 
 /// {@template commons_YunoMethodChannelFactory}
