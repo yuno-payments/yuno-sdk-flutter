@@ -9,8 +9,8 @@ extension Sl on Never {
     );
   }
 
-  static Future<void> destroy() async {
-    _instance.unregister();
+  static void reset() async {
+    _instance.reset();
   }
 
   static final _instance = Injector();

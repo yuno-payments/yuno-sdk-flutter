@@ -44,6 +44,6 @@ class _YunoProviderState extends State<YunoProvider> {
   @override
   void dispose() {
     super.dispose();
-    Sl.destroy();
+    Sl.reset();
   }
 }
