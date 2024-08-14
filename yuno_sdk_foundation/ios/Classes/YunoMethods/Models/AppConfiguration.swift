@@ -7,6 +7,7 @@
 
 import Foundation
 import YunoSDK
+import UIKit
 
 // Card Flow enum
 enum CardFlow: String {
@@ -25,7 +26,7 @@ extension CardFlow {
        }
 }
 
-import UIKit
+
 
 struct Appearance: Codable, Sendable {
     let accentColor: UIColor?
