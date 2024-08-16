@@ -14,7 +14,6 @@ class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
     var countryCode: String = ""
     var checkoutSession: String = ""
     
-    
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
         
     }
