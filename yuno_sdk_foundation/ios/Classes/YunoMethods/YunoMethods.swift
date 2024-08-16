@@ -1,21 +1,21 @@
-//
-//  YunoMethods.swift
-//  Pods
-//
-//  Created by steven on 10/08/24.
-//
+    //
+    //  YunoMethods.swift
+    //  Pods
+    //
+    //  Created by steven on 10/08/24.
+    //
 
 import Flutter
 import Foundation
 import YunoSDK
 
 class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
-    
+
     var countryCode: String = ""
     var checkoutSession: String = ""
     
+    
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
-        
         
     }
     
@@ -34,7 +34,6 @@ class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
         
     }
-    
     
     private func initialize(app:AppConfiguration){
         let appearance = app.configuration?.appearance;
@@ -59,13 +58,11 @@ class YunoMethods:  YunoPaymentDelegate, YunoMethodsViewDelegate {
                 keepLoader: configuration?.keepLoader ?? false,
                 isDynamicViewEnabled: configuration?.isDynamicViewEnable ?? false
             )
-            
         )
         Yuno.startCheckout(with: self)
     }
     
 }
-
 
 extension YunoMethods {
     
@@ -91,6 +88,5 @@ extension YunoMethods {
         } catch {
             return result(FlutterError(code: "0", message: "Unexpected Exception", details: "Something went wrong"))
         }
-        
     }
 }

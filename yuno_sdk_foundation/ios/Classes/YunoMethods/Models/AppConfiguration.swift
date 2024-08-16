@@ -9,24 +9,22 @@ import Foundation
 import YunoSDK
 import UIKit
 
-// Card Flow enum
+    // Card Flow enum
 enum CardFlow: String {
-    case oneStep = "oneStep"
-    case multiStep = "multiStep"
+    case oneStep
+    case multiStep
 }
 
 extension CardFlow {
     var toCardFormType: CardFormType? {
-           switch self {
-           case .oneStep:
-               return .oneStep
-           case .multiStep:
-               return .multiStep
-           }
-       }
+        switch self {
+            case .oneStep:
+                return .oneStep
+            case .multiStep:
+                return .multiStep
+        }
+    }
 }
-
-
 
 struct Appearance: Codable, Sendable {
     let accentColor: UIColor?
@@ -39,7 +37,7 @@ struct Appearance: Codable, Sendable {
     let disableButtonBackgroundColor: UIColor?
     let disableButtonTitleBackgroundColor: UIColor?
     let checkboxColor: UIColor?
-
+    
     enum CodingKeys: String, CodingKey {
         case accentColor
         case buttonBackgroundColor = "buttonBackgrounColor"
@@ -52,8 +50,7 @@ struct Appearance: Codable, Sendable {
         case disableButtonTitleBackgroundColor = "disableButtonTitleBackgrounColor"
         case checkboxColor
     }
-
-    // Custom initializer to decode from a map
+        // Custom initializer to decode from a map
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         accentColor = UIColor(hex: try container.decodeIfPresent(Int.self, forKey: .accentColor))
@@ -67,8 +64,8 @@ struct Appearance: Codable, Sendable {
         disableButtonTitleBackgroundColor = UIColor(hex: try container.decodeIfPresent(Int.self, forKey: .disableButtonTitleBackgroundColor))
         checkboxColor = UIColor(hex: try container.decodeIfPresent(Int.self, forKey: .checkboxColor))
     }
-
-    // Custom encode function
+    
+        // Custom encode function
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(accentColor?.toHex(), forKey: .accentColor)
@@ -84,18 +81,15 @@ struct Appearance: Codable, Sendable {
     }
 }
 
-
 struct Configuration: Codable, Sendable {
     let appearance: Appearance?
     let cardflow:String?
     let saveCardEnable: Bool?
     let keepLoader: Bool?
     let isDynamicViewEnable: Bool?
-
-        
-        
-    init(appearance: Appearance?, 
-         cardflow: String?, 
+    
+    init(appearance: Appearance?,
+         cardflow: String?,
          saveCardEnable: Bool?,
          keepLoader: Bool?,
          isDynamicViewEnable: Bool?
@@ -105,7 +99,6 @@ struct Configuration: Codable, Sendable {
         self.saveCardEnable = saveCardEnable
         self.keepLoader = keepLoader
         self.isDynamicViewEnable = isDynamicViewEnable
- 
     }
 }
 
@@ -119,12 +112,11 @@ struct AppConfiguration:Codable,Sendable{
         self.countryCode = countryCode
         self.configuration = configuration
     }
-
+    
 }
 
-
 extension UIColor {
-    // Initialize UIColor from hex integer
+        // Initialize UIColor from hex integer
     convenience init?(hex: Int?) {
         guard let hex = hex else { return nil }
         let red = CGFloat((hex >> 16) & 0xFF) / 255.0
@@ -133,8 +125,7 @@ extension UIColor {
         let alpha = CGFloat((hex >> 24) & 0xFF) / 255.0
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
-
-    // Convert UIColor to hex integer
+        // Convert UIColor to hex integer
     func toHex() -> Int? {
         var red: CGFloat = 0
         var green: CGFloat = 0

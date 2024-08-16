@@ -5,6 +5,7 @@ import YunoSDK
 
 public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     fileprivate let instance: YunoMethods = YunoMethods()
+    
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "yuno/payments", binaryMessenger: registrar.messenger())
@@ -13,7 +14,7 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+      guard UIApplication.shared.windows.first(where: { $0.isKeyWindow }) != nil else {
             result(FlutterError(code: "UNAVAILABLE", message: "UIWindow is not available", details: nil))
             return
         }
@@ -26,5 +27,3 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     }
   }
 }
-
-
