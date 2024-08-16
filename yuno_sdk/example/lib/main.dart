@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:yuno/yuno.dart';
 
-void main() {
-  // final injector = Injector();
-  // final channels = Result();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final yuno = await Yuno.init(
+    sdkType: YunoSdkType.full,
+    apiKey: '',
+    countryCode: '',
+  );
 
-  runApp(const MainApp());
+  runApp(
+    YunoScope(
+      yuno: yuno,
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -13,21 +22,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.yuno();
     return const MaterialApp(
-      home: YunoProvider(
-        apiKey: '',
-        countryCode: '',
-        iosConfig: IosConfig(
-          cardflow: CARDFLOW.multiStep,
-          appearance: Appearance(
-            accentColor: Colors.red,
-          ),
-        ),
-        sdkType: YunoSdkType.lite,
-        child: Scaffold(
-          body: Center(
-            child: Text('Hello World!'),
-          ),
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello World!'),
         ),
       ),
     );

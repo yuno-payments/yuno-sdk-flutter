@@ -16,6 +16,7 @@
 /// ```
 /// {@end-tool}
 /// {@endtemplate}
+///
 sealed class YunoException implements Exception {
   const YunoException({
     required this.msg,
@@ -68,10 +69,11 @@ class YunoTimeout extends YunoException {
 /// This type of error occurs when missing one or multiple params.
 /// {@endtemplate}
 class YunoMissingParam extends YunoException {
-  YunoMissingParam({
-    super.msg = 'Missing Params',
-    super.preffix = 3,
-  });
+  YunoMissingParam()
+      : super(
+          msg: 'Missing Params',
+          preffix: 3,
+        );
 }
 
 /// {@template commons_Errors}
@@ -80,8 +82,35 @@ class YunoMissingParam extends YunoException {
 /// This type of error occurs when an argument is invalid.
 /// {@endtemplate}
 class YunoInvalidArguments extends YunoException {
-  YunoInvalidArguments({
-    super.msg = 'Invalid argument',
-    super.preffix = 4,
-  });
+  YunoInvalidArguments()
+      : super(
+          msg: 'Invalid argument',
+          preffix: 4,
+        );
+}
+
+/// {@template commons_Errors}
+/// # YunoInvalidArguments
+///
+/// This type of error occurs when an argument is invalid.
+/// {@endtemplate}
+class YunoNotFoundError extends YunoException {
+  YunoNotFoundError()
+      : super(
+          msg: 'Not found error',
+          preffix: 5,
+        );
+}
+
+/// {@template commons_Errors}
+/// # YunoInvalidArguments
+///
+/// This type of error occurs when an argument is invalid.
+/// {@endtemplate}
+class YunoNotSupport extends YunoException {
+  YunoNotSupport()
+      : super(
+          msg: 'Method is not avialable for sdk lite',
+          preffix: 6,
+        );
 }

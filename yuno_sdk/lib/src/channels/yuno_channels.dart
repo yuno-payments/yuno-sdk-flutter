@@ -1,18 +1,28 @@
 import '../internals.dart';
 
-abstract interface class YunoChannels {
-  Future<void> configuration({
+abstract interface class Yuno {
+  static Future<Yuno> init({
     required String apiKey,
     required String countryCode,
+    required YunoSdkType sdkType,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
-  });
+  }) async {
+    final yuno = _YunoChannels(sdkType: sdkType);
+    await yuno.init(
+      apiKey: apiKey,
+      countryCode: countryCode,
+      iosConfig: iosConfig,
+      androidConfig: androidConfig,
+    );
+    return yuno;
+  }
 
-  YunoSdkType get type;
+  Future<void> openPaymentMethodsScreen();
 }
 
-class YunoChannelMethods implements YunoChannels {
-  const YunoChannelMethods({
+final class _YunoChannels implements Yuno {
+  const _YunoChannels({
     required this.sdkType,
   });
   final YunoSdkType sdkType;
@@ -22,20 +32,26 @@ class YunoChannelMethods implements YunoChannels {
     return __platform!;
   }
 
-  @override
-  Future<void> configuration({
+  Future<void> init({
     required String apiKey,
     required String countryCode,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
-  }) async =>
-      await _platform.initialize(
-        apiKey: apiKey,
-        countryCode: countryCode,
-        iosConfig: iosConfig,
-        androidConfig: androidConfig,
-      );
+  }) async {
+    await _platform.initialize(
+      apiKey: apiKey,
+      countryCode: countryCode,
+      iosConfig: iosConfig,
+      androidConfig: androidConfig,
+    );
+  }
 
   @override
-  YunoSdkType get type => sdkType;
+  Future<void> openPaymentMethodsScreen() {
+    if (sdkType == YunoSdkType.lite) {
+      throw YunoNotSupport();
+    } else {}
+
+    throw UnimplementedError();
+  }
 }
