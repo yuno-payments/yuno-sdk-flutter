@@ -5,12 +5,132 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('YunoMethodChannel Tests', () {
     late MethodChannel methodChannel;
     late YunoMethodChannel yunoMethodChannel;
 
     setUp(() {
-      methodChannel = const MethodChannel('yuno/payments');
+      methodChannel = const MethodChannel('test_channel');
+    });
+
+    test('isIos getter should return true when platformIsIos is true', () {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: true,
+        platformIsAndroid: false,
+      );
+
+      expect(yunoMethodChannel.isIos, isTrue);
+    });
+
+    test('isIos getter should return false when platformIsIos is false', () {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: false,
+        platformIsAndroid: true,
+      );
+
+      expect(yunoMethodChannel.isIos, isFalse);
+    });
+
+    test('isAndroid getter should return true when platformIsAndroid is true',
+        () {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: false,
+        platformIsAndroid: true,
+      );
+
+      expect(yunoMethodChannel.isAndroid, isTrue);
+    });
+
+    test('isAndroid getter should return false when platformIsAndroid is false',
+        () {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: true,
+        platformIsAndroid: false,
+      );
+
+      expect(yunoMethodChannel.isAndroid, isFalse);
+    });
+
+    test(
+        'initialize should invoke the method channel with correct parameters for Android',
+        () async {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: false,
+        platformIsAndroid: true,
+      );
+
+      const apiKey = 'test_api_key';
+      const countryCode = 'US';
+      const androidConfig =
+          AndroidConfig(); // Replace with actual AndroidConfig
+
+      bool methodCalled = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(methodChannel,
+              (MethodCall methodCall) async {
+        methodCalled = true;
+
+        expect(methodCall.method, 'initialize');
+        expect(methodCall.arguments, {
+          'apiKey': apiKey,
+          'countryCode': countryCode,
+          'configuration': androidConfig.toMap(),
+        });
+
+        return null;
+      });
+
+      await yunoMethodChannel.initialize(
+        apiKey: apiKey,
+        countryCode: countryCode,
+        androidConfig: androidConfig,
+      );
+
+      expect(methodCalled, isTrue);
+    });
+
+    test(
+        'initialize should invoke the method channel with correct parameters for iOS',
+        () async {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: methodChannel,
+        platformIsIos: true,
+        platformIsAndroid: false,
+      );
+
+      const apiKey = 'test_api_key';
+      const countryCode = 'US';
+      const iosConfig = IosConfig(); // Replace with actual IosConfig
+
+      bool methodCalled = false;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(methodChannel,
+              (MethodCall methodCall) async {
+        methodCalled = true;
+
+        expect(methodCall.method, 'initialize');
+        expect(methodCall.arguments, {
+          'apiKey': apiKey,
+          'countryCode': countryCode,
+          'configuration': iosConfig.toMap(),
+        });
+
+        return null;
+      });
+
+      await yunoMethodChannel.initialize(
+        apiKey: apiKey,
+        countryCode: countryCode,
+        iosConfig: iosConfig,
+      );
+
+      expect(methodCalled, isTrue);
     });
 
     test('Factory creates YunoMethodChannel with correct platform flags', () {
@@ -30,28 +150,6 @@ void main() {
         expect(yuno.isIos, false);
         expect(yuno.isAndroid, true);
       }
-    });
-
-    test('liteInitialize throws UnimplementedError', () {
-      yunoMethodChannel = YunoMethodChannel(
-        methodChannel: methodChannel,
-        platformIsIos: false,
-        platformIsAndroid: true,
-      );
-
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
-          throwsUnimplementedError);
-    });
-
-    test('fullInitialize throws UnimplementedError', () {
-      yunoMethodChannel = YunoMethodChannel(
-        methodChannel: methodChannel,
-        platformIsIos: true,
-        platformIsAndroid: false,
-      );
-
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
-          throwsUnimplementedError);
     });
   });
 }
