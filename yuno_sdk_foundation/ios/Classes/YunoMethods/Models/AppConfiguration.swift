@@ -18,10 +18,10 @@ enum CardFlow: String {
 extension CardFlow {
     var toCardFormType: CardFormType? {
         switch self {
-            case .oneStep:
-                return .oneStep
-            case .multiStep:
-                return .multiStep
+        case .oneStep:
+            return .oneStep
+        case .multiStep:
+            return .multiStep
         }
     }
 }
@@ -37,7 +37,6 @@ struct Appearance: Codable, Sendable {
     let disableButtonBackgroundColor: UIColor?
     let disableButtonTitleBackgroundColor: UIColor?
     let checkboxColor: UIColor?
-    
     enum CodingKeys: String, CodingKey {
         case accentColor
         case buttonBackgroundColor = "buttonBackgrounColor"
@@ -64,8 +63,7 @@ struct Appearance: Codable, Sendable {
         disableButtonTitleBackgroundColor = UIColor(hex: try container.decodeIfPresent(Int.self, forKey: .disableButtonTitleBackgroundColor))
         checkboxColor = UIColor(hex: try container.decodeIfPresent(Int.self, forKey: .checkboxColor))
     }
-    
-        // Custom encode function
+    // Custom encode function
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(accentColor?.toHex(), forKey: .accentColor)
@@ -74,7 +72,8 @@ struct Appearance: Codable, Sendable {
         try container.encode(buttonBorderBackgroundColor?.toHex(), forKey: .buttonBorderBackgroundColor)
         try container.encode(secondaryButtonBackgroundColor?.toHex(), forKey: .secondaryButtonBackgroundColor)
         try container.encode(secondaryButtonTitleBackgroundColor?.toHex(), forKey: .secondaryButtonTitleBackgroundColor)
-        try container.encode(secondaryButtonBorderBackgroundColor?.toHex(), forKey: .secondaryButtonBorderBackgroundColor)
+        try container.encode(secondaryButtonBorderBackgroundColor?.toHex(),
+        forKey: .secondaryButtonBorderBackgroundColor)
         try container.encode(disableButtonBackgroundColor?.toHex(), forKey: .disableButtonBackgroundColor)
         try container.encode(disableButtonTitleBackgroundColor?.toHex(), forKey: .disableButtonTitleBackgroundColor)
         try container.encode(checkboxColor?.toHex(), forKey: .checkboxColor)
@@ -83,36 +82,16 @@ struct Appearance: Codable, Sendable {
 
 struct Configuration: Codable, Sendable {
     let appearance: Appearance?
-    let cardflow:String?
+    let cardflow: String?
     let saveCardEnable: Bool?
     let keepLoader: Bool?
     let isDynamicViewEnable: Bool?
-    
-    init(appearance: Appearance?,
-         cardflow: String?,
-         saveCardEnable: Bool?,
-         keepLoader: Bool?,
-         isDynamicViewEnable: Bool?
-    ) {
-        self.appearance = appearance
-        self.cardflow = cardflow
-        self.saveCardEnable = saveCardEnable
-        self.keepLoader = keepLoader
-        self.isDynamicViewEnable = isDynamicViewEnable
-    }
 }
 
-struct AppConfiguration:Codable,Sendable{
-    let apiKey:String
-    let countryCode:String
-    let configuration:Configuration?
-    
-    init(apiKey: String, countryCode: String, configuration: Configuration?) {
-        self.apiKey = apiKey
-        self.countryCode = countryCode
-        self.configuration = configuration
-    }
-    
+struct AppConfiguration: Codable, Sendable {
+    let apiKey: String
+    let countryCode: String
+    let configuration: Configuration?
 }
 
 extension UIColor {
