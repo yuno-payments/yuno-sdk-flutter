@@ -3,7 +3,6 @@ import '../internals.dart';
 abstract interface class Yuno {
   static Future<Yuno> init({
     required String apiKey,
-    required String countryCode,
     required YunoSdkType sdkType,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
@@ -11,7 +10,6 @@ abstract interface class Yuno {
     final yuno = _YunoChannels(sdkType: sdkType);
     await yuno.init(
       apiKey: apiKey,
-      countryCode: countryCode,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );
@@ -34,13 +32,11 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
-    required String countryCode,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     await _platform.initialize(
       apiKey: apiKey,
-      countryCode: countryCode,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );

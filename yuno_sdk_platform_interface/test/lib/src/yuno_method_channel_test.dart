@@ -39,7 +39,7 @@ void main() {
         platformIsAndroid: true,
       );
 
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
+      expect(() => yunoMethodChannel.initialize(apiKey: ''),
           throwsUnimplementedError);
     });
 
@@ -50,7 +50,7 @@ void main() {
         platformIsAndroid: false,
       );
 
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
+      expect(() => yunoMethodChannel.initialize(apiKey: ''),
           throwsUnimplementedError);
     });
   });

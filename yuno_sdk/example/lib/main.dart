@@ -6,7 +6,6 @@ Future<void> main() async {
   final yuno = await Yuno.init(
     sdkType: YunoSdkType.full,
     apiKey: '',
-    countryCode: '',
   );
 
   runApp(
