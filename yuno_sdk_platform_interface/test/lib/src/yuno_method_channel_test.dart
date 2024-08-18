@@ -1,57 +1,100 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
+class MockMethodChannel extends Mock implements MethodChannel {}
+
 void main() {
-  group('YunoMethodChannel Tests', () {
-    late MethodChannel methodChannel;
+  setUpAll(() {
+    registerFallbackValue(<String, dynamic>{});
+  });
+
+  group('YunoMethodChannel', () {
+    late MockMethodChannel mockMethodChannel;
     late YunoMethodChannel yunoMethodChannel;
 
     setUp(() {
-      methodChannel = const MethodChannel('yuno/payments');
+      mockMethodChannel = MockMethodChannel();
     });
 
-    test('Factory creates YunoMethodChannel with correct platform flags', () {
-      // Factory should set the correct platform flags
-      YunoMethodChannelFactory factory = const YunoMethodChannelFactory();
-
-      if (Platform.isIOS) {
-        YunoPlatform instance = factory.create();
-        expect(instance is YunoMethodChannel, true);
-        final yuno = instance as YunoMethodChannel;
-        expect(yuno.isIos, true);
-        expect(yuno.isAndroid, false);
-      } else if (Platform.isAndroid) {
-        YunoPlatform instance = factory.create();
-        expect(instance is YunoMethodChannel, true);
-        final yuno = instance as YunoMethodChannel;
-        expect(yuno.isIos, false);
-        expect(yuno.isAndroid, true);
-      }
-    });
-
-    test('liteInitialize throws UnimplementedError', () {
+    test('isIos should return true when platform is iOS', () {
       yunoMethodChannel = YunoMethodChannel(
-        methodChannel: methodChannel,
-        platformIsIos: false,
-        platformIsAndroid: true,
-      );
-
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
-          throwsUnimplementedError);
-    });
-
-    test('fullInitialize throws UnimplementedError', () {
-      yunoMethodChannel = YunoMethodChannel(
-        methodChannel: methodChannel,
+        methodChannel: mockMethodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
       );
 
-      expect(() => yunoMethodChannel.initialize(apiKey: '', countryCode: ''),
-          throwsUnimplementedError);
+      expect(yunoMethodChannel.isIos, true);
+      expect(yunoMethodChannel.isAndroid, false);
+    });
+
+    test('isAndroid should return true when platform is Android', () {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: mockMethodChannel,
+        platformIsIos: false,
+        platformIsAndroid: true,
+      );
+
+      expect(yunoMethodChannel.isIos, false);
+      expect(yunoMethodChannel.isAndroid, true);
+    });
+
+    test(
+        'initialize should call invokeMethod with correct arguments on Android',
+        () async {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: mockMethodChannel,
+        platformIsIos: false,
+        platformIsAndroid: true,
+      );
+
+      const androidConfig = AndroidConfig();
+      final expectedArgs = {
+        'apiKey': 'testApiKey',
+        'countryCode': 'US',
+        'configuration': androidConfig.toMap(),
+      };
+
+      when(() => mockMethodChannel.invokeMethod('initialize', any()))
+          .thenAnswer((_) async {});
+
+      await yunoMethodChannel.initialize(
+        apiKey: 'testApiKey',
+        countryCode: 'US',
+        androidConfig: androidConfig,
+      );
+
+      verify(() => mockMethodChannel.invokeMethod('initialize', expectedArgs))
+          .called(1);
+    });
+
+    test('initialize should call invokeMethod with correct arguments on iOS',
+        () async {
+      yunoMethodChannel = YunoMethodChannel(
+        methodChannel: mockMethodChannel,
+        platformIsIos: true,
+        platformIsAndroid: false,
+      );
+
+      const iosConfig = IosConfig();
+      final expectedArgs = {
+        'apiKey': 'testApiKey',
+        'countryCode': 'US',
+        'configuration': iosConfig.toMap(),
+      };
+
+      when(() => mockMethodChannel.invokeMethod('initialize', any()))
+          .thenAnswer((_) async {});
+
+      await yunoMethodChannel.initialize(
+        apiKey: 'testApiKey',
+        countryCode: 'US',
+        iosConfig: iosConfig,
+      );
+
+      verify(() => mockMethodChannel.invokeMethod('initialize', expectedArgs))
+          .called(1);
     });
   });
 }
