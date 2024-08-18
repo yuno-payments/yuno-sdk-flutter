@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import '../internals.dart';
 
-/// {@template yuno_provider_YunoProvider}
+/// {@template yuno_scope_YunoScope}
 /// An injector of the [Yuno] object
 ///
-/// ```
+/// {@tool snippet}
+/// ```dart
 /// Future<void> main() async {
 ///   WidgetsFlutterBinding.ensureInitialized();
 ///   final yuno = await Yuno.init(...);
 ///   return runApp(
 ///     YunoScope(
-///       yuno,
+///       yuno: yuno,
 ///       child: MaterialApp(...),
 ///     ),
 ///   );
 /// }
 /// ```
+/// {@end-tool}
 /// {@endtemplate}
 class YunoScope extends InheritedWidget {
-  /// {@macro yuno_provider_YunoProvider}
+  /// {@macro yuno_scope_YunoScope}
   const YunoScope({
     super.key,
     required this.yuno,
