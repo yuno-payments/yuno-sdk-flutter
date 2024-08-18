@@ -4,8 +4,8 @@ abstract interface class Yuno {
   static Future<Yuno> init({
     required String apiKey,
     required YunoSdkType sdkType,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
+    IosConfig iosConfig = const IosConfig(),
+    AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
     final yuno = _YunoChannels(sdkType: sdkType);
     await yuno.init(

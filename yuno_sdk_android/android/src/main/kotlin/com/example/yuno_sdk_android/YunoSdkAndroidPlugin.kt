@@ -41,6 +41,7 @@ class YunoSdkAndroidPlugin :
             checkoutSession = "",
             callbackPaymentState = this::onPaymentStateChange,
             callbackOTT = this::onTokenUpdated,
+
         )
     }
 
@@ -57,30 +58,43 @@ class YunoSdkAndroidPlugin :
                     val argument = call.arguments<Map<String, Any>>()
                     val resultConverter = argument?.toApiConfig()
 
-                  resultConverter?.onSuccess { appConfig ->
-                    val config = appConfig.configuration;
-                    Yuno.initialize(
-                      context,
-                      appConfig.apiKey,
-                      config = YunoConfig(
-                        saveCardEnabled = config.saveCardEnable,
-                        cardFormDeployed = config.cardFormDeployed,
-                        isDynamicViewEnabled = config.isDynamicViewEnable,
-                        keepLoader = config.keepLoader,
+                    resultConverter?.onSuccess { appConfig ->
+                        val config = appConfig.configuration;
+                        if (appConfig.apiKey.isEmpty()) {
+                            return result.error(
+                                "4",
+                                "ApiKey is empty",
+                                "ApiKey must be necessary for starting to use Yuno SDK"
+                            )
+                        }
+                        Yuno.initialize(
+                            context,
+                            appConfig.apiKey,
+                            config = YunoConfig(
+                                saveCardEnabled = config.saveCardEnable,
+                                cardFormDeployed = config.cardFormDeployed,
+                                isDynamicViewEnabled = config.isDynamicViewEnable,
+                                keepLoader = config.keepLoader,
+                            )
+                        )
+                        return result.success(true)
+                    }?.onFailure { exception ->
+                        println()
+                        return result.error(
+                            "5",
+                            "Failure: An error occurred - ${exception.message}",
+                            "Invalid arguments in json cast"
+                        )
 
-                      )
-                    )
-                    result.success(true)
-                  }?.onFailure { exception ->
-                    println("Failure: An error occurred - ${exception.message}")
-                  }
+                    }
 
                 } catch (e: Exception) {
-                    result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
+                    return result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
                 }
             }
 
             "paymentMethods" -> {
+                
 //        try {
 //          val intent = Intent(activity, PaymentMethodsActivity::class.java)
 //
