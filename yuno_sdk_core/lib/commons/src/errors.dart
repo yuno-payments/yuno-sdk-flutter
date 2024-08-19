@@ -110,7 +110,7 @@ class YunoNotFoundError extends YunoException {
 class YunoNotSupport extends YunoException {
   YunoNotSupport()
       : super(
-          msg: 'Method is not avialable for sdk lite',
+          msg: 'Method is not avialable for lite version',
           preffix: 6,
         );
 }
