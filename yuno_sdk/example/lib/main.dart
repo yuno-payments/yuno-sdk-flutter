@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:yuno/yuno.dart';
 
-void main() {
-  runApp(const MainApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final yuno = await Yuno.init(
+    sdkType: YunoSdkType.full,
+    apiKey: 'sdfds',
+    countryCode: 'CO',
+  );
+
+  runApp(
+    YunoScope(
+      yuno: yuno,
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -9,6 +22,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.yuno();
     return const MaterialApp(
       home: Scaffold(
         body: Center(

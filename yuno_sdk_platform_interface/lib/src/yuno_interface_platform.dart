@@ -1,4 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:yuno_sdk_platform_interface/src/models/android_config.dart';
+import 'package:yuno_sdk_platform_interface/src/models/ios_config.dart';
 import 'package:yuno_sdk_platform_interface/src/yuno_method_channel.dart';
 
 /// {@template commons_YunoPlatform}
@@ -29,18 +31,10 @@ abstract interface class YunoPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  
-/// {@template commons_liteInitialize}
-/// ## Method: liteInitialize()
-/// Help us to initilize lite in Android and IOS for Yuno SDK
-///{@tool snippet}
-/// ```dart
-/// 
-/// ```
-/// {@end-tool}
-/// {@endtemplate}
-  Future<void> liteInitialize();
-  Future<void> fullInitialize();
-
-
+  Future<void> initialize({
+    required String apiKey,
+    required String countryCode,
+    IosConfig? iosConfig,
+    AndroidConfig? androidConfig,
+  });
 }
