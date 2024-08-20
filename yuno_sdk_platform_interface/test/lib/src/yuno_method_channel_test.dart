@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -133,5 +135,24 @@ void main() {
 
       expect(methodCalled, isTrue);
     });
+  });
+
+  test('Factory creates YunoMethodChannel with correct platform flags', () {
+    // Factory should set the correct platform flags
+    YunoMethodChannelFactory factory = const YunoMethodChannelFactory();
+
+    if (Platform.isIOS) {
+      YunoPlatform instance = factory.create();
+      expect(instance is YunoMethodChannel, true);
+      final yuno = instance as YunoMethodChannel;
+      expect(yuno.isIos, true);
+      expect(yuno.isAndroid, false);
+    } else if (Platform.isAndroid) {
+      YunoPlatform instance = factory.create();
+      expect(instance is YunoMethodChannel, true);
+      final yuno = instance as YunoMethodChannel;
+      expect(yuno.isIos, false);
+      expect(yuno.isAndroid, true);
+    }
   });
 }
