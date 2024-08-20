@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.yuno_sdk_android.core.utils.key_objects.Key
 import com.example.yuno_sdk_android.models.toApiConfig
 import com.example.yuno_sdk_android.models.toCardFLowSDK
 import com.yuno.payments.core.YunoConfig
@@ -55,7 +56,7 @@ class YunoSdkAndroidPlugin :
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
-            "initialize" -> {
+            Key.init -> {
                 try {
                     val argument = call.arguments<Map<String, Any>>()
                     val resultConverter = argument?.toApiConfig()
