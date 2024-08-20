@@ -2,7 +2,7 @@ project:
   name: Yuno
   version: 1.0.0
   description: |
-    This is an Yuno project.
+    This is a Yuno project.
   
 license:
   type: MIT License
