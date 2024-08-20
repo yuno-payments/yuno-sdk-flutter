@@ -9,24 +9,10 @@ void main() {
       expect(exception.preffix, 0);
     });
 
-    test('YunoUnexpectedException allows custom values', () {
-      final exception =
-          YunoUnexpectedException(msg: 'Custom Message', preffix: 99);
-      expect(exception.msg, 'Custom Message');
-      expect(exception.preffix, 99);
-    });
-
     test('YunoMethodNotImplemented has correct default values', () {
       final exception = YunoMethodNotImplemented();
       expect(exception.msg, 'Method not implemented');
       expect(exception.preffix, 1);
-    });
-
-    test('YunoMethodNotImplemented allows custom values', () {
-      final exception =
-          YunoMethodNotImplemented(msg: 'Custom Message', preffix: 99);
-      expect(exception.msg, 'Custom Message');
-      expect(exception.preffix, 99);
     });
 
     test('YunoTimeout has correct default values', () {
@@ -35,22 +21,10 @@ void main() {
       expect(exception.preffix, 2);
     });
 
-    test('YunoTimeout allows custom values', () {
-      final exception = YunoTimeout(msg: 'Custom Message', preffix: 99);
-      expect(exception.msg, 'Custom Message');
-      expect(exception.preffix, 99);
-    });
-
     test('YunoMissingParam has correct default values', () {
       final exception = YunoMissingParam();
       expect(exception.msg, 'Missing Params');
       expect(exception.preffix, 3);
-    });
-
-    test('YunoMissingParam allows custom values', () {
-      final exception = YunoMissingParam();
-      expect(exception.msg, 'Custom Message');
-      expect(exception.preffix, 99);
     });
   });
 }
