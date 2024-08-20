@@ -5,8 +5,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final yuno = await Yuno.init(
     sdkType: YunoSdkType.full,
-    apiKey: '',
-    countryCode: '',
+    apiKey: 'sdfds',
+    countryCode: 'CO',
   );
 
   runApp(

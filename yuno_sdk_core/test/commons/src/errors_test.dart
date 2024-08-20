@@ -12,6 +12,8 @@ void main() {
     test('YunoUnexpectedException allows custom values', () {
       final exception =
           YunoUnexpectedException(msg: 'Custom Message', preffix: 99);
+      final exception =
+          YunoUnexpectedException(msg: 'Custom Message', preffix: 99);
       expect(exception.msg, 'Custom Message');
       expect(exception.preffix, 99);
     });
@@ -23,6 +25,8 @@ void main() {
     });
 
     test('YunoMethodNotImplemented allows custom values', () {
+      final exception =
+          YunoMethodNotImplemented(msg: 'Custom Message', preffix: 99);
       final exception =
           YunoMethodNotImplemented(msg: 'Custom Message', preffix: 99);
       expect(exception.msg, 'Custom Message');
