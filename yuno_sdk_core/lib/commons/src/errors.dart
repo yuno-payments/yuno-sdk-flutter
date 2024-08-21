@@ -33,10 +33,11 @@ sealed class YunoException implements Exception {
 /// This type of error occurs when something went wrong and the origin is unknown.
 /// {@endtemplate}
 class YunoUnexpectedException extends YunoException {
-  YunoUnexpectedException({
-    super.msg = 'Unexpected Exception',
-    super.preffix = 0,
-  });
+  YunoUnexpectedException()
+      : super(
+          msg: 'Unexpected Exception',
+          preffix: 0,
+        );
 }
 
 /// {@template commons_Errors}
@@ -45,10 +46,11 @@ class YunoUnexpectedException extends YunoException {
 /// This type of error occurs when a method is not implemented.
 /// {@endtemplate}
 class YunoMethodNotImplemented extends YunoException {
-  YunoMethodNotImplemented({
-    super.msg = 'Method not implemented',
-    super.preffix = 1,
-  });
+  YunoMethodNotImplemented()
+      : super(
+          msg: 'Method not implemented',
+          preffix: 1,
+        );
 }
 
 /// {@template commons_Errors}
@@ -57,10 +59,11 @@ class YunoMethodNotImplemented extends YunoException {
 /// This type of error occurs when occurs a timeout.
 /// {@endtemplate}
 class YunoTimeout extends YunoException {
-  YunoTimeout({
-    super.msg = 'Timeout',
-    super.preffix = 2,
-  });
+  YunoTimeout()
+      : super(
+          msg: 'Timeout',
+          preffix: 2,
+        );
 }
 
 /// {@template commons_Errors}

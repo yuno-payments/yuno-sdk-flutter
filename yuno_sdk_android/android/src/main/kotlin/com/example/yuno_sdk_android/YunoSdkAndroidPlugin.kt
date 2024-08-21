@@ -109,6 +109,7 @@ class YunoSdkAndroidPlugin :
 
             "startPayment" -> {
                 try {
+                    
                     activity.startPaymentLite(
                         paymentSelected = PaymentSelected(
                             paymentMethodType = "CARD",

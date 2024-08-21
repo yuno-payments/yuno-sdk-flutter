@@ -68,8 +68,8 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
+    required IosConfig iosConfig,
+    required AndroidConfig androidConfig,
   }) async {
     await _platform.initialize(
       apiKey: apiKey,
