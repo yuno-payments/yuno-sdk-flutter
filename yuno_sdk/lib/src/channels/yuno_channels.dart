@@ -1,3 +1,5 @@
+import 'package:yuno/src/channels/yuno_mixin.dart';
+
 import '../internals.dart';
 
 /// The `Yuno` class provides an abstract interface for initializing and interacting with the Yuno SDK.
@@ -16,7 +18,7 @@ import '../internals.dart';
 ///   androidConfig: AndroidConfig(), // Optional, can use default value
 /// );
 /// ```
-abstract interface class Yuno {
+abstract interface class Yuno with YunoMixin {
   /// Initializes the Yuno SDK.
   ///
   /// This method must be called before any other interaction with the SDK. It returns a `Yuno`
@@ -51,8 +53,6 @@ abstract interface class Yuno {
     );
     return yuno;
   }
-
-  Future<void> openPaymentMethodsScreen();
 }
 
 final class _YunoChannels implements Yuno {
@@ -84,6 +84,11 @@ final class _YunoChannels implements Yuno {
       throw YunoNotSupport();
     } else {}
 
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> startPaymentLite() async {
     throw UnimplementedError();
   }
 }

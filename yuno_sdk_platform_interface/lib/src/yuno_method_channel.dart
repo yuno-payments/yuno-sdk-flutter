@@ -40,6 +40,13 @@ class YunoMethodChannel implements YunoPlatform {
           );
     await _methodChannel.invokeMethod('initialize', mapper);
   }
+
+  @override
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
+  }) async {
+    await _methodChannel.invokeMethod('startPaymentLite');
+  }
 }
 
 /// {@template commons_YunoMethodChannelFactory}

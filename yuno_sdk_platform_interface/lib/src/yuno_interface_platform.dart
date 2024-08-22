@@ -1,7 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:yuno_sdk_platform_interface/src/models/android_config.dart';
-import 'package:yuno_sdk_platform_interface/src/models/ios_config.dart';
-import 'package:yuno_sdk_platform_interface/src/yuno_method_channel.dart';
+import '../lib.dart';
 
 /// {@template commons_YunoPlatform}
 /// ## YunoPlatform
@@ -35,5 +33,9 @@ abstract interface class YunoPlatform extends PlatformInterface {
     required String apiKey,
     IosConfig iosConfig,
     AndroidConfig androidConfig,
+  });
+
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
   });
 }
