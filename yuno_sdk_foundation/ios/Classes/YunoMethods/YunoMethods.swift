@@ -10,24 +10,18 @@ import Foundation
 import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
+    private let methodChannel: FlutterMethodChannel
     var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
+
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
-    init() {
+
+    init(methodChannel: FlutterMethodChannel) {
         viewController = UIViewController()
-    }
-
-    func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
-        print(result)
-       guard let window = self.window else {return }
-       guard let vc = self.viewController else { return}
-       guard let rc = window.rootViewController else { return}
-       vc.dismiss(animated: true)
-       rc.dismiss(animated: true)
-
+        self.methodChannel = methodChannel
     }
 
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
@@ -47,12 +41,17 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
 
     func yunoCreatePayment(with token: String) {
-        guard let window = self.window else {return }
-        guard let vc = self.viewController else { return}
-        guard let rc = window.rootViewController else { return}
-        vc.dismiss(animated: true)
+        removeViews()
+    }
+    func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+        removeViews()
+    }
+    private func removeViews() {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
+        controller.dismiss(animated: true)
         rc.dismiss(animated: true)
-        print(token)
     }
 
     private func initialize(app: AppConfiguration) {
@@ -85,12 +84,21 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
+
+    func handleOTT(token: String) {
+        do {
+            methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
+        } catch {
+            methodChannel.invokeMethod(Keys.onError.rawValue, arguments: YunoError.somethingWentWrong())
+        }
+    }
+
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let window = self.window else {return }
-        guard let controller = self.viewController else { return }
-        guard let rc = window.rootViewController else {return}
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
         guard let args = call.arguments as? [String: Any] else {
-            return  result(YunoError.invalidArguments())
+            return result(YunoError.invalidArguments())
         }
 
         do {
@@ -127,7 +135,6 @@ extension YunoMethods {
     }
 
     func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
-
         guard let args = call.arguments as? [String: Any] else {
             return  result(YunoError.invalidArguments())
         }
@@ -137,7 +144,7 @@ extension YunoMethods {
             let decoder = JSONDecoder()
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
-            if app.apiKey.isEmpty  || app.countryCode.isEmpty {
+            if app.apiKey.isEmpty || app.countryCode.isEmpty {
                 return result(YunoError.missingParams())
             }
             self.countryCode = app.countryCode

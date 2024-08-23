@@ -10,4 +10,6 @@ import Foundation
 enum Keys: String {
     case initialize
     case startPaymentLite
+    case ott
+    case onError
 }

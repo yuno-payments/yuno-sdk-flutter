@@ -9,34 +9,31 @@ import Foundation
 import Flutter
 
 class YunoError {
-    
    static func customError(
-    code:String,
-    message:String,
-    details:String) -> FlutterError{
+    code: String,
+    message: String,
+    details: String) -> FlutterError {
         return FlutterError(
-            code:code,
+            code: code,
             message: message,
             details: details
         )
     }
-    
-   static func somethingWentWrong() -> FlutterError{
+
+   static func somethingWentWrong() -> FlutterError {
         return FlutterError(
             code: "0",
             message: "Unexpected Exception",
             details: "Something went wrong"
         )
     }
-    
-    static func paymentMethodIsRequired() -> FlutterError{
+    static func paymentMethodIsRequired() -> FlutterError {
         return FlutterError(
             code: "0",
             message: "Unexpected Exception",
             details: "Something went wrong"
         )
     }
-    
     static func invalidArguments() -> FlutterError {
         return FlutterError(
             code: "4",
@@ -44,7 +41,7 @@ class YunoError {
             details: "Arguments are invalid"
         )
     }
-    
+
     static func missingParams() -> FlutterError {
         return FlutterError(
             code: "3",
@@ -66,4 +63,3 @@ let SOMETHING_WENT_WRONG = FlutterError(code: "0",
 let MISSING_PARAMS = FlutterError(code: "3",
                     message: "Missing API Key or Country Code",
                     details: "Missing params")
-
