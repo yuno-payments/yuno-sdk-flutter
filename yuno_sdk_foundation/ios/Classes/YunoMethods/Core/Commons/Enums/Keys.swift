@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Keys:String{
+enum Keys: String {
     case initialize
     case startPaymentLite
 }

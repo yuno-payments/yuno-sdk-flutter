@@ -7,16 +7,13 @@
 
 import Foundation
 
-
-class StartPayment: Codable  {
-    
-    var showPaymentStatus:Bool
-    var checkoutSession:String
+class StartPayment: Codable {
+    var showPaymentStatus: Bool
+    var checkoutSession: String
     var paymentMetdhodSelected: PaymentMethod
-    
-    init(paymentMetdhodSelected: PaymentMethod, 
+    init(paymentMetdhodSelected: PaymentMethod,
          showPaymentStatus: Bool,
-         checkoutSession:String
+         checkoutSession: String
     ) {
         self.paymentMetdhodSelected = paymentMetdhodSelected
         self.showPaymentStatus = showPaymentStatus

@@ -16,10 +16,10 @@ enum CardFlow: String {
 extension CardFlow {
     var toCardFormType: CardFormType? {
         switch self {
-            case .oneStep:
-                return .oneStep
-            case .multiStep:
-                return .multiStep
+        case .oneStep:
+            return .oneStep
+        case .multiStep:
+            return .multiStep
         }
     }
 }

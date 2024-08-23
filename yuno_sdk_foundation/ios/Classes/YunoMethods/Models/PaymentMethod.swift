@@ -8,11 +8,10 @@
 import Foundation
 import YunoSDK
 
-class PaymentMethod: PaymentMethodSelected,Codable  {
-    
+class PaymentMethod: PaymentMethodSelected, Codable {
     var vaultedToken: String?
     var paymentMethodType: String
-    
+
     init(vaultedToken: String?, paymentMethodType: String) {
         self.vaultedToken = vaultedToken
         self.paymentMethodType = paymentMethodType

@@ -72,7 +72,7 @@ struct Configuration: Codable, Sendable {
 
 struct AppConfiguration: Codable, Sendable {
     let apiKey: String
-    let countryCode:String
+    let countryCode: String
     let configuration: Configuration?
 }
 
