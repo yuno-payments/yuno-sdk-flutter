@@ -97,14 +97,7 @@ class YunoSdkAndroidPlugin :
 
             "paymentMethods" -> {
                 
-//        try {
-//          val intent = Intent(activity, PaymentMethodsActivity::class.java)
-//
-//          startActivityForResultLauncher.launch(intent)
-//          result.success(true)
-//        } catch (e: Exception) {
-//          println("${e}")
-//        }
+
             }
 
             "startPayment" -> {
@@ -118,7 +111,7 @@ class YunoSdkAndroidPlugin :
                     )
                     result.success(true)
                 } catch (e: Exception) {
-                    println("${e}")
+            
                 }
             }
 
@@ -158,8 +151,7 @@ class YunoSdkAndroidPlugin :
 
     fun onTokenUpdated(token: String?) {
         token?.let {
-            println("${token}")
-            Log.e("Payment flow", "success ---> token: $token")
+       
         }
     }
 
