@@ -1,5 +1,5 @@
-class PaymentMethodSelected {
-  const PaymentMethodSelected({
+class MethodSelected {
+  const MethodSelected({
     this.vaultedToken,
     required this.paymentMethodType,
   }) : assert(paymentMethodType != "");
@@ -7,7 +7,7 @@ class PaymentMethodSelected {
   final String paymentMethodType;
 
   @override
-  bool operator ==(covariant PaymentMethodSelected other) {
+  bool operator ==(covariant MethodSelected other) {
     if (identical(this, other)) return true;
 
     return other.vaultedToken == vaultedToken &&

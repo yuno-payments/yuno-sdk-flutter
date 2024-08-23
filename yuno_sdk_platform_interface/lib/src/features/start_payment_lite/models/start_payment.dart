@@ -3,31 +3,34 @@ import 'package:yuno_sdk_platform_interface/src/features/start_payment_lite/mode
 class StartPayment {
   const StartPayment({
     this.showPaymentStatus = true,
-    required this.paymentMethod,
+    required this.checkoutSession,
+    required this.methodSelected,
   });
 
   final bool showPaymentStatus;
-  final PaymentMethodSelected paymentMethod;
+  final MethodSelected methodSelected;
+  final String checkoutSession;
 
   @override
   bool operator ==(covariant StartPayment other) {
     if (identical(this, other)) return true;
 
     return other.showPaymentStatus == showPaymentStatus &&
-        other.paymentMethod == paymentMethod;
+        other.methodSelected == methodSelected;
   }
 
   @override
-  int get hashCode => showPaymentStatus.hashCode ^ paymentMethod.hashCode;
+  int get hashCode => showPaymentStatus.hashCode ^ methodSelected.hashCode;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'showPaymentStatus': showPaymentStatus,
-      'paymentMethod': paymentMethod.toMap(),
+      'checkoutSession': checkoutSession,
+      'paymentMetdhodSelected': methodSelected.toMap(),
     };
   }
 
   @override
   String toString() =>
-      'StartPayment(showPaymentStatus: $showPaymentStatus, paymentMethod: $paymentMethod)';
+      'StartPayment(showPaymentStatus: $showPaymentStatus, paymentMethod: $methodSelected)';
 }

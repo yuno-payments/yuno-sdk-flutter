@@ -59,5 +59,13 @@ class YunoScope extends InheritedWidget {
 /// {@endtemplate}
 extension YunoReader on BuildContext {
   /// {@macro yuno_provicer_YunoReader}
+
+  @visibleForTesting
   Yuno yuno() => YunoScope.of(this);
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
+  }) =>
+      yuno().startPaymentLite(
+        arguments: arguments,
+      );
 }

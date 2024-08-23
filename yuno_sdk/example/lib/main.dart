@@ -5,7 +5,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final yuno = await Yuno.init(
     apiKey: '',
-    sdkType: YunoSdkType.full,
+    countryCode: '',
   );
 
   runApp(
@@ -21,11 +21,34 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.yuno();
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Center(
+              child: Text('Hello World!'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.startPaymentLite(
+                  arguments: const StartPayment(
+                    checkoutSession: '',
+                    methodSelected: MethodSelected(
+                      paymentMethodType: 'CARD',
+                    ),
+                  ),
+                );
+              },
+              child: const Center(
+                child: Text(
+                  'Pressed',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
