@@ -81,7 +81,6 @@ class YunoSdkAndroidPlugin :
         startActivityForResultLauncher = activity.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
-            // Handle the result of the launched activity
         }
     }
 
@@ -102,19 +101,14 @@ class YunoSdkAndroidPlugin :
         channel.setMethodCallHandler(null)
     }
 
-
     fun onTokenUpdated(token: String?) {
         token?.let {
-            println("${token}")
-            Log.e("Payment flow", "success ---> token: $token")
+       
         }
     }
 
     fun onPaymentStateChange(paymentState: String?) {
-        paymentState?.let {
-            print("${paymentState}")
+        paymentState?.let {     
         }
-
-
     }
 }
