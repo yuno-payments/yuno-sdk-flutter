@@ -136,7 +136,7 @@ extension YunoMethods {
 
     func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-            return  result(YunoError.invalidArguments())
+            return result(YunoError.invalidArguments())
         }
 
         do {

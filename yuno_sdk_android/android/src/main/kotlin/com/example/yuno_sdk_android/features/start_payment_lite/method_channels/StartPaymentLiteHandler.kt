@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 class StartPaymentLiteHandler {
 
-    fun handler(call: MethodCall, result: Result, context: Context, activity:FlutterFragmentActivity){
+    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity){
         try {
             //TODO: implement dynamic startPayment
             activity.startPaymentLite(
