@@ -10,7 +10,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 class InitHandler {
 
-    fun handler(call: MethodCall, result: Result, context:Context){
+    fun handler(call: MethodCall, result: Result, context: Context){
         try {
             val argument = call.arguments<Map<String, Any>>()
             val resultConverter = argument?.toApiConfig()
