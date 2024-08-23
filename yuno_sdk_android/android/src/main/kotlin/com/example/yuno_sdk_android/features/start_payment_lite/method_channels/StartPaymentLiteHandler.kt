@@ -11,15 +11,16 @@ class StartPaymentLiteHandler {
 
     fun handler(call: MethodCall, result: Result, context: Context, activity:FlutterFragmentActivity){
         try {
+            //TODO: implement dynamic startPayment
             activity.startPaymentLite(
                 paymentSelected = PaymentSelected(
-                    paymentMethodType = "CARD",
+                    paymentMethodType = "",
                     vaultedToken = "",
                 )
             )
             result.success(true)
         } catch (e: Exception) {
-            println("${e}")
+           //TODO: handle exception
         }
     }
 }
