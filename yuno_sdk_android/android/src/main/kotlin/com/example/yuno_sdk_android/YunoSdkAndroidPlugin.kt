@@ -94,15 +94,9 @@ class YunoSdkAndroidPlugin :
                     return result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
                 }
             }
-
-            "paymentMethods" -> {
-                
-
-            }
-
+            "paymentMethods" -> {}
             "startPayment" -> {
-                try {
-                    
+                try {     
                     activity.startPaymentLite(
                         paymentSelected = PaymentSelected(
                             paymentMethodType = "CARD",
@@ -127,7 +121,6 @@ class YunoSdkAndroidPlugin :
         startActivityForResultLauncher = activity.registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
-            // Handle the result of the launched activity
         }
     }
 
@@ -148,7 +141,6 @@ class YunoSdkAndroidPlugin :
         channel.setMethodCallHandler(null)
     }
 
-
     fun onTokenUpdated(token: String?) {
         token?.let {
        
@@ -156,10 +148,7 @@ class YunoSdkAndroidPlugin :
     }
 
     fun onPaymentStateChange(paymentState: String?) {
-        paymentState?.let {
-      
+        paymentState?.let {     
         }
-
-
     }
 }
