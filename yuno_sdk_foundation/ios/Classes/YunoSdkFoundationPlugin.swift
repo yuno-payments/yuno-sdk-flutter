@@ -14,15 +14,12 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      guard UIApplication.shared.windows.first(where: { $0.isKeyWindow }) != nil else {
-            result(FlutterError(code: "UNAVAILABLE",
-            message: "UIWindow is not available",
-            details: nil))
-            return
-        }
+      
     switch call.method {
-    case "initialize":
+        case Keys.initialize.rawValue:
         instance.handleInitialize(call: call, result: result)
+        case Keys.startPaymentLite.rawValue:
+        instance.handleStartPaymentLite(call: call, result: result)
 
     default:
       result(FlutterMethodNotImplemented)

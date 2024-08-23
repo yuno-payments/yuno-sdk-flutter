@@ -6,25 +6,7 @@
 //
 
 import Foundation
-import YunoSDK
 import UIKit
-
-    // Card Flow enum
-enum CardFlow: String {
-    case oneStep
-    case multiStep
-}
-
-extension CardFlow {
-    var toCardFormType: CardFormType? {
-        switch self {
-        case .oneStep:
-            return .oneStep
-        case .multiStep:
-            return .multiStep
-        }
-    }
-}
 
 struct Appearance: Codable, Sendable {
     let accentColor: UIColor?
@@ -90,7 +72,7 @@ struct Configuration: Codable, Sendable {
 
 struct AppConfiguration: Codable, Sendable {
     let apiKey: String
-    let countryCode: String
+    let countryCode:String
     let configuration: Configuration?
 }
 

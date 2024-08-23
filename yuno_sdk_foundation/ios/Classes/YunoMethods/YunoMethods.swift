@@ -10,11 +10,25 @@ import Foundation
 import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
-
+    
+    var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
+    private lazy var window: UIWindow? = {
+        return UIApplication.shared.windows.first { $0.isKeyWindow }
+    }()
+    
+    init() {
+        viewController = UIViewController()
+    }
 
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+        print(result)
+       guard let window = self.window else {return }
+       guard let vc = self.viewController else { return}
+       guard let rc = window.rootViewController else { return}
+       vc.dismiss(animated: true)
+       rc.dismiss(animated: true)
 
     }
 
@@ -34,10 +48,20 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
     }
 
+    func yunoCreatePayment(with token: String) {
+        guard let window = self.window else {return }
+        guard let vc = self.viewController else { return}
+        guard let rc = window.rootViewController else { return}
+        vc.dismiss(animated: true)
+        rc.dismiss(animated: true)
+        print(token)
+    }
+
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let configuration = app.configuration
-        let cardFormType = CardFlow(rawValue: configuration?.cardflow ?? "oneStep")
+        let cardFormType = CardFlow(rawValue: configuration?.cardFlow ?? "oneStep")
+    
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -64,39 +88,65 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
-
-    func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
-
+    
+    func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        guard let window = self.window else {return }
+        guard let controller = self.viewController else { return }
+        guard let rc = window.rootViewController else {return}
         guard let args = call.arguments as? [String: Any] else {
-            return  result(FlutterError(code: "4",
-             message: "Invalid arguments",
-              details: "Arguments are invalid")
-              )
+            return  result(YunoError.invalidArguments())
         }
-
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
+            let decoder = JSONDecoder()
+            let startPayment = try decoder.decode(StartPayment.self, from: jsonData)
+            
+            if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
+               startPayment.checkoutSession.isEmpty {
+                return result(YunoError.customError(code: "6", message: "Missing params", details: "startPayment.paymentMetdhodSelected:\(startPayment.paymentMetdhodSelected.paymentMethodType) is empty"
+                                                   )
+                )
+            }
+            self.checkoutSession = startPayment.checkoutSession
+            Yuno.startPaymentLite(
+                paymentSelected: startPayment.paymentMetdhodSelected,
+                showPaymentStatus: startPayment.showPaymentStatus
+            )
+            
+            if rc.presentedViewController == nil {
+                rc.present(controller, animated: true)
+                window.makeKeyAndVisible()
+            } else {
+                print("The view controller is already being presented.")
+            }
+            
+        } catch {
+            print(error)
+            return result(YunoError.somethingWentWrong())
+        }
+    }
+    
+    func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        guard let args = call.arguments as? [String: Any] else {
+            return  result(YunoError.invalidArguments())
+        }
+        
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
-            if app.apiKey.isEmpty || app.countryCode.isEmpty {
-                return result(
-                    FlutterError(code: "3",
-                    message: "Missing API Key or Country Code",
-                    details: "Missing params"
-                  )
-                )
+            if app.apiKey.isEmpty  || app.countryCode.isEmpty {
+                return result(YunoError.missingParams())
             }
-
+            self.countryCode = app.countryCode
             self.initialize(app: app )
-
             return result(true)
         } catch {
-            return result(
-            FlutterError(code: "0",
-            message: "Unexpected Exception",
-            details: "Something went wrong")
-             )
+            return result(YunoError.somethingWentWrong())
         }
     }
 }
