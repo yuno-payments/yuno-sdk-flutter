@@ -157,7 +157,7 @@ class YunoSdkAndroidPlugin :
 
     fun onPaymentStateChange(paymentState: String?) {
         paymentState?.let {
-            print("${paymentState}")
+      
         }
 
 
