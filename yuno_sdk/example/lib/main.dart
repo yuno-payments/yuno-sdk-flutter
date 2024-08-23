@@ -4,9 +4,8 @@ import 'package:yuno/yuno.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final yuno = await Yuno.init(
+    apiKey: '',
     sdkType: YunoSdkType.full,
-    apiKey: 'sdfds',
-    countryCode: 'CO',
   );
 
   runApp(

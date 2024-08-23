@@ -9,31 +9,30 @@ import '../utils/mock_yuno_platform.dart';
 void main() {
   late MockYunoPlatform mockPlatform;
 
-  setUp(() {
+  setUpAll(() {
     mockPlatform = MockYunoPlatform();
     YunoPlatform.instance = mockPlatform;
+    registerFallbackValue(const IosConfig());
+    registerFallbackValue(const AndroidConfig());
   });
 
   group('Yuno', () {
     test('init should call platform initialize', () async {
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
-            countryCode: any(named: 'countryCode'),
             iosConfig: any(named: 'iosConfig'),
             androidConfig: any(named: 'androidConfig'),
           )).thenAnswer((_) async {});
 
       await Yuno.init(
         apiKey: 'test_api_key',
-        countryCode: 'US',
         sdkType: YunoSdkType.full,
       );
 
       verify(() => mockPlatform.initialize(
             apiKey: 'test_api_key',
-            countryCode: 'US',
-            iosConfig: null,
-            androidConfig: null,
+            iosConfig: const IosConfig(),
+            androidConfig: const AndroidConfig(),
           )).called(1);
     });
 
@@ -41,7 +40,6 @@ void main() {
         () async {
       final yuno = await Yuno.init(
         apiKey: 'test_api_key',
-        countryCode: 'US',
         sdkType: YunoSdkType.lite,
       );
 
@@ -54,7 +52,6 @@ void main() {
         () async {
       final yuno = await Yuno.init(
         apiKey: 'test_api_key',
-        countryCode: 'US',
         sdkType: YunoSdkType.full,
       );
 

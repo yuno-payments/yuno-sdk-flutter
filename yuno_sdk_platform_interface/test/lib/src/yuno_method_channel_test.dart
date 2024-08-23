@@ -69,7 +69,7 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
-      const countryCode = 'US';
+
       const androidConfig =
           AndroidConfig(); // Replace with actual AndroidConfig
 
@@ -82,7 +82,6 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'countryCode': countryCode,
           'configuration': androidConfig.toMap(),
         });
 
@@ -91,7 +90,6 @@ void main() {
 
       await yunoMethodChannel.initialize(
         apiKey: apiKey,
-        countryCode: countryCode,
         androidConfig: androidConfig,
       );
 
@@ -108,7 +106,7 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
-      const countryCode = 'US';
+
       const iosConfig = IosConfig(); // Replace with actual IosConfig
 
       bool methodCalled = false;
@@ -120,7 +118,6 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'countryCode': countryCode,
           'configuration': iosConfig.toMap(),
         });
 
@@ -129,7 +126,6 @@ void main() {
 
       await yunoMethodChannel.initialize(
         apiKey: apiKey,
-        countryCode: countryCode,
         iosConfig: iosConfig,
       );
 

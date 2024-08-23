@@ -1,3 +1,3 @@
 library yuno;
-export 'src/src.dart';
 
+export 'src/src.dart';

@@ -82,7 +82,7 @@ struct Appearance: Codable, Sendable {
 
 struct Configuration: Codable, Sendable {
     let appearance: Appearance?
-    let cardflow: String?
+    let cardFlow: String?
     let saveCardEnable: Bool?
     let keepLoader: Bool?
     let isDynamicViewEnable: Bool?

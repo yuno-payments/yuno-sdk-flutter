@@ -1,39 +1,154 @@
 package com.example.yuno_sdk_android
 
-import android.view.View
-import androidx.annotation.NonNull
-
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import com.yuno.payments.core.Yuno
+import com.yuno.payments.features.payment.startCheckout
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.embedding.engine.FlutterEngine
-import com.yuno.payments.features.payment.startPayment
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import com.example.yuno_sdk_android.core.utils.keys.Key
+import com.example.yuno_sdk_android.models.toApiConfig
+import com.example.yuno_sdk_android.models.toCardFLowSDK
+import com.yuno.payments.core.YunoConfig
+import com.yuno.payments.features.payment.startPaymentLite
+import com.yuno.payments.features.payment.ui.views.PaymentSelected
+import io.flutter.embedding.android.FlutterFragmentActivity
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
+class YunoSdkAndroidPlugin :
+    FlutterPlugin,
+    MethodCallHandler,
+    ActivityAware,
+    DefaultLifecycleObserver {
 
-/** YunoSdkAndroidPlugin */
-class YunoSdkAndroidPlugin: FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+    private lateinit var channel: MethodChannel
+    private lateinit var context: Context
+    private lateinit var activity: FlutterFragmentActivity
+    private lateinit var startActivityForResultLauncher: ActivityResultLauncher<Intent>
 
-  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "yuno_sdk_android")
-    channel.setMethodCallHandler(this)
-  }
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
 
-  override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
+        activity.startCheckout(
+            checkoutSession = "",
+            callbackPaymentState = this::onPaymentStateChange,
+            callbackOTT = this::onTokenUpdated,
+
+        )
     }
-  }
 
-  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "yuno/payments")
+        channel.setMethodCallHandler(this)
+        context = flutterPluginBinding.applicationContext
+    }
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            Key.init -> {
+                try {
+                    val argument = call.arguments<Map<String, Any>>()
+                    val resultConverter = argument?.toApiConfig()
+
+                    resultConverter?.onSuccess { appConfig ->
+                        val config = appConfig.configuration;
+                        if (appConfig.apiKey.isEmpty()) {
+                            return result.error(
+                                "4",
+                                "ApiKey is empty",
+                                "ApiKey must be necessary for starting to use Yuno SDK"
+                            )
+                        }
+                        Yuno.initialize(
+                            context,
+                            appConfig.apiKey,
+                            config = YunoConfig(
+                                saveCardEnabled = config.saveCardEnable,
+                                cardFormDeployed = config.cardFormDeployed,
+                                isDynamicViewEnabled = config.isDynamicViewEnable,
+                                keepLoader = config.keepLoader,
+                                cardFlow = config.cardFlow.toCardFLowSDK()
+                            )
+                        )
+                        return result.success(true)
+                    }?.onFailure { exception ->
+                        println()
+                        return result.error(
+                            "5",
+                            "Failure: An error occurred - ${exception.message}",
+                            "Invalid arguments in json cast"
+                        )
+
+                    }
+
+                } catch (e: Exception) {
+                    return result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
+                }
+            }
+            "paymentMethods" -> {}
+            "startPayment" -> {
+                try {     
+                    activity.startPaymentLite(
+                        paymentSelected = PaymentSelected(
+                            paymentMethodType = "CARD",
+                            vaultedToken = ""
+                        )
+                    )
+                    result.success(true)
+                } catch (e: Exception) {
+            
+                }
+            }
+
+            else -> {
+                result.notImplemented()
+            }
+        }
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity as FlutterFragmentActivity
+        activity.lifecycle.addObserver(this)
+        startActivityForResultLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+        }
+    }
+
+    override fun onDetachedFromActivity() {
+        activity.lifecycle.removeObserver(this)
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity as FlutterFragmentActivity
+        activity.lifecycle.addObserver(this)
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        activity.lifecycle.removeObserver(this)
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
+
+    fun onTokenUpdated(token: String?) {
+        token?.let {
+       
+        }
+    }
+
+    fun onPaymentStateChange(paymentState: String?) {
+        paymentState?.let {     
+        }
+    }
 }
