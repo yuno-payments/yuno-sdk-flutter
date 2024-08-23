@@ -36,7 +36,7 @@ class MainApp extends StatelessWidget {
                   arguments: const StartPayment(
                     checkoutSession: '',
                     methodSelected: MethodSelected(
-                      paymentMethodType: 'CARD',
+                      paymentMethodType: 'sample',
                     ),
                   ),
                 );
