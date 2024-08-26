@@ -6,25 +6,7 @@
 //
 
 import Foundation
-import YunoSDK
 import UIKit
-
-    // Card Flow enum
-enum CardFlow: String {
-    case oneStep
-    case multiStep
-}
-
-extension CardFlow {
-    var toCardFormType: CardFormType? {
-        switch self {
-        case .oneStep:
-            return .oneStep
-        case .multiStep:
-            return .multiStep
-        }
-    }
-}
 
 struct Appearance: Codable, Sendable {
     let accentColor: UIColor?
@@ -97,7 +79,9 @@ struct AppConfiguration: Codable, Sendable {
 extension UIColor {
         // Initialize UIColor from hex integer
     convenience init?(hex: Int?) {
-        guard let hex = hex else { return nil }
+        guard let hex = hex else {
+            return
+        }
         let red = CGFloat((hex >> 16) & 0xFF) / 255.0
         let green = CGFloat((hex >> 8) & 0xFF) / 255.0
         let blue = CGFloat(hex & 0xFF) / 255.0

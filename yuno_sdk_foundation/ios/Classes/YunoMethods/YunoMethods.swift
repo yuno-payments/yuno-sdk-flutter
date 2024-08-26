@@ -10,12 +10,18 @@ import Foundation
 import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
-
+    private let methodChannel: FlutterMethodChannel
+    var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
 
-    func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+    private lazy var window: UIWindow? = {
+        return UIApplication.shared.windows.first { $0.isKeyWindow }
+    }()
 
+    init(methodChannel: FlutterMethodChannel) {
+        viewController = UIViewController()
+        self.methodChannel = methodChannel
     }
 
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
@@ -34,10 +40,24 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
     }
 
+    func yunoCreatePayment(with token: String) {
+        removeViews()
+    }
+    func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+        removeViews()
+    }
+    private func removeViews() {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
+        controller.dismiss(animated: true)
+        rc.dismiss(animated: true)
+    }
+
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let configuration = app.configuration
-        let cardFormType = CardFlow(rawValue: configuration?.cardflow ?? "oneStep")
+        let cardFormType = CardFlow(rawValue: configuration?.cardFlow ?? "oneStep")
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -65,13 +85,58 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
 extension YunoMethods {
 
-    func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func handleOTT(token: String) {
+        do {
+            methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
+        } catch {
+            methodChannel.invokeMethod(Keys.onError.rawValue, arguments: YunoError.somethingWentWrong())
+        }
+    }
 
+    func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
         guard let args = call.arguments as? [String: Any] else {
-            return  result(FlutterError(code: "4",
-             message: "Invalid arguments",
-              details: "Arguments are invalid")
+            return result(YunoError.invalidArguments())
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
+            let decoder = JSONDecoder()
+            let startPayment = try decoder
+            .decode(StartPayment.self, from: jsonData)
+            if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
+               startPayment.checkoutSession.isEmpty {
+                return result(YunoError
+                    .customError(
+                    code: "6",
+                    message: "Missing params",
+                    details: "param:\(startPayment.paymentMetdhodSelected.paymentMethodType) is empty"
+                )
               )
+            }
+            self.checkoutSession = startPayment.checkoutSession
+            Yuno.startPaymentLite(
+                paymentSelected: startPayment.paymentMetdhodSelected,
+                showPaymentStatus: startPayment.showPaymentStatus
+            )
+
+            if rc.presentedViewController == nil {
+                rc.present(controller, animated: true)
+                window.makeKeyAndVisible()
+            } else {
+                return result(YunoError.somethingWentWrong())
+            }
+
+        } catch {
+            return result(YunoError.somethingWentWrong())
+        }
+    }
+
+    func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? [String: Any] else {
+            return result(YunoError.invalidArguments())
         }
 
         do {
@@ -80,23 +145,13 @@ extension YunoMethods {
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
             if app.apiKey.isEmpty || app.countryCode.isEmpty {
-                return result(
-                    FlutterError(code: "3",
-                    message: "Missing API Key or Country Code",
-                    details: "Missing params"
-                  )
-                )
+                return result(YunoError.missingParams())
             }
-
+            self.countryCode = app.countryCode
             self.initialize(app: app )
-
             return result(true)
         } catch {
-            return result(
-            FlutterError(code: "0",
-            message: "Unexpected Exception",
-            details: "Something went wrong")
-             )
+            return result(YunoError.somethingWentWrong())
         }
     }
 }

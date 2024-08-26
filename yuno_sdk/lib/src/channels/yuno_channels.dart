@@ -11,12 +11,12 @@ import '../internals.dart';
 ///
 /// final yuno = await Yuno.init(
 ///   apiKey: 'your_api_key_here',
-///   sdkType: YunoSdkType.full || YunoSdkType.lite,
+///   countryCode: 'your_country_code',
 ///   iosConfig: IosConfig(), // Optional, can use default value
 ///   androidConfig: AndroidConfig(), // Optional, can use default value
 /// );
 /// ```
-abstract interface class Yuno {
+abstract interface class Yuno with YunoMixin {
   /// Initializes the Yuno SDK.
   ///
   /// This method must be called before any other interaction with the SDK. It returns a `Yuno`
@@ -34,32 +34,29 @@ abstract interface class Yuno {
   /// ```dart
   /// final yuno = await Yuno.init(
   ///   apiKey: 'your_api_key_here',
-  ///   sdkType: YunoSdkType.full || YunoSdkType.lite,
+  ///   countryCode: 'your_country_code',
   /// );
   /// ```
   static Future<Yuno> init({
     required String apiKey,
-    required YunoSdkType sdkType,
+    required String countryCode,
     IosConfig iosConfig = const IosConfig(),
     AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
-    final yuno = _YunoChannels(sdkType: sdkType);
+    const yuno = _YunoChannels();
     await yuno.init(
       apiKey: apiKey,
+      countryCode: countryCode,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );
     return yuno;
   }
-
-  Future<void> openPaymentMethodsScreen();
 }
 
 final class _YunoChannels implements Yuno {
-  const _YunoChannels({
-    required this.sdkType,
-  });
-  final YunoSdkType sdkType;
+  const _YunoChannels();
+
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
     __platform ??= YunoPlatform.instance;
@@ -68,10 +65,12 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
+    required String countryCode,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
   }) async {
     await _platform.initialize(
+      countryCode: countryCode,
       apiKey: apiKey,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
@@ -79,11 +78,13 @@ final class _YunoChannels implements Yuno {
   }
 
   @override
-  Future<void> openPaymentMethodsScreen() {
-    if (sdkType == YunoSdkType.lite) {
-      throw YunoNotSupport();
-    } else {}
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
+  }) async =>
+      await _platform.startPaymentLite(arguments: arguments);
 
+  @override
+  Future<void> openPaymentMethodsScreen() {
     throw UnimplementedError();
   }
 }

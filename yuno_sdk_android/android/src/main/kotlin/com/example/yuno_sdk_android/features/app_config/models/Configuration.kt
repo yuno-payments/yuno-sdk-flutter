@@ -1,4 +1,4 @@
-package com.example.yuno_sdk_android.models
+package com.example.yuno_sdk_android.features.app_config.models
 import com.yuno.payments.features.base.ui.screens.CardFormType
 
 

@@ -3,27 +3,24 @@ import UIKit
 import YunoSDK
 
 public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
-    fileprivate let instance: YunoMethods = YunoMethods()
+    fileprivate var instance: YunoMethods?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
       name: "yuno/payments",
-      binaryMessenger: registrar.messenger())
+    binaryMessenger: registrar.messenger())
     let instanceSDK = YunoSdkFoundationPlugin()
+    instanceSDK.instance = YunoMethods(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-      guard UIApplication.shared.windows.first(where: { $0.isKeyWindow }) != nil else {
-            result(FlutterError(code: "UNAVAILABLE",
-            message: "UIWindow is not available",
-            details: nil))
-            return
-        }
+    guard let instance = self.instance else {return }
     switch call.method {
-    case "initialize":
+    case Keys.initialize.rawValue:
         instance.handleInitialize(call: call, result: result)
-
+    case Keys.startPaymentLite.rawValue:
+        instance.handleStartPaymentLite(call: call, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

@@ -47,9 +47,11 @@ extension ParserAppearance on Appearance {
 extension Parser on Never {
   static Map<String, dynamic> toMap({
     required String apiKey,
+    required String countryCode,
     Map<String, dynamic>? configuration,
   }) {
     return <String, dynamic>{
+      'countryCode': countryCode,
       'apiKey': apiKey,
       'configuration': configuration,
     };
