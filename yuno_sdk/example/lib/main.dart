@@ -115,7 +115,7 @@ class __HomeLayoutState extends State<_HomeLayout> {
             ),
             Row(
               children: [
-                Text('$token'),
+                Text(token),
                 IconButton(
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: token));

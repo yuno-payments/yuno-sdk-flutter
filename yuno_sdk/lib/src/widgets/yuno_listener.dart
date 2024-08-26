@@ -61,7 +61,6 @@ class YunoListener extends StatefulWidget {
 }
 
 class _YunoListenerState extends State<YunoListener> {
-  final controller = SampleController();
   @override
   void initState() {
     super.initState();
