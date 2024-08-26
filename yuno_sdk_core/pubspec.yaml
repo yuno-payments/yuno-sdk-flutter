@@ -1,6 +1,6 @@
 name: yuno_sdk_core
-description: "A new Flutter package project."
-version: 0.0.1
+description: "A Yuno project"
+version: 1.0.0
 
 
 environment:
@@ -17,4 +17,3 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 
-flutter:

@@ -1,6 +1,1 @@
-
-
-
-class YunoSdkFoundation {
- 
-}
+class YunoSdkFoundation {}

@@ -12,13 +12,16 @@ void main() {
   group('YunoMethodChannel Tests', () {
     late MethodChannel methodChannel;
     late YunoMethodChannel yunoMethodChannel;
+    late YunoNotifier yunoController;
 
     setUp(() {
       methodChannel = const MethodChannel('test_channel');
+      yunoController = YunoNotifier();
     });
 
     test('isIos getter should return true when platformIsIos is true', () {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
@@ -29,6 +32,7 @@ void main() {
 
     test('isIos getter should return false when platformIsIos is false', () {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
@@ -40,6 +44,7 @@ void main() {
     test('isAndroid getter should return true when platformIsAndroid is true',
         () {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
@@ -51,6 +56,7 @@ void main() {
     test('isAndroid getter should return false when platformIsAndroid is false',
         () {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
@@ -63,6 +69,7 @@ void main() {
         'initialize should invoke the method channel with correct parameters for Android',
         () async {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
@@ -103,6 +110,7 @@ void main() {
         'initialize should invoke the method channel with correct parameters for iOS',
         () async {
       yunoMethodChannel = YunoMethodChannel(
+        yunoNotifier: yunoController,
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,

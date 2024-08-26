@@ -50,16 +50,3 @@ class YunoError {
         )
     }
 }
-
-let PAYMENT_METHOD_IS_REQUIRED = FlutterError(
-    code: "0",
-    message: "Unexpected Exception",
-    details: "Something went wrong")
-
-let SOMETHING_WENT_WRONG = FlutterError(code: "0",
-                   message: "Unexpected Exception",
-                   details: "Something went wrong")
-
-let MISSING_PARAMS = FlutterError(code: "3",
-                    message: "Missing API Key or Country Code",
-                    details: "Missing params")

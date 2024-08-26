@@ -25,25 +25,23 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
 
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
-
     }
 
     func yunoDidSelect(enrollmentMethod: any YunoSDK.EnrollmentMethodSelected) {
-
     }
 
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
-
     }
 
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
-
     }
 
     func yunoCreatePayment(with token: String) {
+        handleOTT(token: token)
         removeViews()
     }
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+        handleStatus(status: result.rawValue)
         removeViews()
     }
     private func removeViews() {
@@ -80,25 +78,43 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
         )
         Yuno.startCheckout(with: self)
     }
-
 }
 
 extension YunoMethods {
+    private func presentController(error: @escaping () -> Void ) {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
+        if rc.presentedViewController == nil {
+            rc.present(controller, animated: true)
+            window.makeKeyAndVisible()
+        } else {
+            error()
+        }
+    }
+    func handleStatus(status: Int) {
+        methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
+    }
 
     func handleOTT(token: String) {
+        methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
+    }
+    func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        
+        //TODO: keep to implement mapping param function
         do {
-            methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
+            Yuno.continuePayment(showPaymentStatus: true)
+            presentController {
+                return result(YunoError.somethingWentWrong())
+            }
         } catch {
-            methodChannel.invokeMethod(Keys.onError.rawValue, arguments: YunoError.somethingWentWrong())
+            result(YunoError.somethingWentWrong())
         }
     }
 
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let window = self.window,
-              let controller = self.viewController,
-              let rc = window.rootViewController else { return }
         guard let args = call.arguments as? [String: Any] else {
-            return result(YunoError.invalidArguments())
+          return result(YunoError.invalidArguments())
         }
 
         do {
@@ -108,7 +124,7 @@ extension YunoMethods {
             .decode(StartPayment.self, from: jsonData)
             if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
                startPayment.checkoutSession.isEmpty {
-                return result(YunoError
+                 result(YunoError
                     .customError(
                     code: "6",
                     message: "Missing params",
@@ -122,21 +138,17 @@ extension YunoMethods {
                 showPaymentStatus: startPayment.showPaymentStatus
             )
 
-            if rc.presentedViewController == nil {
-                rc.present(controller, animated: true)
-                window.makeKeyAndVisible()
-            } else {
+            presentController {
                 return result(YunoError.somethingWentWrong())
             }
-
         } catch {
-            return result(YunoError.somethingWentWrong())
+            result(YunoError.somethingWentWrong())
         }
     }
 
     func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-            return result(YunoError.invalidArguments())
+           return result(YunoError.invalidArguments())
         }
 
         do {
@@ -145,13 +157,13 @@ extension YunoMethods {
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
             if app.apiKey.isEmpty || app.countryCode.isEmpty {
-                return result(YunoError.missingParams())
+                 result(YunoError.missingParams())
             }
             self.countryCode = app.countryCode
             self.initialize(app: app )
-            return result(true)
+             result(true)
         } catch {
-            return result(YunoError.somethingWentWrong())
+             result(YunoError.somethingWentWrong())
         }
     }
 }

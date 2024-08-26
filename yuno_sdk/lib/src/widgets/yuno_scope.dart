@@ -68,4 +68,5 @@ extension YunoReader on BuildContext {
       yuno().startPaymentLite(
         arguments: arguments,
       );
+  Future<void> continuePayment() => yuno().continuePayment();
 }
