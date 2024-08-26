@@ -1,4 +1,0 @@
-enum YunoSdkType{
-  full,
-  lite,
-}
