@@ -80,7 +80,7 @@ extension UIColor {
         // Initialize UIColor from hex integer
     convenience init?(hex: Int?) {
         guard let hex = hex else {
-            return
+            return nil
         }
         let red = CGFloat((hex >> 16) & 0xFF) / 255.0
         let green = CGFloat((hex >> 8) & 0xFF) / 255.0
