@@ -16,7 +16,7 @@ import '../internals.dart';
 ///   androidConfig: AndroidConfig(), // Optional, can use default value
 /// );
 /// ```
-abstract interface class Yuno with YunoMixin {
+abstract interface class Yuno {
   /// Initializes the Yuno SDK.
   ///
   /// This method must be called before any other interaction with the SDK. It returns a `Yuno`
@@ -44,14 +44,24 @@ abstract interface class Yuno with YunoMixin {
     AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
     const yuno = _YunoChannels();
+    await yuno.initInvoke();
     await yuno.init(
       apiKey: apiKey,
       countryCode: countryCode,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );
+
     return yuno;
   }
+
+  Future<void> openPaymentMethodsScreen();
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
+  });
+  Future<void> continuePayment({
+    bool showPaymentStatus = true,
+  });
 }
 
 final class _YunoChannels implements Yuno {
@@ -77,11 +87,20 @@ final class _YunoChannels implements Yuno {
     );
   }
 
+  Future<void> initInvoke() async {
+    await _platform.init();
+  }
+
   @override
   Future<void> startPaymentLite({
     required StartPayment arguments,
   }) async =>
       await _platform.startPaymentLite(arguments: arguments);
+
+  @override
+  Future<void> continuePayment({bool showPaymentStatus = true}) async {
+    await _platform.continuePayment(showPaymentStatus: showPaymentStatus);
+  }
 
   @override
   Future<void> openPaymentMethodsScreen() {
