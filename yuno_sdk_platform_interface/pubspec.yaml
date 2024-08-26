@@ -1,6 +1,7 @@
 name: yuno_sdk_platform_interface
 description: "A new Flutter plugin project."
 version: 0.0.1
+publish_to: none
 
 
 environment:
@@ -11,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  yuno_sdk_core:
+    path: ../yuno_sdk_core
 
 dev_dependencies:
   flutter_test:

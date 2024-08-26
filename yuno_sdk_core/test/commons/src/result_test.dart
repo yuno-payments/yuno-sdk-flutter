@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yuno_sdk_core/lib.dart';
 
-
 void main() {
   group('Result', () {
     group('Ok', () {

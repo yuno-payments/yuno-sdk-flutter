@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:yuno_sdk_core/lib.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
 class YunoMethodChannel implements YunoPlatform {
@@ -10,7 +12,9 @@ class YunoMethodChannel implements YunoPlatform {
     required MethodChannel methodChannel,
     required bool platformIsIos,
     required bool platformIsAndroid,
+    required YunoNotifier yunoNotifier,
   })  : _methodChannel = methodChannel,
+        _yunoNotifier = yunoNotifier,
         _platformIsAndroid = platformIsAndroid,
         _platformIsIos = platformIsIos;
 
@@ -19,6 +23,7 @@ class YunoMethodChannel implements YunoPlatform {
   @visibleForTesting
   bool get isAndroid => _platformIsAndroid;
 
+  final YunoNotifier _yunoNotifier;
   final MethodChannel _methodChannel;
   final bool _platformIsIos;
   final bool _platformIsAndroid;
@@ -51,6 +56,38 @@ class YunoMethodChannel implements YunoPlatform {
     final data = arguments.toMap();
     await _methodChannel.invokeMethod('startPaymentLite', data);
   }
+
+  @override
+  Future<void> continuePayment({
+    bool showPaymentStatus = true,
+  }) async {
+    await _methodChannel.invokeMethod('continuePayment');
+  }
+
+  @override
+  Future<void> init() async {
+    _methodChannel.setMethodCallHandler((MethodCall call) async {
+      switch (call.method) {
+        case 'ott':
+          if (call.arguments is! String) return;
+          final token = call.arguments as String;
+          _yunoNotifier.add(token);
+          break;
+
+        case 'status':
+          if (call.arguments is! int) return;
+          final index = call.arguments as int;
+          _yunoNotifier.addStatus(PaymentStatus.values[index]);
+          break;
+        default:
+          throw MissingPluginException(
+              'Not implemented method: ${call.method}');
+      }
+    });
+  }
+
+  @override
+  YunoNotifier get controller => _yunoNotifier;
 }
 
 /// {@template commons_YunoMethodChannelFactory}
@@ -66,6 +103,7 @@ class YunoMethodChannelFactory {
         methodChannel: const MethodChannel(
           'yuno/payments',
         ),
+        yunoNotifier: YunoNotifier(),
         platformIsIos: Platform.isIOS,
         platformIsAndroid: Platform.isAndroid,
       );
