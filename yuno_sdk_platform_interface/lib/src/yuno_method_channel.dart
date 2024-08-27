@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-class YunoMethodChannel implements YunoPlatform {
+final class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
 
   YunoMethodChannel({
@@ -101,7 +101,7 @@ class YunoMethodChannel implements YunoPlatform {
 ///  static YunoPlatform _instance = const YunoMethodChannelFactory().create();
 /// ```
 /// {@endtemplate}
-class YunoMethodChannelFactory {
+final class YunoMethodChannelFactory {
   const YunoMethodChannelFactory();
 
   YunoPlatform create() => YunoMethodChannel(
