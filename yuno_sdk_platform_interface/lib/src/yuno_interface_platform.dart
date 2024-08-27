@@ -37,6 +37,8 @@ abstract interface class YunoPlatform extends PlatformInterface {
     AndroidConfig androidConfig,
   });
 
+  Future<void> hideLoader();
+
   Future<void> startPaymentLite({
     required StartPayment arguments,
   });

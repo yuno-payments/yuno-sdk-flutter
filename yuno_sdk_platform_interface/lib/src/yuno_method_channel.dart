@@ -88,6 +88,11 @@ class YunoMethodChannel implements YunoPlatform {
 
   @override
   YunoNotifier get controller => _yunoNotifier;
+
+  @override
+  Future<void> hideLoader() async {
+    await _methodChannel.invokeMethod('hideLoader');
+  }
 }
 
 /// {@template commons_YunoMethodChannelFactory}

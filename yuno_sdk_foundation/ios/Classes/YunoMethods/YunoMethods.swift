@@ -82,17 +82,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
 extension YunoMethods {
     
-    private func presentController(error: @escaping () -> Void ) {
-        guard let window = self.window,
-              let controller = self.viewController,
-              let rc = window.rootViewController else { return }
-        if rc.presentedViewController == nil {
-            rc.present(controller, animated: true)
-            window.makeKeyAndVisible()
-        } else {
-            error()
-        }
-    }
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
@@ -100,6 +89,15 @@ extension YunoMethods {
     func handleOTT(token: String) {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
     }
+    
+    func handleHideLoader(call: FlutterMethodCall, result: @escaping FlutterResult){
+        do {
+            Yuno.hideLoader()
+        } catch {
+            return result(YunoError.somethingWentWrong())
+        }
+    }
+    
     func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? Bool else {
             return result(YunoError.invalidArguments())
@@ -166,6 +164,18 @@ extension YunoMethods {
              result(true)
         } catch {
              result(YunoError.somethingWentWrong())
+        }
+    }
+    
+    private func presentController(error: @escaping () -> Void ) {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
+        if rc.presentedViewController == nil {
+            rc.present(controller, animated: true)
+            window.makeKeyAndVisible()
+        } else {
+            error()
         }
     }
 }

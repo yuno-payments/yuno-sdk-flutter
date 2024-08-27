@@ -62,6 +62,7 @@ abstract interface class Yuno {
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   });
+  Future<void> hideLoader();
 }
 
 final class _YunoChannels implements Yuno {
@@ -78,18 +79,15 @@ final class _YunoChannels implements Yuno {
     required String countryCode,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
-  }) async {
-    await _platform.initialize(
-      countryCode: countryCode,
-      apiKey: apiKey,
-      iosConfig: iosConfig,
-      androidConfig: androidConfig,
-    );
-  }
+  }) async =>
+      await _platform.initialize(
+        countryCode: countryCode,
+        apiKey: apiKey,
+        iosConfig: iosConfig,
+        androidConfig: androidConfig,
+      );
 
-  Future<void> initInvoke() async {
-    await _platform.init();
-  }
+  Future<void> initInvoke() async => await _platform.init();
 
   @override
   Future<void> startPaymentLite({
@@ -98,9 +96,11 @@ final class _YunoChannels implements Yuno {
       await _platform.startPaymentLite(arguments: arguments);
 
   @override
-  Future<void> continuePayment({bool showPaymentStatus = true}) async {
-    await _platform.continuePayment(showPaymentStatus: showPaymentStatus);
-  }
+  Future<void> continuePayment({bool showPaymentStatus = true}) async =>
+      await _platform.continuePayment(showPaymentStatus: showPaymentStatus);
+
+  @override
+  Future<void> hideLoader() async => await _platform.hideLoader();
 
   @override
   Future<void> openPaymentMethodsScreen() {

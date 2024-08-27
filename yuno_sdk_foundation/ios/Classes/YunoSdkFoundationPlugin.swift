@@ -24,6 +24,8 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
         instance.handleStartPaymentLite(call: call, result: result)
     case Keys.continuePayment.rawValue:
         instance.continuePayment(call: call, result: result)
+    case Keys.hideLoader.rawValue:
+        instance.handleHideLoader(call: call,result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

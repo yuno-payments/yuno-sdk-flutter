@@ -14,4 +14,5 @@ enum Keys: String {
     case ott
     case onError
     case status
+    case hideLoader
 }
