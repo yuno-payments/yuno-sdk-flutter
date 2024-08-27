@@ -50,18 +50,10 @@ class YunoMethodChannel implements YunoPlatform {
   }
 
   @override
-  Future<void> startPaymentLite({
-    required StartPayment arguments,
-  }) async {
-    final data = arguments.toMap();
-    await _methodChannel.invokeMethod('startPaymentLite', data);
-  }
-
-  @override
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   }) async {
-    await _methodChannel.invokeMethod('continuePayment');
+    await _methodChannel.invokeMethod('continuePayment', showPaymentStatus);
   }
 
   @override
@@ -84,6 +76,14 @@ class YunoMethodChannel implements YunoPlatform {
               'Not implemented method: ${call.method}');
       }
     });
+  }
+
+  @override
+  Future<void> startPaymentLite({
+    required StartPayment arguments,
+  }) async {
+    final data = arguments.toMap();
+    await _methodChannel.invokeMethod('startPaymentLite', data);
   }
 
   @override
