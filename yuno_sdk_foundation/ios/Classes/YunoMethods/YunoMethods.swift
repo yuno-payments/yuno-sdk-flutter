@@ -14,7 +14,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
-    var language: String? = nil
+    var language: String?
 
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
@@ -148,7 +148,7 @@ extension YunoMethods {
         guard let args = call.arguments as? [String: Any] else {
            return result(YunoError.invalidArguments())
         }
-
+    
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
