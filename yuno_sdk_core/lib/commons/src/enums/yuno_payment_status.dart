@@ -4,5 +4,5 @@ enum PaymentStatus {
   fail,
   processing,
   internalError,
-  cancel,
+  cancelByUser,
 }

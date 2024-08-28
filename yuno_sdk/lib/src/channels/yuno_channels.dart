@@ -40,6 +40,7 @@ abstract interface class Yuno {
   static Future<Yuno> init({
     required String apiKey,
     required String countryCode,
+    YunoLanguage lang = YunoLanguage.en,
     IosConfig iosConfig = const IosConfig(),
     AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
@@ -47,6 +48,7 @@ abstract interface class Yuno {
     await yuno.initInvoke();
     await yuno.init(
       apiKey: apiKey,
+      lang: lang,
       countryCode: countryCode,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
@@ -76,13 +78,15 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
+    required YunoLanguage lang,
     required String countryCode,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
   }) async =>
       await _platform.initialize(
-        countryCode: countryCode,
+        lang: lang,
         apiKey: apiKey,
+        countryCode: countryCode,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
       );

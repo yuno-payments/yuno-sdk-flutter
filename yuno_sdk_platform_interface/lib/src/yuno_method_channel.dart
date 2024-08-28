@@ -32,17 +32,20 @@ final class YunoMethodChannel implements YunoPlatform {
   Future<void> initialize({
     required String apiKey,
     required String countryCode,
+    YunoLanguage lang = YunoLanguage.en,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     final mapper = isAndroid
         ? Parser.toMap(
             apiKey: apiKey,
+            lang: lang,
             countryCode: countryCode,
             configuration: androidConfig?.toMap(),
           )
         : Parser.toMap(
             apiKey: apiKey,
+            lang: lang,
             countryCode: countryCode,
             configuration: iosConfig?.toMap(),
           );
