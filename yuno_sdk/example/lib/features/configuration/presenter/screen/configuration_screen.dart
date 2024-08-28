@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
-class HomeViewLite extends StatelessWidget {
-  const HomeViewLite({super.key});
+class ConfigurationScreen extends StatelessWidget {
+  const ConfigurationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

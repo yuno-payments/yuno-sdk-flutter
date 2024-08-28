@@ -1,6 +1,7 @@
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
@@ -25,28 +26,21 @@ class _RegisterFormState extends State<RegisterForm> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            TextFormField(
-              controller: _aliasController,
+            YunoInput(
+              title: 'Alias',
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter an alias';
                 }
                 return null;
               },
-              decoration: InputDecoration(
-                labelText: 'Alias',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ),
+              controller: _aliasController,
             ),
             const SizedBox(
               height: 10,
             ),
-            TextFormField(
+            YunoInput(
+              title: 'Coutry code',
               controller: _countryCodeController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -54,20 +48,12 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
-                labelText: 'Coutry code',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ),
             ),
             const SizedBox(
               height: 10,
             ),
-            TextFormField(
+            YunoInput(
+              title: 'Public Api Key',
               controller: _apiController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -75,15 +61,6 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
-                labelText: 'Public Api Key',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ),
             ),
             const SizedBox(
               height: 20,
@@ -137,6 +114,63 @@ class _RegisterFormState extends State<RegisterForm> {
       if (!mounted) return;
       Navigator.pop(context);
     }
+  }
+}
+
+typedef Validator = String? Function(String?)?;
+
+class YunoInput extends StatelessWidget {
+  const YunoInput({
+    super.key,
+    required this.title,
+    required this.validator,
+    required TextEditingController controller,
+  }) : _controller = controller;
+
+  final TextEditingController _controller;
+  final Validator validator;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 5,
+          child: TextFormField(
+            controller: _controller,
+            validator: validator,
+            decoration: InputDecoration(
+              labelText: title,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () async =>
+              await Clipboard.setData(ClipboardData(text: _controller.text)),
+          icon: const Icon(
+            Icons.copy,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () async {
+            var cdata = await Clipboard.getData(Clipboard.kTextPlain);
+            _controller.text = cdata?.text ?? '';
+          },
+          icon: const Icon(
+            Icons.paste_sharp,
+          ),
+        ),
+      ],
+    );
   }
 }
 

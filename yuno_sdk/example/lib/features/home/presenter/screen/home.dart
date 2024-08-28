@@ -1,6 +1,6 @@
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
-import 'package:example/features/lite/presenter/screen/home_lite.dart';
+import 'package:example/features/configuration/presenter/screen/configuration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const HomeViewLite())),
+                                        const ConfigurationScreen())),
                             title: Text(
                               credential.alias,
                               style: const TextStyle(
