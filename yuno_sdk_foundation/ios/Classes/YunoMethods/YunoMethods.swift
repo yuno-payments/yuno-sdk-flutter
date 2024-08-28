@@ -81,6 +81,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
+    
     private func presentController(error: @escaping () -> Void ) {
         guard let window = self.window,
               let controller = self.viewController,
@@ -100,15 +101,16 @@ extension YunoMethods {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
     }
     func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        
-        //TODO: keep to implement mapping param function
+        guard let args = call.arguments as? Bool else {
+            return result(YunoError.invalidArguments())
+        }
         do {
-            Yuno.continuePayment(showPaymentStatus: true)
+            Yuno.continuePayment(showPaymentStatus: args)
             presentController {
                 return result(YunoError.somethingWentWrong())
             }
         } catch {
-            result(YunoError.somethingWentWrong())
+           return result(YunoError.somethingWentWrong())
         }
     }
 

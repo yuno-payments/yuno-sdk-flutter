@@ -6,4 +6,6 @@ export 'package:yuno_sdk_platform_interface/lib.dart'
     hide ParserAndroidConfig
     hide ParserIosConfig
     hide ParserAppearance
+    hide YunoMethodChannelFactory
+    hide YunoNotifier
     hide Parser;
