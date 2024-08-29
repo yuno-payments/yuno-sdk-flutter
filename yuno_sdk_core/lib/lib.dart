@@ -1,1 +1,3 @@
-export 'commons/commons.dart';
+library yuno_sdk_core;
+
+export 'commons/commons.dart' hide Injector hide Result;

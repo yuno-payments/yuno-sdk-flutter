@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _aliasController = TextEditingController();
   final _apiController = TextEditingController();
-  final _countryCodeController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -39,16 +40,6 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(
               height: 10,
             ),
-            YunoInput(
-              title: 'Coutry code',
-              controller: _countryCodeController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your contry coude';
-                }
-                return null;
-              },
-            ),
             const SizedBox(
               height: 10,
             ),
@@ -60,6 +51,42 @@ class _RegisterFormState extends State<RegisterForm> {
                   return 'Please enter your api key';
                 }
                 return null;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final controller = ref.watch(contryCodeNotifier);
+                final reader = ref.read(contryCodeNotifier.notifier);
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CountryCodePicker(
+                          initialSelection: controller?.code,
+                          onChanged: (value) => reader.changeContryCode(value),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: TextFormField(
+                          controller: TextEditingController(
+                              text:
+                                  '${controller?.name ?? ''}  ${controller?.code ?? ''}'),
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Choose a country'),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
             const SizedBox(
@@ -104,11 +131,14 @@ class _RegisterFormState extends State<RegisterForm> {
     required SecureStorage storage,
     required WidgetRef ref,
   }) async {
-    if (_formKey.currentState!.validate()) {
+    final contryCode = ref.read(contryCodeNotifier);
+    if (_formKey.currentState!.validate() && contryCode != null) {
       await storage.write(key: Keys.alias.name, value: _aliasController.text);
       await storage.write(key: Keys.apiKey.name, value: _apiController.text);
       await storage.write(
-          key: Keys.countryCode.name, value: _countryCodeController.text);
+        key: Keys.countryCode.name,
+        value: contryCode.code ?? 'CO',
+      );
       final _ = ref.refresh(credentialNotifier.future);
       _formKey.currentState!.reset();
       if (!mounted) return;
@@ -189,3 +219,15 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
     ),
   );
 });
+
+final contryCodeNotifier = NotifierProvider<CountryCodeNotiifer, CountryCode?>(
+    CountryCodeNotiifer.new);
+
+class CountryCodeNotiifer extends Notifier<CountryCode?> {
+  @override
+  CountryCode? build() => null;
+
+  void changeContryCode(CountryCode value) {
+    state = value;
+  }
+}
