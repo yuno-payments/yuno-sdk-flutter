@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-class YunoMethodChannel implements YunoPlatform {
+final class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
 
   YunoMethodChannel({
@@ -32,17 +32,20 @@ class YunoMethodChannel implements YunoPlatform {
   Future<void> initialize({
     required String apiKey,
     required String countryCode,
+    YunoLanguage lang = YunoLanguage.en,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     final mapper = isAndroid
         ? Parser.toMap(
             apiKey: apiKey,
+            lang: lang,
             countryCode: countryCode,
             configuration: androidConfig?.toMap(),
           )
         : Parser.toMap(
             apiKey: apiKey,
+            lang: lang,
             countryCode: countryCode,
             configuration: iosConfig?.toMap(),
           );
@@ -88,6 +91,11 @@ class YunoMethodChannel implements YunoPlatform {
 
   @override
   YunoNotifier get controller => _yunoNotifier;
+
+  @override
+  Future<void> hideLoader() async {
+    await _methodChannel.invokeMethod('hideLoader');
+  }
 }
 
 /// {@template commons_YunoMethodChannelFactory}
@@ -96,7 +104,7 @@ class YunoMethodChannel implements YunoPlatform {
 ///  static YunoPlatform _instance = const YunoMethodChannelFactory().create();
 /// ```
 /// {@endtemplate}
-class YunoMethodChannelFactory {
+final class YunoMethodChannelFactory {
   const YunoMethodChannelFactory();
 
   YunoPlatform create() => YunoMethodChannel(

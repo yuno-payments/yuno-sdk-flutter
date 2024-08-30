@@ -14,6 +14,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
+    var language: String?
 
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
@@ -81,18 +82,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
-    
-    private func presentController(error: @escaping () -> Void ) {
-        guard let window = self.window,
-              let controller = self.viewController,
-              let rc = window.rootViewController else { return }
-        if rc.presentedViewController == nil {
-            rc.present(controller, animated: true)
-            window.makeKeyAndVisible()
-        } else {
-            error()
-        }
-    }
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
@@ -100,25 +89,23 @@ extension YunoMethods {
     func handleOTT(token: String) {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
     }
+    func handleHideLoader(call: FlutterMethodCall, result: @escaping FlutterResult) {
+            Yuno.hideLoader()
+    }
     func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? Bool else {
             return result(YunoError.invalidArguments())
         }
-        do {
             Yuno.continuePayment(showPaymentStatus: args)
             presentController {
                 return result(YunoError.somethingWentWrong())
             }
-        } catch {
-           return result(YunoError.somethingWentWrong())
-        }
     }
 
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
           return result(YunoError.invalidArguments())
         }
-
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
@@ -152,7 +139,6 @@ extension YunoMethods {
         guard let args = call.arguments as? [String: Any] else {
            return result(YunoError.invalidArguments())
         }
-
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
@@ -162,10 +148,22 @@ extension YunoMethods {
                  result(YunoError.missingParams())
             }
             self.countryCode = app.countryCode
+            self.language = app.lang
             self.initialize(app: app )
              result(true)
         } catch {
              result(YunoError.somethingWentWrong())
+        }
+    }
+    private func presentController(error: @escaping () -> Void ) {
+        guard let window = self.window,
+              let controller = self.viewController,
+              let rc = window.rootViewController else { return }
+        if rc.presentedViewController == nil {
+            rc.present(controller, animated: true)
+            window.makeKeyAndVisible()
+        } else {
+            error()
         }
     }
 }

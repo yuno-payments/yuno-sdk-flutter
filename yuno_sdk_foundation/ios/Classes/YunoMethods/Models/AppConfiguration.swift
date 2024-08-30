@@ -72,6 +72,7 @@ struct Configuration: Codable, Sendable {
 
 struct AppConfiguration: Codable, Sendable {
     let apiKey: String
+    let lang: String
     let countryCode: String
     let configuration: Configuration?
 }
