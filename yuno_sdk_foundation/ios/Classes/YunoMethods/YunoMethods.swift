@@ -139,7 +139,6 @@ extension YunoMethods {
         guard let args = call.arguments as? [String: Any] else {
            return result(YunoError.invalidArguments())
         }
-
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
