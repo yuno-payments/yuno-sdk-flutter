@@ -90,31 +90,22 @@ extension YunoMethods {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
     }
     func handleHideLoader(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        do {
             Yuno.hideLoader()
-        } catch {
-            return result(YunoError.somethingWentWrong())
-        }
     }
     func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? Bool else {
             return result(YunoError.invalidArguments())
         }
-        do {
             Yuno.continuePayment(showPaymentStatus: args)
             presentController {
                 return result(YunoError.somethingWentWrong())
             }
-        } catch {
-           return result(YunoError.somethingWentWrong())
-        }
     }
 
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
           return result(YunoError.invalidArguments())
         }
-
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
@@ -148,7 +139,7 @@ extension YunoMethods {
         guard let args = call.arguments as? [String: Any] else {
            return result(YunoError.invalidArguments())
         }
-    
+
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
