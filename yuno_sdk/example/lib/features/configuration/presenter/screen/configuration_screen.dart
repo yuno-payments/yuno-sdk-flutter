@@ -1,3 +1,5 @@
+import 'package:example/core/feature/utils/yuno_assets.dart';
+import 'package:example/features/configuration/presenter/ios_configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
 import 'package:flutter/services.dart';
@@ -40,61 +42,109 @@ class __HomeLayoutState extends State<_HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFF2F2F7),
-        ),
-        body: Consumer(
-          builder: (context, ref, child) {
-            return YunoListener(
-              listener: (context, state) {
-                ref
-                    .read(checkoutSessionNotifier.notifier)
-                    .recoverySession(state.token);
-                YunoSnackBar.showSnackBar(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF2F2F7),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  const Text('IOS Configuration '),
+                  Image.asset(
+                    YunoAssets.appleIC,
+                    height: 20,
+                    width: 20,
+                  )
+                ],
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
                   context,
-                  state.status,
-                  () {
-                    ref.read(checkoutSessionNotifier.notifier).resetSession();
-                  },
+                  MaterialPageRoute(
+                    builder: (ctx) => const IOSConfigurationScreen(),
+                  ),
                 );
               },
-              child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Text(
-                                  'PAYMENT',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 126, 126, 126),
-                                    fontSize: 12,
-                                  ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  const Text('Android Configuration '),
+                  Image.asset(
+                    YunoAssets.androidIC,
+                    height: 20,
+                    width: 20,
+                  )
+                ],
+              ),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+      body: Consumer(
+        builder: (context, ref, child) {
+          return YunoListener(
+            listener: (context, state) {
+              ref
+                  .read(checkoutSessionNotifier.notifier)
+                  .recoverySession(state.token);
+              YunoSnackBar.showSnackBar(
+                context,
+                state.status,
+                () {
+                  ref.read(checkoutSessionNotifier.notifier).resetSession();
+                },
+              );
+            },
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                'PAYMENT',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 126, 126, 126),
+                                  fontSize: 12,
                                 ),
                               ),
-                            ],
-                          ),
-                          ExecutePayments()
-                        ],
-                      )
-                    ],
-                  ),
+                            ),
+                          ],
+                        ),
+                        ExecutePayments()
+                      ],
+                    )
+                  ],
                 ),
               ),
-            );
-          },
-        ));
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -121,7 +171,6 @@ class _ExecutePaymentsState extends State<ExecutePayments> {
       elevation: 0,
       child: SizedBox(
         width: double.infinity,
-        height: 400,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Form(

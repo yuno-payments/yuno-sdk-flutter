@@ -183,20 +183,20 @@ class YunoInput extends StatelessWidget {
         ),
         IconButton(
           padding: EdgeInsets.zero,
-          onPressed: () async =>
-              await Clipboard.setData(ClipboardData(text: _controller.text)),
-          icon: const Icon(
-            Icons.copy,
-          ),
-        ),
-        IconButton(
-          padding: EdgeInsets.zero,
           onPressed: () async {
             var cdata = await Clipboard.getData(Clipboard.kTextPlain);
             _controller.text = cdata?.text ?? '';
           },
           icon: const Icon(
             Icons.paste_sharp,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () async =>
+              await Clipboard.setData(ClipboardData(text: _controller.text)),
+          icon: const Icon(
+            Icons.copy,
           ),
         ),
       ],
