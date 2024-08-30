@@ -58,7 +58,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.cancel:
+      case PaymentStatus.cancelByUser:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Transaction had been canceled 😢'),

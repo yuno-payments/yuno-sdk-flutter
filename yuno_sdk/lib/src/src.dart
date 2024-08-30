@@ -1,6 +1,6 @@
 export 'widgets/widgets.dart';
 export './channels/channels.dart';
-export 'package:yuno_sdk_core/commons/externals.dart';
+export 'package:yuno_sdk_core/commons/external.dart';
 export 'package:yuno_sdk_platform_interface/lib.dart'
     hide YunoMethodChannel
     hide YunoPlatform
