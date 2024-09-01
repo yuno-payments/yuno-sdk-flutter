@@ -1,7 +1,12 @@
 enum Keys {
   apiKey,
   cardFlow,
+  fontFamily,
   countryCode,
+  saveCardEnable,
+  cardFormDeployed,
+  isDynamicViewEnable,
+  keepLoader,
   alias,
   checkoutSession,
   accentColor,

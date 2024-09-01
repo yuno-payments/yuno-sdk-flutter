@@ -8,6 +8,7 @@ class YunoConfig {
     this.saveCardEnable = false,
     this.keepLoader = false,
     this.isDynamicViewEnable = false,
+    this.cardFormDeployed = false,
   });
 
   final YunoLanguage lang;
@@ -15,6 +16,7 @@ class YunoConfig {
   final bool saveCardEnable;
   final bool keepLoader;
   final bool isDynamicViewEnable;
+  final bool cardFormDeployed;
 
   @override
   bool operator ==(covariant YunoConfig other) {

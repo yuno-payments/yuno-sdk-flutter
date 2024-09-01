@@ -52,8 +52,23 @@ class SecureStorage {
     return data as String;
   }
 
+  Future<void> writeBool({
+    required String key,
+    required bool value,
+  }) async {
+    await storage.setBool(key, value);
+  }
+
+  Future<bool> getBool({
+    required String key,
+  }) async {
+    await storage.reload();
+    return storage.getBool(key) ?? false;
+  }
+
   Future<void> removeAll() async {
     await storage.clear();
+    await storage.reload();
   }
 
   Future<YunoLanguage?> getLang({
@@ -84,6 +99,40 @@ final credentialNotifier = FutureProvider<Credential>(
       countryCode: countryCode,
       alias: alias,
     );
+  },
+);
+
+final keepLoaderNotifier = FutureProvider<bool>(
+  (ref) async {
+    final keepLoader =
+        await ref.watch(providerStorage).getBool(key: Keys.keepLoader.name);
+    return keepLoader;
+  },
+);
+
+final dynamicSDKNotifier = FutureProvider<bool>(
+  (ref) async {
+    final isDynamic = await ref
+        .watch(providerStorage)
+        .getBool(key: Keys.isDynamicViewEnable.name);
+    return isDynamic;
+  },
+);
+
+final cardFormDeployedNotifier = FutureProvider<bool>(
+  (ref) async {
+    final cardFormDeployed = await ref
+        .watch(providerStorage)
+        .getBool(key: Keys.cardFormDeployed.name);
+    return cardFormDeployed;
+  },
+);
+
+final saveCardNotifier = FutureProvider<bool>(
+  (ref) async {
+    final saveCard =
+        await ref.watch(providerStorage).getBool(key: Keys.saveCardEnable.name);
+    return saveCard;
   },
 );
 
@@ -121,8 +170,11 @@ final appearanceNotifier = FutureProvider<Appearance>(
 //-------------------------------------------------------------------
     final checkboxColor =
         await ref.watch(providerStorage).getColor(key: Keys.checkboxColor.name);
-
+//-------------------------------------------------------------------
+    final fontFamiky =
+        await ref.watch(providerStorage).read(key: Keys.fontFamily.name);
     return Appearance(
+      fontFamily: fontFamiky.isEmpty ? null : fontFamiky,
       buttonBackgrounColor: buttonBackgrounColor,
       buttonBorderBackgrounColor: buttonBorderBackgrounColor,
       buttonTitleBackgrounColor: buttonTitleBackgrounColor,
@@ -148,6 +200,12 @@ final cardFlowNotifier = FutureProvider<CardFlow>(
 final langNotifier = FutureProvider<YunoLanguage?>(
   (ref) async {
     return await ref.watch(providerStorage).getLang(key: Keys.language.name);
+  },
+);
+
+final countryCodeFuture = FutureProvider<String>(
+  (ref) async {
+    return await ref.watch(providerStorage).read(key: Keys.countryCode.name);
   },
 );
 

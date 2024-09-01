@@ -3,6 +3,7 @@ import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/screen/home.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -33,10 +34,14 @@ class DefaultConfiguration extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(langNotifier);
-    final cardFlowNotifer = ref.watch(cardFlowNotifier);
-    final controllerCountry = ref.watch(contryCodeNotifier);
-    final reader = ref.read(contryCodeNotifier.notifier);
+    final langController = ref.watch(langNotifier);
+    final cardFlowController = ref.watch(cardFlowNotifier);
+    final controllerNotifier = ref.watch(countryCodeFuture);
+    final contryController = ref.watch(contryCodeNotifier.notifier);
+    final saveCardController = ref.watch(saveCardNotifier);
+    final dynamicSDKController = ref.watch(dynamicSDKNotifier);
+    final keepLoaderController = ref.watch(keepLoaderNotifier);
+    final cardFormDeployedController = ref.watch(cardFormDeployedNotifier);
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -63,62 +68,15 @@ class DefaultConfiguration extends ConsumerWidget {
                       children: [
                         CountryCodePicker(
                           padding: EdgeInsets.zero,
-                          initialSelection: controllerCountry?.code,
-                          onChanged: (value) => reader.changeContryCode(value),
+                          initialSelection: controllerNotifier.value ?? "GT",
+                          onChanged: (value) =>
+                              contryController.changeContryCode(value),
                         ),
                         const Text('Country'),
                       ],
                     ),
                     leading: const Icon(Icons.location_on),
                     onTap: () {},
-                  ),
-                ],
-              ),
-            ),
-          ),
-          //-----------------------------------------------------------
-          const SizedBox(
-            height: 30,
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('CARD Settings'),
-          ),
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            color: Colors.white,
-            elevation: 0,
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  ListTile(
-                    minVerticalPadding: 10,
-                    minTileHeight: 10,
-                    title: cardFlowNotifer.when(
-                        data: (data) => Text(
-                            'Mode - ${data == CardFlow.oneStep ? 'ONE STEP' : 'STEP BY STEP'}'),
-                        error: (err, stck) => ErrorWidget(err),
-                        loading: () => const CircularProgressIndicator()),
-                    leading: const Icon(Icons.credit_card),
-                    onTap: () async {
-                      final cardFlow =
-                          await YunoDiaglos.showCardStep(context: context);
-                      if (cardFlow != null) {
-                        await ref.read(providerStorage).write(
-                              key: Keys.cardFlow.name,
-                              value: cardFlow.name,
-                            );
-
-                        ref.invalidate(yunoProvider);
-                      }
-                    },
-                  ),
-                  const Divider(
-                    thickness: 0.5,
-                    height: 0,
                   ),
                 ],
               ),
@@ -142,7 +100,7 @@ class DefaultConfiguration extends ConsumerWidget {
               width: double.infinity,
               child: Column(
                 children: [
-                  controller.when(
+                  langController.when(
                     data: (data) => ListTile(
                       minVerticalPadding: 10,
                       minTileHeight: 10,
@@ -166,6 +124,131 @@ class DefaultConfiguration extends ConsumerWidget {
                     thickness: 0.5,
                     height: 0,
                   ),
+                  ListTile(
+                    minVerticalPadding: 10,
+                    minTileHeight: 10,
+                    title: const Text('Dynamic SDK'),
+                    leading: const Icon(Icons.dynamic_feed_rounded),
+                    trailing: CupertinoSwitch(
+                      value: dynamicSDKController.value ?? false,
+                      onChanged: (value) async {
+                        await ref.read(providerStorage).writeBool(
+                              key: Keys.isDynamicViewEnable.name,
+                              value: value,
+                            );
+                        ref.invalidate(dynamicSDKNotifier);
+                        ref.invalidate(yunoProvider);
+                      },
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 0.5,
+                    height: 0,
+                  ),
+                  ListTile(
+                    minVerticalPadding: 10,
+                    minTileHeight: 10,
+                    title: const Text('Keep Loader'),
+                    leading: const Icon(Icons.back_hand_outlined),
+                    trailing: CupertinoSwitch(
+                      value: keepLoaderController.value ?? false,
+                      onChanged: (value) async {
+                        await ref.read(providerStorage).writeBool(
+                              key: Keys.keepLoader.name,
+                              value: value,
+                            );
+                        ref.invalidate(keepLoaderNotifier);
+                        ref.invalidate(yunoProvider);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          //-----------------------------------------------------------
+          const SizedBox(
+            height: 30,
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text('CARD Settings'),
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: Colors.white,
+            elevation: 0,
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  ListTile(
+                    minVerticalPadding: 10,
+                    minTileHeight: 10,
+                    title: cardFlowController.when(
+                        data: (data) => Text(
+                            'Mode - ${data == CardFlow.oneStep ? 'ONE STEP' : 'STEP BY STEP'}'),
+                        error: (err, stck) => ErrorWidget(err),
+                        loading: () => const CircularProgressIndicator()),
+                    leading: const Icon(Icons.credit_card),
+                    onTap: () async {
+                      final cardFlow =
+                          await YunoDiaglos.showCardStep(context: context);
+                      if (cardFlow != null) {
+                        await ref.read(providerStorage).write(
+                              key: Keys.cardFlow.name,
+                              value: cardFlow.name,
+                            );
+                        ref.invalidate(cardFlowNotifier);
+                        ref.invalidate(yunoProvider);
+                      }
+                    },
+                  ),
+                  const Divider(
+                    thickness: 0.5,
+                    height: 0,
+                  ),
+                  ListTile(
+                    minVerticalPadding: 10,
+                    minTileHeight: 10,
+                    title: const Text('Card Unfolded'),
+                    leading: const Icon(Icons.movie_creation_outlined),
+                    trailing: CupertinoSwitch(
+                      value: cardFormDeployedController.value ?? false,
+                      onChanged: (value) async {
+                        await ref.read(providerStorage).writeBool(
+                              key: Keys.cardFormDeployed.name,
+                              value: value,
+                            );
+                        ref.invalidate(cardFormDeployedNotifier);
+                        ref.invalidate(yunoProvider);
+                      },
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 0.5,
+                    height: 0,
+                  ),
+                  ListTile(
+                    minVerticalPadding: 10,
+                    minTileHeight: 10,
+                    title: const Text('Save Card'),
+                    leading: const Icon(Icons.credit_score),
+                    trailing: CupertinoSwitch(
+                      value: saveCardController.value ?? false,
+                      onChanged: (value) async {
+                        await ref.read(providerStorage).writeBool(
+                              key: Keys.saveCardEnable.name,
+                              value: value,
+                            );
+                        ref.invalidate(saveCardNotifier);
+                        ref.invalidate(yunoProvider);
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
@@ -195,8 +278,8 @@ class DefaultConfiguration extends ConsumerWidget {
                     title: const Text('Font'),
                     leading: const Icon(Icons.font_download),
                     onTap: () async {
-                      await ShowBottomDialog.showAppearence(context);
-                      final __ = ref.refresh(appearanceNotifier);
+                      await ShowBottomDialog.showFontsList(context);
+                      ref.invalidate(appearanceNotifier);
                       final _ = ref.refresh(yunoProvider);
                     },
                   ),
@@ -211,7 +294,7 @@ class DefaultConfiguration extends ConsumerWidget {
                     leading: const Icon(Icons.color_lens),
                     onTap: () async {
                       await ShowBottomDialog.showAppearence(context);
-                      final __ = ref.refresh(appearanceNotifier);
+                      ref.invalidate(appearanceNotifier);
                       final _ = ref.refresh(yunoProvider);
                     },
                   ),

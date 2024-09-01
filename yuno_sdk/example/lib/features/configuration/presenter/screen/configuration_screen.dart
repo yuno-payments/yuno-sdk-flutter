@@ -53,7 +53,13 @@ class __HomeLayoutState extends State<_HomeLayout> {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Drawer Header'),
+              child: Text(
+                'General Settings',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
             ListTile(
               title: Row(

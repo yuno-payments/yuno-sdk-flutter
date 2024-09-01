@@ -211,6 +211,10 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
   final lang = await ref.watch(langNotifier.future);
   final cardFlow = await ref.watch(cardFlowNotifier.future);
   final appearance = await ref.watch(appearanceNotifier.future);
+  final saveCard = await ref.watch(saveCardNotifier.future);
+  final isDynamic = await ref.watch(dynamicSDKNotifier.future);
+  final keepLoader = await ref.watch(keepLoaderNotifier.future);
+  final cardForm = await ref.watch(cardFormDeployedNotifier.future);
 
   try {
     final yuno = await Yuno.init(
@@ -218,8 +222,11 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
       countryCode: countryCode,
       yunoConfig: YunoConfig(
         lang: lang ?? YunoLanguage.en,
-        cardflow: cardFlow,
-        keepLoader: true,
+        cardFlow: cardFlow,
+        keepLoader: keepLoader,
+        saveCardEnable: saveCard,
+        isDynamicViewEnable: isDynamic,
+        cardFormDeployed: cardForm,
       ),
       iosConfig: IosConfig(
         appearance: appearance,
