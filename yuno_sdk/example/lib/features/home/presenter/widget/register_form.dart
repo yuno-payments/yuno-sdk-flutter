@@ -215,10 +215,12 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
   try {
     final yuno = await Yuno.init(
       apiKey: apiKey,
-      lang: lang ?? YunoLanguage.en,
       countryCode: countryCode,
-      cardflow: cardFlow,
-      keepLoader: true,
+      yunoConfig: YunoConfig(
+        lang: lang ?? YunoLanguage.en,
+        cardflow: cardFlow,
+        keepLoader: true,
+      ),
       iosConfig: IosConfig(
         appearance: appearance,
       ),

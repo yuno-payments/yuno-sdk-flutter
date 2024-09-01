@@ -55,7 +55,8 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
-        let cardFormType = CardFlow(rawValue: app.cardFlow ?? "oneStep")
+        let yunoConfig = app.yunoConfig
+        let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? "oneStep")
         Yuno.startCheckout(with: self)
         Yuno.initialize(
             apiKey: app.apiKey,
@@ -73,9 +74,9 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
                     disableButtonBackgroundColor: appearance?.disableButtonBackgroundColor,
                     disableButtonTitleColor: appearance?.disableButtonTitleBackgroundColor,
                     checkboxColor: appearance?.checkboxColor),
-                saveCardEnabled: app.saveCardEnable ?? false,
-                keepLoader: app.keepLoader ?? false,
-                isDynamicViewEnabled: app.isDynamicViewEnable ?? false
+                saveCardEnabled: yunoConfig.saveCardEnable ?? false,
+                keepLoader: yunoConfig.keepLoader ?? false,
+                isDynamicViewEnabled: yunoConfig.isDynamicViewEnable ?? false
             )
         )
     }
@@ -148,7 +149,7 @@ extension YunoMethods {
                  result(YunoError.missingParams())
             }
             self.countryCode = app.countryCode
-            self.language = app.lang
+            self.language = app.yunoConfig.lang
             self.initialize(app: app )
              result(true)
         } catch {
