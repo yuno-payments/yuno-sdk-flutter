@@ -32,7 +32,6 @@ class _HomeViewState extends State<HomeView> {
       apiKey: '',
       countryCode: '',
       iosConfig: const IosConfig(
-        keepLoader: true,
         appearance: Appearance(
           buttonBackgrounColor: Colors.red,
         ),

@@ -12,15 +12,21 @@ void main() {
     YunoPlatform.instance = mockPlatform;
     registerFallbackValue(const IosConfig());
     registerFallbackValue(const AndroidConfig());
+    registerFallbackValue(CARDFLOW.multiStep);
   });
 
   group('Yuno', () {
     test('init should call platform initialize', () async {
+      when(() => mockPlatform.init()).thenAnswer((_) async {});
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
             iosConfig: any(named: 'iosConfig'),
             androidConfig: any(named: 'androidConfig'),
             countryCode: any(named: 'countryCode'),
+            cardflow: any(named: 'cardflow'),
+            saveCardEnable: any(named: 'saveCardEnable'),
+            keepLoader: any(named: 'keepLoader'),
+            isDynamicViewEnable: any(named: 'isDynamicViewEnable'),
           )).thenAnswer((_) async {});
 
       await Yuno.init(
@@ -33,6 +39,10 @@ void main() {
             iosConfig: const IosConfig(),
             androidConfig: const AndroidConfig(),
             countryCode: any(named: 'countryCode'),
+            cardflow: any(named: 'cardflow'),
+            saveCardEnable: any(named: 'saveCardEnable'),
+            keepLoader: any(named: 'keepLoader'),
+            isDynamicViewEnable: any(named: 'isDynamicViewEnable'),
           )).called(1);
     });
 

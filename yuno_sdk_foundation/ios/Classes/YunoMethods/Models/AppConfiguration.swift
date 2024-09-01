@@ -64,16 +64,16 @@ struct Appearance: Codable, Sendable {
 
 struct Configuration: Codable, Sendable {
     let appearance: Appearance?
-    let cardFlow: String?
-    let saveCardEnable: Bool?
-    let keepLoader: Bool?
-    let isDynamicViewEnable: Bool?
 }
 
 struct AppConfiguration: Codable, Sendable {
     let apiKey: String
     let lang: String
     let countryCode: String
+    let cardFlow: String?
+    let saveCardEnable: Bool?
+    let keepLoader: Bool?
+    let isDynamicViewEnable: Bool?
     let configuration: Configuration?
 }
 

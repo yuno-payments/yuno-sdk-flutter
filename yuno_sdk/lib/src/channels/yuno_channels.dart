@@ -40,6 +40,10 @@ abstract interface class Yuno {
   static Future<Yuno> init({
     required String apiKey,
     required String countryCode,
+    CARDFLOW cardflow = CARDFLOW.oneStep,
+    bool saveCardEnable = false,
+    bool keepLoader = false,
+    bool isDynamicViewEnable = false,
     YunoLanguage lang = YunoLanguage.en,
     IosConfig iosConfig = const IosConfig(),
     AndroidConfig androidConfig = const AndroidConfig(),
@@ -48,8 +52,12 @@ abstract interface class Yuno {
     await yuno.initInvoke();
     await yuno.init(
       apiKey: apiKey,
-      lang: lang,
       countryCode: countryCode,
+      saveCardEnable: saveCardEnable,
+      keepLoader: keepLoader,
+      cardflow: cardflow,
+      isDynamicViewEnable: isDynamicViewEnable,
+      lang: lang,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
     );
@@ -78,8 +86,12 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
-    required YunoLanguage lang,
     required String countryCode,
+    required CARDFLOW cardflow,
+    required bool saveCardEnable,
+    required bool keepLoader,
+    required bool isDynamicViewEnable,
+    required YunoLanguage lang,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
   }) async =>
@@ -89,8 +101,11 @@ final class _YunoChannels implements Yuno {
         countryCode: countryCode,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
+        cardflow: cardflow,
+        saveCardEnable: saveCardEnable,
+        keepLoader: keepLoader,
+        isDynamicViewEnable: isDynamicViewEnable,
       );
-
   Future<void> initInvoke() async => await _platform.init();
 
   @override

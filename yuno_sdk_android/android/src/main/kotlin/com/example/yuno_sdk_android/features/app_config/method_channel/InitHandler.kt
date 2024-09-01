@@ -28,11 +28,11 @@ class InitHandler {
                     context,
                     appConfig.apiKey,
                     config = YunoConfig(
-                        saveCardEnabled = config.saveCardEnable,
+                        saveCardEnabled = appConfig.saveCardEnable,
                         cardFormDeployed = config.cardFormDeployed,
-                        isDynamicViewEnabled = config.isDynamicViewEnable,
-                        keepLoader = config.keepLoader,
-                        cardFlow = config.cardFlow.toCardFLowSDK()
+                        isDynamicViewEnabled = appConfig.isDynamicViewEnable,
+                        keepLoader = appConfig.keepLoader,
+                        cardFlow = appConfig.cardFlow.toCardFLowSDK()
                     )
                 )
                 return result.success(true)

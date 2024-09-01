@@ -14,9 +14,5 @@ fun CardFlow.toCardFLowSDK(): CardFormType {
 }
 
 data class Configuration(
-    val cardFlow: CardFlow,
-    val saveCardEnable: Boolean,
-    val keepLoader: Boolean,
-    val isDynamicViewEnable: Boolean,
     val cardFormDeployed: Boolean
 )

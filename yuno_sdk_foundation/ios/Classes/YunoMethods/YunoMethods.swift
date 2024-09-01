@@ -55,8 +55,8 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
-        let configuration = app.configuration
-        let cardFormType = CardFlow(rawValue: configuration?.cardFlow ?? "oneStep")
+        let cardFormType = CardFlow(rawValue: app.cardFlow ?? "oneStep")
+        Yuno.startCheckout(with: self)
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -72,12 +72,11 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
                     disableButtonBackgroundColor: appearance?.disableButtonBackgroundColor,
                     disableButtonTitleColor: appearance?.disableButtonTitleBackgroundColor,
                     checkboxColor: appearance?.checkboxColor),
-                saveCardEnabled: configuration?.saveCardEnable ?? false,
-                keepLoader: configuration?.keepLoader ?? false,
-                isDynamicViewEnabled: configuration?.isDynamicViewEnable ?? false
+                saveCardEnabled: app.saveCardEnable ?? false,
+                keepLoader: app.keepLoader ?? false,
+                isDynamicViewEnabled: app.isDynamicViewEnable ?? false
             )
         )
-        Yuno.startCheckout(with: self)
     }
 }
 

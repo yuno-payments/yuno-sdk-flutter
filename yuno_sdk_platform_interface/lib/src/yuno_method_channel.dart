@@ -32,6 +32,10 @@ final class YunoMethodChannel implements YunoPlatform {
   Future<void> initialize({
     required String apiKey,
     required String countryCode,
+    required CARDFLOW cardflow,
+    required bool saveCardEnable,
+    required bool keepLoader,
+    required bool isDynamicViewEnable,
     YunoLanguage lang = YunoLanguage.en,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
@@ -40,12 +44,20 @@ final class YunoMethodChannel implements YunoPlatform {
         ? Parser.toMap(
             apiKey: apiKey,
             lang: lang,
+            cardflow: cardflow,
+            saveCardEnable: saveCardEnable,
+            keepLoader: keepLoader,
+            isDynamicViewEnable: isDynamicViewEnable,
             countryCode: countryCode,
             configuration: androidConfig?.toMap(),
           )
         : Parser.toMap(
             apiKey: apiKey,
             lang: lang,
+            cardflow: cardflow,
+            saveCardEnable: saveCardEnable,
+            keepLoader: keepLoader,
+            isDynamicViewEnable: isDynamicViewEnable,
             countryCode: countryCode,
             configuration: iosConfig?.toMap(),
           );
