@@ -20,7 +20,7 @@ extension ParserYunoConfig on YunoConfig {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'lang': lang.rawValue,
-      'cardflow': cardFlow.toJson(),
+      'cardFlow': cardFlow.toJson(),
       'saveCardEnable': saveCardEnable,
       'keepLoader': keepLoader,
       'isDynamicViewEnable': isDynamicViewEnable,
