@@ -12,7 +12,8 @@ class StartPayment: Codable {
     var showPaymentStatus: Bool
     var checkoutSession: String
     var paymentMetdhodSelected: PaymentMethod
-    init(countryCode:String,
+    init(
+         countryCode: String,
          paymentMetdhodSelected: PaymentMethod,
          showPaymentStatus: Bool,
          checkoutSession: String
