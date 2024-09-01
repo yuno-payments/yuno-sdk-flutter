@@ -2,7 +2,6 @@ package com.example.yuno_sdk_android.features.app_config.models
 
 data class AppConfigModel(
     val apiKey: String,
-    val countryCode: String,
     val yunoConfiguration: YunoConfiguration,
     val configuration: Configuration
 )
@@ -20,8 +19,7 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
         val apiKey = this["apiKey"] as? String
             ?: return Result.failure(IllegalArgumentException("Missing or invalid apiKey"))
 
-        val countryCode = this["countryCode"] as? String
-            ?: return Result.failure(IllegalArgumentException("Missing or invalid apiKey"))
+
 
         val yunoConfigurationMap = this["yunoConfig"] as? Map<*, *> ?: return Result.failure(
             IllegalArgumentException("Missing or invalid configuration")
@@ -67,7 +65,6 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
         Result.success(
             AppConfigModel(
                 apiKey = apiKey,
-                countryCode = countryCode,
                 yunoConfiguration = yunoConfiguration,
                 configuration = configuration
             )

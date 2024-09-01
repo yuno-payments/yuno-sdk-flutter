@@ -55,11 +55,12 @@ abstract interface class Yuno {
     IosConfig iosConfig = const IosConfig(),
     AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
-    const yuno = _YunoChannels();
+    final yuno = _YunoChannels(
+      countryCodeIncome: countryCode,
+    );
     await yuno.initInvoke();
     await yuno.init(
       apiKey: apiKey,
-      countryCode: countryCode,
       yunoConfig: yunoConfig,
       iosConfig: iosConfig,
       androidConfig: androidConfig,
@@ -71,6 +72,7 @@ abstract interface class Yuno {
   Future<void> openPaymentMethodsScreen();
   Future<void> startPaymentLite({
     required StartPayment arguments,
+    String countryCode = '',
   });
   Future<void> continuePayment({
     bool showPaymentStatus = true,
@@ -79,7 +81,9 @@ abstract interface class Yuno {
 }
 
 final class _YunoChannels implements Yuno {
-  const _YunoChannels();
+  const _YunoChannels({
+    required this.countryCodeIncome,
+  });
 
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
@@ -87,16 +91,15 @@ final class _YunoChannels implements Yuno {
     return __platform!;
   }
 
+  final String countryCodeIncome;
   Future<void> init({
     required String apiKey,
-    required String countryCode,
     required YunoConfig yunoConfig,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
   }) async =>
       await _platform.initialize(
         apiKey: apiKey,
-        countryCode: countryCode,
         yunoConfig: yunoConfig,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
@@ -106,8 +109,12 @@ final class _YunoChannels implements Yuno {
   @override
   Future<void> startPaymentLite({
     required StartPayment arguments,
+    String countryCode = '',
   }) async =>
-      await _platform.startPaymentLite(arguments: arguments);
+      await _platform.startPaymentLite(
+        arguments: arguments,
+        countryCode: countryCode.isEmpty ? countryCodeIncome : countryCode,
+      );
 
   @override
   Future<void> continuePayment({bool showPaymentStatus = true}) async =>

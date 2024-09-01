@@ -113,7 +113,7 @@ extension YunoMethods {
             let startPayment = try decoder
             .decode(StartPayment.self, from: jsonData)
             if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
-               startPayment.checkoutSession.isEmpty {
+               startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                  result(YunoError
                     .customError(
                     code: "6",
@@ -122,6 +122,7 @@ extension YunoMethods {
                 )
               )
             }
+            self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
             Yuno.startPaymentLite(
                 paymentSelected: startPayment.paymentMetdhodSelected,
@@ -145,10 +146,9 @@ extension YunoMethods {
             let decoder = JSONDecoder()
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
-            if app.apiKey.isEmpty || app.countryCode.isEmpty {
+            if app.apiKey.isEmpty {
                  result(YunoError.missingParams())
             }
-            self.countryCode = app.countryCode
             self.language = app.yunoConfig.lang
             self.initialize(app: app )
              result(true)

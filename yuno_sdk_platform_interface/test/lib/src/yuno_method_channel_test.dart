@@ -113,7 +113,6 @@ void main() {
       await yunoMethodChannel.initialize(
         apiKey: apiKey,
         androidConfig: androidConfig,
-        countryCode: countryCode,
         yunoConfig: yunoConfig,
       );
 
@@ -164,10 +163,7 @@ void main() {
       });
 
       await yunoMethodChannel.initialize(
-          apiKey: apiKey,
-          iosConfig: iosConfig,
-          countryCode: countryCode,
-          yunoConfig: yunoConfig);
+          apiKey: apiKey, iosConfig: iosConfig, yunoConfig: yunoConfig);
 
       expect(methodCalled, isTrue);
     });
