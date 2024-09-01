@@ -77,13 +77,13 @@ void main() {
 
       const apiKey = 'test_api_key';
       const countryCode = 'country_code';
-      const cardFlow = CARDFLOW.oneStep;
+      const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
       const keepLoader = false;
       const lang = YunoLanguage.en;
       const yunoConfig = YunoConfig(
-        cardflow: cardFlow,
+        cardFlow: cardFlow,
         saveCardEnable: saveCardEnable,
         isDynamicViewEnable: isDynamicViewEnable,
         keepLoader: keepLoader,
@@ -133,13 +133,13 @@ void main() {
       const apiKey = 'test_api_key';
       const countryCode = 'country_code';
       const iosConfig = IosConfig();
-      const cardFlow = CARDFLOW.oneStep;
+      const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
       const keepLoader = false;
       const lang = YunoLanguage.en;
       const yunoConfig = YunoConfig(
-        cardflow: cardFlow,
+        cardFlow: cardFlow,
         saveCardEnable: saveCardEnable,
         isDynamicViewEnable: isDynamicViewEnable,
         lang: lang,

@@ -12,7 +12,7 @@ void main() {
     YunoPlatform.instance = mockPlatform;
     registerFallbackValue(const IosConfig());
     registerFallbackValue(const AndroidConfig());
-    registerFallbackValue(CARDFLOW.multiStep);
+    registerFallbackValue(CardFlow.multiStep);
     registerFallbackValue(YunoLanguage.en);
     registerFallbackValue(const YunoConfig());
   });

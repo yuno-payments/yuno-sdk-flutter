@@ -4,14 +4,14 @@ import 'package:yuno_sdk_platform_interface/lib.dart';
 class YunoConfig {
   const YunoConfig({
     this.lang = YunoLanguage.en,
-    this.cardflow = CARDFLOW.oneStep,
+    this.cardFlow = CardFlow.oneStep,
     this.saveCardEnable = false,
     this.keepLoader = false,
     this.isDynamicViewEnable = false,
   });
 
   final YunoLanguage lang;
-  final CARDFLOW cardflow;
+  final CardFlow cardFlow;
   final bool saveCardEnable;
   final bool keepLoader;
   final bool isDynamicViewEnable;
@@ -20,7 +20,7 @@ class YunoConfig {
   bool operator ==(covariant YunoConfig other) {
     if (identical(this, other)) return true;
 
-    return other.cardflow == cardflow &&
+    return other.cardFlow == cardFlow &&
         other.saveCardEnable == saveCardEnable &&
         other.keepLoader == keepLoader &&
         other.isDynamicViewEnable == isDynamicViewEnable &&
@@ -29,7 +29,7 @@ class YunoConfig {
 
   @override
   int get hashCode {
-    return cardflow.hashCode ^
+    return cardFlow.hashCode ^
         saveCardEnable.hashCode ^
         keepLoader.hashCode ^
         isDynamicViewEnable.hashCode ^
