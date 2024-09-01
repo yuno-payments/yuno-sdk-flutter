@@ -34,7 +34,7 @@ abstract interface class YunoPlatform extends PlatformInterface {
   Future<void> initialize({
     required String apiKey,
     required String countryCode,
-    required CARDFLOW cardflow,
+    required CardFlow cardflow,
     required bool saveCardEnable,
     required bool keepLoader,
     required bool isDynamicViewEnable,

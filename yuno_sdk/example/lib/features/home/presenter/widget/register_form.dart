@@ -208,9 +208,8 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
   final apiKey = await ref.watch(providerStorage).read(key: Keys.apiKey.name);
   final countryCode =
       await ref.watch(providerStorage).read(key: Keys.countryCode.name);
-  final lang =
-      await ref.watch(providerStorage).getLang(key: Keys.language.name);
-
+  final lang = await ref.watch(langNotifier.future);
+  final cardFlow = await ref.watch(cardFlowNotifier.future);
   final appearance = await ref.watch(appearanceNotifier.future);
 
   try {
@@ -218,7 +217,7 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
       apiKey: apiKey,
       lang: lang ?? YunoLanguage.en,
       countryCode: countryCode,
-      cardflow: CARDFLOW.multiStep,
+      cardflow: cardFlow,
       keepLoader: true,
       iosConfig: IosConfig(
         appearance: appearance,
@@ -239,5 +238,18 @@ class CountryCodeNotiifer extends Notifier<CountryCode?> {
 
   void changeContryCode(CountryCode value) {
     state = value;
+  }
+}
+
+extension Converter on Never {
+  static CardFlow fromJson(String value) {
+    switch (value) {
+      case 'oneStep':
+        return CardFlow.oneStep;
+      case 'multiStep':
+        return CardFlow.multiStep;
+      default:
+        return CardFlow.oneStep;
+    }
   }
 }

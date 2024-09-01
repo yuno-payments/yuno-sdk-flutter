@@ -1,5 +1,6 @@
 enum Keys {
   apiKey,
+  cardFlow,
   countryCode,
   alias,
   checkoutSession,

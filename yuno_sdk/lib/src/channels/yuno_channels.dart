@@ -52,7 +52,7 @@ abstract interface class Yuno {
     required String apiKey,
     required String countryCode,
     YunoLanguage lang = YunoLanguage.en,
-    CARDFLOW cardflow = CARDFLOW.oneStep,
+    CardFlow cardflow = CardFlow.oneStep,
     bool saveCardEnable = false,
     bool keepLoader = false,
     bool isDynamicViewEnable = false,
@@ -98,7 +98,7 @@ final class _YunoChannels implements Yuno {
   Future<void> init({
     required String apiKey,
     required String countryCode,
-    required CARDFLOW cardflow,
+    required CardFlow cardflow,
     required bool saveCardEnable,
     required bool keepLoader,
     required bool isDynamicViewEnable,

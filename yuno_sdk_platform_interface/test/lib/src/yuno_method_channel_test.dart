@@ -78,7 +78,7 @@ void main() {
 
       const apiKey = 'test_api_key';
       const countryCode = 'country_code';
-      const cardFlow = CARDFLOW.oneStep;
+      const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
       const keepLoader = false;
@@ -133,7 +133,7 @@ void main() {
       const apiKey = 'test_api_key';
       const countryCode = 'country_code';
       const iosConfig = IosConfig();
-      const cardFlow = CARDFLOW.oneStep;
+      const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
       const keepLoader = false;
