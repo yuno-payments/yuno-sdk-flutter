@@ -13,6 +13,8 @@ void main() {
     registerFallbackValue(const IosConfig());
     registerFallbackValue(const AndroidConfig());
     registerFallbackValue(CARDFLOW.multiStep);
+    registerFallbackValue(YunoLanguage.en);
+    registerFallbackValue(const YunoConfig());
   });
 
   group('Yuno', () {
@@ -20,13 +22,10 @@ void main() {
       when(() => mockPlatform.init()).thenAnswer((_) async {});
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
+            countryCode: any(named: 'countryCode'),
+            yunoConfig: any(named: 'yunoConfig'),
             iosConfig: any(named: 'iosConfig'),
             androidConfig: any(named: 'androidConfig'),
-            countryCode: any(named: 'countryCode'),
-            cardflow: any(named: 'cardflow'),
-            saveCardEnable: any(named: 'saveCardEnable'),
-            keepLoader: any(named: 'keepLoader'),
-            isDynamicViewEnable: any(named: 'isDynamicViewEnable'),
           )).thenAnswer((_) async {});
 
       await Yuno.init(
@@ -36,13 +35,10 @@ void main() {
 
       verify(() => mockPlatform.initialize(
             apiKey: 'test_api_key',
+            countryCode: any(named: 'countryCode'),
+            yunoConfig: any(named: 'yunoConfig'),
             iosConfig: const IosConfig(),
             androidConfig: const AndroidConfig(),
-            countryCode: any(named: 'countryCode'),
-            cardflow: any(named: 'cardflow'),
-            saveCardEnable: any(named: 'saveCardEnable'),
-            keepLoader: any(named: 'keepLoader'),
-            isDynamicViewEnable: any(named: 'isDynamicViewEnable'),
           )).called(1);
     });
 

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -83,6 +82,13 @@ void main() {
       const isDynamicViewEnable = false;
       const keepLoader = false;
       const lang = YunoLanguage.en;
+      const yunoConfig = YunoConfig(
+        cardflow: cardFlow,
+        saveCardEnable: saveCardEnable,
+        isDynamicViewEnable: isDynamicViewEnable,
+        keepLoader: keepLoader,
+        lang: lang,
+      );
 
       const androidConfig =
           AndroidConfig(); // Replace with actual AndroidConfig
@@ -96,12 +102,8 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'lang': lang.rawValue,
           'countryCode': countryCode,
-          'cardFlow': cardFlow.toJson(),
-          'saveCardEnable': saveCardEnable,
-          'keepLoader': keepLoader,
-          'isDynamicViewEnable': isDynamicViewEnable,
+          'yunoConfig': yunoConfig.toMap(),
           'configuration': androidConfig.toMap(),
         });
 
@@ -109,13 +111,11 @@ void main() {
       });
 
       await yunoMethodChannel.initialize(
-          apiKey: apiKey,
-          androidConfig: androidConfig,
-          countryCode: countryCode,
-          cardflow: cardFlow,
-          saveCardEnable: saveCardEnable,
-          isDynamicViewEnable: isDynamicViewEnable,
-          keepLoader: keepLoader);
+        apiKey: apiKey,
+        androidConfig: androidConfig,
+        countryCode: countryCode,
+        yunoConfig: yunoConfig,
+      );
 
       expect(methodCalled, isTrue);
     });
@@ -138,6 +138,13 @@ void main() {
       const isDynamicViewEnable = false;
       const keepLoader = false;
       const lang = YunoLanguage.en;
+      const yunoConfig = YunoConfig(
+        cardflow: cardFlow,
+        saveCardEnable: saveCardEnable,
+        isDynamicViewEnable: isDynamicViewEnable,
+        lang: lang,
+        keepLoader: keepLoader,
+      );
 
       bool methodCalled = false;
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -148,12 +155,8 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'lang': lang.rawValue,
           'countryCode': countryCode,
-          'cardFlow': cardFlow.toJson(),
-          'saveCardEnable': saveCardEnable,
-          'keepLoader': keepLoader,
-          'isDynamicViewEnable': isDynamicViewEnable,
+          'yunoConfig': yunoConfig.toMap(),
           'configuration': iosConfig.toMap(),
         });
 
@@ -164,10 +167,7 @@ void main() {
           apiKey: apiKey,
           iosConfig: iosConfig,
           countryCode: countryCode,
-          cardflow: cardFlow,
-          saveCardEnable: saveCardEnable,
-          isDynamicViewEnable: isDynamicViewEnable,
-          keepLoader: keepLoader);
+          yunoConfig: yunoConfig);
 
       expect(methodCalled, isTrue);
     });

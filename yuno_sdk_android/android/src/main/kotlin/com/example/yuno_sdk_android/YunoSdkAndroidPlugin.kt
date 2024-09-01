@@ -54,7 +54,8 @@ class YunoSdkAndroidPlugin :
                 init.handler(
                     call = call,
                     result = result,
-                    context = context
+                    context = context,
+                    activity = activity
                 )
             }
             "paymentMethods" -> {
