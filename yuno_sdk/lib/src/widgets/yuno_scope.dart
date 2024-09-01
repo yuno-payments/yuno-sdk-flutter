@@ -62,11 +62,11 @@ extension YunoReader on BuildContext {
 
   @visibleForTesting
   Yuno yuno() => YunoScope.of(this);
-  Future<void> startPaymentLite({
-    required StartPayment arguments,
-  }) =>
+  Future<void> startPaymentLite(
+          {required StartPayment arguments, String countryCode = ''}) =>
       yuno().startPaymentLite(
         arguments: arguments,
+        countryCode: countryCode,
       );
   Future<void> continuePayment() => yuno().continuePayment();
 }

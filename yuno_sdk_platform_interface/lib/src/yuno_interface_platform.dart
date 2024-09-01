@@ -32,7 +32,6 @@ abstract interface class YunoPlatform extends PlatformInterface {
 
   Future<void> initialize({
     required String apiKey,
-    required String countryCode,
     required YunoConfig yunoConfig,
     IosConfig iosConfig,
     AndroidConfig androidConfig,
@@ -42,6 +41,7 @@ abstract interface class YunoPlatform extends PlatformInterface {
 
   Future<void> startPaymentLite({
     required StartPayment arguments,
+    required String countryCode,
   });
 
   Future<void> continuePayment({

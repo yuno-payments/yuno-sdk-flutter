@@ -22,8 +22,9 @@ class StartPayment {
   @override
   int get hashCode => showPaymentStatus.hashCode ^ methodSelected.hashCode;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({required String countryCode}) {
     return <String, dynamic>{
+      'countryCode': countryCode,
       'showPaymentStatus': showPaymentStatus,
       'checkoutSession': checkoutSession,
       'paymentMetdhodSelected': methodSelected.toMap(),

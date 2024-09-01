@@ -22,7 +22,6 @@ void main() {
       when(() => mockPlatform.init()).thenAnswer((_) async {});
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
-            countryCode: any(named: 'countryCode'),
             yunoConfig: any(named: 'yunoConfig'),
             iosConfig: any(named: 'iosConfig'),
             androidConfig: any(named: 'androidConfig'),
@@ -35,7 +34,6 @@ void main() {
 
       verify(() => mockPlatform.initialize(
             apiKey: 'test_api_key',
-            countryCode: any(named: 'countryCode'),
             yunoConfig: any(named: 'yunoConfig'),
             iosConfig: const IosConfig(),
             androidConfig: const AndroidConfig(),
