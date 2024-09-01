@@ -83,7 +83,7 @@ void main() {
       const keepLoader = false;
       const lang = YunoLanguage.en;
       const yunoConfig = YunoConfig(
-        cardflow: cardFlow,
+        cardFlow: cardFlow,
         saveCardEnable: saveCardEnable,
         isDynamicViewEnable: isDynamicViewEnable,
         keepLoader: keepLoader,
@@ -139,7 +139,7 @@ void main() {
       const keepLoader = false;
       const lang = YunoLanguage.en;
       const yunoConfig = YunoConfig(
-        cardflow: cardFlow,
+        cardFlow: cardFlow,
         saveCardEnable: saveCardEnable,
         isDynamicViewEnable: isDynamicViewEnable,
         lang: lang,
