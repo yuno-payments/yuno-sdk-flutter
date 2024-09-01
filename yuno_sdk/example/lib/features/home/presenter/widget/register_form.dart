@@ -208,16 +208,26 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
   final apiKey = await ref.watch(providerStorage).read(key: Keys.apiKey.name);
   final countryCode =
       await ref.watch(providerStorage).read(key: Keys.countryCode.name);
-  return await Yuno.init(
-    apiKey: apiKey,
-    countryCode: countryCode,
-    iosConfig: const IosConfig(
-      keepLoader: true,
-      appearance: Appearance(
-        buttonBackgrounColor: Colors.red,
+  final lang =
+      await ref.watch(providerStorage).getLang(key: Keys.language.name);
+
+  final appearance = await ref.watch(appearanceNotifier.future);
+
+  try {
+    final yuno = await Yuno.init(
+      apiKey: apiKey,
+      lang: lang ?? YunoLanguage.en,
+      countryCode: countryCode,
+      iosConfig: IosConfig(
+        keepLoader: true,
+        appearance: appearance,
+        cardflow: CARDFLOW.multiStep,
       ),
-    ),
-  );
+    );
+    return yuno;
+  } catch (e) {
+    throw Exception();
+  }
 });
 
 final contryCodeNotifier = NotifierProvider<CountryCodeNotiifer, CountryCode?>(

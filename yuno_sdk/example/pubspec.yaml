@@ -11,11 +11,13 @@ dependencies:
     sdk: flutter
   
   flutter_riverpod: ^2.5.1
-  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.2
   flutter_slidable: ^3.1.1
+  flutter_colorpicker: ^1.1.0
   country_code_picker: ^3.0.0
   yuno:
    path: ../
+
 
 dev_dependencies:
   flutter_test:

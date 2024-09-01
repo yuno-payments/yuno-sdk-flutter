@@ -4,6 +4,7 @@ enum Keys {
   alias,
   checkoutSession,
   accentColor,
+  language,
   buttonBackgrounColor,
   buttonTitleBackgrounColor,
   buttonBorderBackgrounColor,
