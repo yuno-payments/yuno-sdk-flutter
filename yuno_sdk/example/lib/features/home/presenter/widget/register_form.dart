@@ -218,10 +218,10 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
       apiKey: apiKey,
       lang: lang ?? YunoLanguage.en,
       countryCode: countryCode,
+      cardflow: CARDFLOW.multiStep,
+      keepLoader: true,
       iosConfig: IosConfig(
-        keepLoader: true,
         appearance: appearance,
-        cardflow: CARDFLOW.multiStep,
       ),
     );
     return yuno;
