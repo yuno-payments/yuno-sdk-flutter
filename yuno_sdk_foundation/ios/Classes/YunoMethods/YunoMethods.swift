@@ -56,7 +56,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let yunoConfig = app.yunoConfig
-        let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? "oneStep")
+        let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? String(describing: CardFormType.oneStep))
         Yuno.startCheckout(with: self)
         Yuno.initialize(
             apiKey: app.apiKey,
