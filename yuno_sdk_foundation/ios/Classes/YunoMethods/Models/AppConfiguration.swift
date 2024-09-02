@@ -66,7 +66,7 @@ struct Configuration: Codable, Sendable {
     let appearance: Appearance?
 }
 
-struct YunoConfiguration: Codable, Sendable{
+struct YunoConfiguration: Codable, Sendable {
     let lang: String
     let cardFlow: String?
     let saveCardEnable: Bool?
