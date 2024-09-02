@@ -89,9 +89,8 @@ void main() {
         keepLoader: keepLoader,
         lang: lang,
       );
-
-      const androidConfig =
-          AndroidConfig(); // Replace with actual AndroidConfig
+//TODO: consider is the following class [AndroidConfig] is neccesary
+      const androidConfig = AndroidConfig();
 
       bool methodCalled = false;
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -163,7 +162,10 @@ void main() {
       });
 
       await yunoMethodChannel.initialize(
-          apiKey: apiKey, iosConfig: iosConfig, yunoConfig: yunoConfig);
+        apiKey: apiKey,
+        iosConfig: iosConfig,
+        yunoConfig: yunoConfig,
+      );
 
       expect(methodCalled, isTrue);
     });
