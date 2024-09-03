@@ -55,8 +55,9 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
-        let configuration = app.configuration
-        let cardFormType = CardFlow(rawValue: configuration?.cardFlow ?? "oneStep")
+        let yunoConfig = app.yunoConfig
+        let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? String(describing: CardFormType.oneStep))
+        Yuno.startCheckout(with: self)
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -72,12 +73,11 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
                     disableButtonBackgroundColor: appearance?.disableButtonBackgroundColor,
                     disableButtonTitleColor: appearance?.disableButtonTitleBackgroundColor,
                     checkboxColor: appearance?.checkboxColor),
-                saveCardEnabled: configuration?.saveCardEnable ?? false,
-                keepLoader: configuration?.keepLoader ?? false,
-                isDynamicViewEnabled: configuration?.isDynamicViewEnable ?? false
+                saveCardEnabled: yunoConfig.saveCardEnable ?? false,
+                keepLoader: yunoConfig.keepLoader ?? false,
+                isDynamicViewEnabled: yunoConfig.isDynamicViewEnable ?? false
             )
         )
-        Yuno.startCheckout(with: self)
     }
 }
 
@@ -112,7 +112,7 @@ extension YunoMethods {
             let startPayment = try decoder
             .decode(StartPayment.self, from: jsonData)
             if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
-               startPayment.checkoutSession.isEmpty {
+               startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                  result(YunoError
                     .customError(
                     code: "6",
@@ -121,6 +121,7 @@ extension YunoMethods {
                 )
               )
             }
+            self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
             Yuno.startPaymentLite(
                 paymentSelected: startPayment.paymentMetdhodSelected,
@@ -144,11 +145,10 @@ extension YunoMethods {
             let decoder = JSONDecoder()
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
 
-            if app.apiKey.isEmpty || app.countryCode.isEmpty {
+            if app.apiKey.isEmpty {
                  result(YunoError.missingParams())
             }
-            self.countryCode = app.countryCode
-            self.language = app.lang
+            self.language = app.yunoConfig.lang
             self.initialize(app: app )
              result(true)
         } catch {

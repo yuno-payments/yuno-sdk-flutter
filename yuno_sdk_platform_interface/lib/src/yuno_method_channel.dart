@@ -31,22 +31,19 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<void> initialize({
     required String apiKey,
-    required String countryCode,
-    YunoLanguage lang = YunoLanguage.en,
+    required YunoConfig yunoConfig,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     final mapper = isAndroid
         ? Parser.toMap(
             apiKey: apiKey,
-            lang: lang,
-            countryCode: countryCode,
+            yunoConfig: yunoConfig,
             configuration: androidConfig?.toMap(),
           )
         : Parser.toMap(
             apiKey: apiKey,
-            lang: lang,
-            countryCode: countryCode,
+            yunoConfig: yunoConfig,
             configuration: iosConfig?.toMap(),
           );
     await _methodChannel.invokeMethod('initialize', mapper);
@@ -84,8 +81,9 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<void> startPaymentLite({
     required StartPayment arguments,
+    String countryCode = '',
   }) async {
-    final data = arguments.toMap();
+    final data = arguments.toMap(countryCode: countryCode);
     await _methodChannel.invokeMethod('startPaymentLite', data);
   }
 

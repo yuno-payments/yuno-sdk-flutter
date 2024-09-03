@@ -12,7 +12,6 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     instanceSDK.instance = YunoMethods(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
   }
-
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     guard let instance = self.instance else {
       return
@@ -25,7 +24,7 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     case Keys.continuePayment.rawValue:
         instance.continuePayment(call: call, result: result)
     case Keys.hideLoader.rawValue:
-        instance.handleHideLoader(call: call,result: result)
+        instance.handleHideLoader(call: call, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

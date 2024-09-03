@@ -5,6 +5,8 @@ import com.example.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.example.yuno_sdk_android.features.app_config.models.toCardFLowSDK
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.core.YunoConfig
+import com.yuno.payments.features.payment.updateCheckoutSession
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
@@ -28,11 +30,11 @@ class InitHandler {
                     context,
                     appConfig.apiKey,
                     config = YunoConfig(
-                        saveCardEnabled = config.saveCardEnable,
+                        saveCardEnabled = appConfig.yunoConfiguration.saveCardEnable,
                         cardFormDeployed = config.cardFormDeployed,
-                        isDynamicViewEnabled = config.isDynamicViewEnable,
-                        keepLoader = config.keepLoader,
-                        cardFlow = config.cardFlow.toCardFLowSDK()
+                        isDynamicViewEnabled = appConfig.yunoConfiguration.isDynamicViewEnable,
+                        keepLoader = appConfig.yunoConfiguration.keepLoader,
+                        cardFlow = appConfig.yunoConfiguration.cardFlow.toCardFLowSDK()
                     )
                 )
                 return result.success(true)

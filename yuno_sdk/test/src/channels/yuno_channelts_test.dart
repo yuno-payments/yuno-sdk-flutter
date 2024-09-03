@@ -12,15 +12,19 @@ void main() {
     YunoPlatform.instance = mockPlatform;
     registerFallbackValue(const IosConfig());
     registerFallbackValue(const AndroidConfig());
+    registerFallbackValue(CardFlow.multiStep);
+    registerFallbackValue(YunoLanguage.en);
+    registerFallbackValue(const YunoConfig());
   });
 
   group('Yuno', () {
     test('init should call platform initialize', () async {
+      when(() => mockPlatform.init()).thenAnswer((_) async {});
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
+            yunoConfig: any(named: 'yunoConfig'),
             iosConfig: any(named: 'iosConfig'),
             androidConfig: any(named: 'androidConfig'),
-            countryCode: any(named: 'countryCode'),
           )).thenAnswer((_) async {});
 
       await Yuno.init(
@@ -30,9 +34,9 @@ void main() {
 
       verify(() => mockPlatform.initialize(
             apiKey: 'test_api_key',
+            yunoConfig: any(named: 'yunoConfig'),
             iosConfig: const IosConfig(),
             androidConfig: const AndroidConfig(),
-            countryCode: any(named: 'countryCode'),
           )).called(1);
     });
 

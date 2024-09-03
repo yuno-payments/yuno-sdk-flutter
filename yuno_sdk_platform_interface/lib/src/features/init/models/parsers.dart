@@ -1,13 +1,8 @@
-import 'package:yuno_sdk_core/commons/src/enums/yuno_language.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
 extension ParserAndroidConfig on AndroidConfig {
   Map<String, dynamic> toMap() {
     return {
-      'cardFlow': cardFlow.toJson(),
-      'saveCardEnable': saveCardEnable,
-      'keepLoader': keepLoader,
-      'isDynamicViewEnable': isDynamicViewEnable,
       'cardFormDeployed': cardFormDeployed,
     };
   }
@@ -16,8 +11,16 @@ extension ParserAndroidConfig on AndroidConfig {
 extension ParserIosConfig on IosConfig {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'cardFlow': cardflow.toJson(),
       'appearance': appearance?.toMap(),
+    };
+  }
+}
+
+extension ParserYunoConfig on YunoConfig {
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'lang': lang.rawValue,
+      'cardFlow': cardFlow.name,
       'saveCardEnable': saveCardEnable,
       'keepLoader': keepLoader,
       'isDynamicViewEnable': isDynamicViewEnable,
@@ -48,14 +51,12 @@ extension ParserAppearance on Appearance {
 extension Parser on Never {
   static Map<String, dynamic> toMap({
     required String apiKey,
-    required YunoLanguage lang,
-    required String countryCode,
+    required YunoConfig yunoConfig,
     Map<String, dynamic>? configuration,
   }) {
     return <String, dynamic>{
       'apiKey': apiKey,
-      'lang': lang.rawValue,
-      'countryCode': countryCode,
+      'yunoConfig': yunoConfig.toMap(),
       'configuration': configuration,
     };
   }
