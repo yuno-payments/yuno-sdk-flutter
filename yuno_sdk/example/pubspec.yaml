@@ -1,7 +1,7 @@
 name: example
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.0+2
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -9,8 +9,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  flutter_riverpod: ^2.5.1
+  shared_preferences: ^2.3.2
+  flutter_slidable: ^3.1.1
+  flutter_colorpicker: ^1.1.0
+  country_code_picker: ^3.0.0
   yuno:
    path: ../
+
 
 dev_dependencies:
   flutter_test:
@@ -19,3 +26,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/

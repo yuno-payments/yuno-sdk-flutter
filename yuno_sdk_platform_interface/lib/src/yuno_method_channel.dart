@@ -35,6 +35,8 @@ final class YunoMethodChannel implements YunoPlatform {
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
+    ///TODO: Remove [androidConfig]
+    /// 'cause param [cardFormDeployed] work for IOS and Android
     final mapper = isAndroid
         ? Parser.toMap(
             apiKey: apiKey,

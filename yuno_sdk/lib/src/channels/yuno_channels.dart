@@ -8,7 +8,6 @@ import '../internals.dart';
 /// Example usage:
 ///
 /// ```dart
-///
 /// final yuno = await Yuno.init(
 ///   apiKey: 'your_api_key_here',
 ///   countryCode: 'your_country_code',
@@ -22,19 +21,31 @@ abstract interface class Yuno {
   /// This method must be called before any other interaction with the SDK. It returns a `Yuno`
   /// instance, which can be used to interact with the SDK.
   ///
-  /// The method takes the following required parameters:
-  /// - `apiKey`: The API key provided by Yuno.
-  /// - `sdkType`: The type of SDK should be (`YunoSdkType.full` or `YunoSdkType.lite`).
+  /// ### Required Parameters:
+  /// - `apiKey`: The API key provided by Yuno. This is used to authenticate and authorize API requests.
+  /// - `countryCode`: The country code associated with the user's location (e.g., "US" for the United States).
   ///
-  /// The following optional parameters are available:
-  /// - `iosConfig`: The configuration for iOS (default is `IosConfig()`).
-  /// - `androidConfig`: The configuration for Android (default is `AndroidConfig()`).
+  /// ### Optional Parameters:
+  /// - `lang`: The language for the SDK's user interface. Defaults to `YunoLanguage.en` (English).
+  /// - `cardflow`: The card flow configuration for the payment process. Defaults to `CARDFLOW.oneStep`.
+  /// - `saveCardEnable`: A boolean flag indicating whether the option to save card details is enabled. Defaults to `false`.
+  /// - `keepLoader`: A boolean flag indicating whether to keep the loader visible during SDK operations. Defaults to `false`.
+  /// - `isDynamicViewEnable`: A boolean flag indicating whether dynamic view updates are enabled. Defaults to `false`.
+  /// - `iosConfig`: The configuration for iOS, allowing customization of the SDK's behavior on iOS devices. Defaults to `IosConfig()`.
+  /// - `androidConfig`: The configuration for Android, allowing customization of the SDK's behavior on Android devices. Defaults to `AndroidConfig()`.
   ///
-  /// Example usage:
+  /// ### Example usage:
   /// ```dart
   /// final yuno = await Yuno.init(
   ///   apiKey: 'your_api_key_here',
   ///   countryCode: 'your_country_code',
+  ///   lang: YunoLanguage.es,
+  ///   cardflow: CARDFLOW.twoStep,
+  ///   saveCardEnable: true,
+  ///   keepLoader: true,
+  ///   isDynamicViewEnable: true,
+  ///   iosConfig: IosConfig(),
+  ///   androidConfig: AndroidConfig(),
   /// );
   /// ```
   static Future<Yuno> init({

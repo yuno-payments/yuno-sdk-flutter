@@ -31,6 +31,7 @@ extension ParserYunoConfig on YunoConfig {
 extension ParserAppearance on Appearance {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'fontFamily': fontFamily,
       'accentColor': accentColor?.value,
       'buttonBackgrounColor': buttonBackgrounColor?.value,
       'buttonTitleBackgrounColor': buttonTitleBackgrounColor?.value,
