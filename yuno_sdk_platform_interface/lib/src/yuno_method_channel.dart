@@ -96,6 +96,16 @@ final class YunoMethodChannel implements YunoPlatform {
   Future<void> hideLoader() async {
     await _methodChannel.invokeMethod('hideLoader');
   }
+
+  @override
+  Future<void> receiveDeeplink({
+    required Uri url,
+  }) async {
+    await _methodChannel.invokeMethod(
+      'receiveDeeplink',
+      url.toString(),
+    );
+  }
 }
 
 /// {@template commons_YunoMethodChannelFactory}

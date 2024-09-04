@@ -15,4 +15,5 @@ enum Keys: String {
     case onError
     case status
     case hideLoader
+    case receiveDeeplink
 }

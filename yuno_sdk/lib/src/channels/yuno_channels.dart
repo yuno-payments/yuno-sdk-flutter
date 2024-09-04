@@ -11,6 +11,13 @@ import '../internals.dart';
 /// final yuno = await Yuno.init(
 ///   apiKey: 'your_api_key_here',
 ///   countryCode: 'your_country_code',
+///   yunoConfig: YunoConfig(
+///     lang: YunoLanguage.en,
+///     cardflow: CARDFLOW.twoStep,
+///     saveCardEnable: true,
+///     keepLoader: true,
+///     isDynamicViewEnable: true,
+///   ), // optional, can use default value
 ///   iosConfig: IosConfig(), // Optional, can use default value
 ///   androidConfig: AndroidConfig(), // Optional, can use default value
 /// );
@@ -39,11 +46,13 @@ abstract interface class Yuno {
   /// final yuno = await Yuno.init(
   ///   apiKey: 'your_api_key_here',
   ///   countryCode: 'your_country_code',
-  ///   lang: YunoLanguage.es,
-  ///   cardflow: CARDFLOW.twoStep,
-  ///   saveCardEnable: true,
-  ///   keepLoader: true,
-  ///   isDynamicViewEnable: true,
+  ///   yunoConfig: YunoConfig(
+  ///     lang: YunoLanguage.en,
+  ///     cardflow: CARDFLOW.twoStep,
+  ///     saveCardEnable: true,
+  ///     keepLoader: true,
+  ///     isDynamicViewEnable: true,
+  ///   ),
   ///   iosConfig: IosConfig(),
   ///   androidConfig: AndroidConfig(),
   /// );
@@ -78,6 +87,8 @@ abstract interface class Yuno {
     bool showPaymentStatus = true,
   });
   Future<void> hideLoader();
+
+  Future<void> receiveDeeplink({required Uri url});
 }
 
 final class _YunoChannels implements Yuno {
@@ -104,6 +115,11 @@ final class _YunoChannels implements Yuno {
         iosConfig: iosConfig,
         androidConfig: androidConfig,
       );
+
+  @override
+  Future<void> receiveDeeplink({required Uri url}) async =>
+      await _platform.receiveDeeplink(url: url);
+
   Future<void> initInvoke() async => await _platform.init();
 
   @override

@@ -39,6 +39,10 @@ abstract interface class YunoPlatform extends PlatformInterface {
 
   Future<void> hideLoader();
 
+  Future<void> receiveDeeplink({
+    required Uri url,
+  });
+
   Future<void> startPaymentLite({
     required StartPayment arguments,
     required String countryCode,

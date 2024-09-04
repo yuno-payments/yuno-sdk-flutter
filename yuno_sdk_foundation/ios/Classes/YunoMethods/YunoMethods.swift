@@ -87,6 +87,18 @@ extension YunoMethods {
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
+    
+    func handleReceiveDeeplink(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? String,
+              let safeURL = URL(string:args) else {
+            return result(YunoError.invalidArguments())
+        }
+
+        if args.isEmpty {
+            return result(YunoError.invalidArguments())
+        }
+        Yuno.receiveDeeplink(safeURL)
+    }
 
     func handleOTT(token: String) {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
