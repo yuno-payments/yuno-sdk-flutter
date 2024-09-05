@@ -11,6 +11,9 @@ import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     private let methodChannel: FlutterMethodChannel
+    private weak var paymentMethodsContainer: UIView!
+    private weak var paymentMethodsContainerHeight: NSLayoutConstraint!
+    private var generator: MethodsView!
     var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
@@ -23,6 +26,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     init(methodChannel: FlutterMethodChannel) {
         viewController = UIViewController()
         self.methodChannel = methodChannel
+        generator = Yuno.methodsView(delegate: self)
     }
 
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
@@ -32,6 +36,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
 
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
+        paymentMethodsContainerHeight.constant = height
     }
 
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
@@ -84,6 +89,34 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
+    
+    
+    func showPaymentMethods(call: FlutterMethodCall, result: @escaping FlutterResult){
+        guard let controller = self.viewController else { return }
+        UIView.animate(withDuration: 0.33, animations: {
+            self.paymentMethodsContainer.alpha = 0.0
+        }, completion: { _ in
+            self.paymentMethodsContainer.alpha = 1.0
+            self.generator.getPaymentMethodsView(checkoutSession: self.checkoutSession,
+                                                 viewType: .separated) { [weak self] (view: UIView) in
+                guard let self else { return }
+                self.paymentMethodsContainer.addSubview(view)
+                view.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    view.topAnchor.constraint(equalTo: self.paymentMethodsContainer.topAnchor),
+                    view.leadingAnchor.constraint(equalTo: self.paymentMethodsContainer.leadingAnchor),
+                    view.trailingAnchor.constraint(equalTo: self.paymentMethodsContainer.trailingAnchor),
+                    view.bottomAnchor.constraint(equalTo: self.paymentMethodsContainer.bottomAnchor)
+                ])
+                
+                
+            }
+        })
+        controller.view.addSubview(paymentMethodsContainer)
+        controller.view.backgroundColor = .white
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
