@@ -89,11 +89,8 @@ extension YunoMethods {
     }
     func handleReceiveDeeplink(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? String,
+              !args.isEmpty,
               let safeURL = URL(string: args) else {
-            return result(YunoError.invalidArguments())
-        }
-
-        if args.isEmpty {
             return result(YunoError.invalidArguments())
         }
         Yuno.receiveDeeplink(safeURL)
