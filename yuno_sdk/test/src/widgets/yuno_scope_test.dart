@@ -132,7 +132,7 @@ void main() {
           yuno: mockYuno,
           child: Builder(
             builder: (BuildContext context) {
-              capturedYuno = context.yuno();
+              capturedYuno = context.yuno;
               return const SizedBox();
             },
           ),
@@ -148,7 +148,7 @@ void main() {
       await tester.pumpWidget(
         Builder(
           builder: (BuildContext context) {
-            expect(() => context.yuno(), throwsA(isA<YunoNotFoundError>()));
+            expect(() => context.yuno, throwsA(isA<YunoNotFoundError>()));
             return const SizedBox();
           },
         ),
@@ -169,7 +169,7 @@ void main() {
             children: [
               Builder(
                 builder: (context) {
-                  capturedOuterYuno = context.yuno();
+                  capturedOuterYuno = context.yuno;
                   return const SizedBox();
                 },
               ),
@@ -177,7 +177,7 @@ void main() {
                 yuno: innerYuno,
                 child: Builder(
                   builder: (context) {
-                    capturedInnerYuno = context.yuno();
+                    capturedInnerYuno = context.yuno;
                     return const SizedBox();
                   },
                 ),

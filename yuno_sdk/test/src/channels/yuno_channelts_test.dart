@@ -15,6 +15,7 @@ void main() {
     registerFallbackValue(CardFlow.multiStep);
     registerFallbackValue(YunoLanguage.en);
     registerFallbackValue(const YunoConfig());
+    registerFallbackValue(const PaymentMethodsArgs(checkoutSession: '1234'));
   });
 
   group('Yuno', () {
@@ -40,6 +41,7 @@ void main() {
           )).called(1);
     });
 
+//TODO: refactor the following test
     test(
         'openPaymentMethodsScreen should throw UnimplementedError for standard SDK',
         () async {
@@ -48,7 +50,10 @@ void main() {
         countryCode: 'country_code',
       );
 
-      expect(() => yuno.openPaymentMethodsScreen(),
+      expect(
+          () => yuno.openPaymentMethodsScreen(
+                arguments: any(named: 'argumens'),
+              ),
           throwsA(isA<UnimplementedError>()));
     });
   });
