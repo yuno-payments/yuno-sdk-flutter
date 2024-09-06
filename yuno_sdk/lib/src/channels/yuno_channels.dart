@@ -78,7 +78,9 @@ abstract interface class Yuno {
     return yuno;
   }
 
-  Future<void> openPaymentMethodsScreen();
+  Future<void> openPaymentMethodsScreen({
+    required PaymentMethodsArgs arguments,
+  });
   Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
@@ -133,14 +135,17 @@ final class _YunoChannels implements Yuno {
       );
 
   @override
-  Future<void> continuePayment({bool showPaymentStatus = true}) async =>
+  Future<void> continuePayment({
+    bool showPaymentStatus = true,
+  }) async =>
       await _platform.continuePayment(showPaymentStatus: showPaymentStatus);
 
   @override
   Future<void> hideLoader() async => await _platform.hideLoader();
 
   @override
-  Future<void> openPaymentMethodsScreen() {
-    throw UnimplementedError();
-  }
+  Future<void> openPaymentMethodsScreen({
+    required PaymentMethodsArgs arguments,
+  }) async =>
+      await _platform.showPaymentMethods(arguments: arguments);
 }
