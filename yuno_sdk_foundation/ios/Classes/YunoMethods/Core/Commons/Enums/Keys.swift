@@ -16,4 +16,5 @@ enum Keys: String {
     case status
     case hideLoader
     case receiveDeeplink
+    case showPaymentMethods
 }

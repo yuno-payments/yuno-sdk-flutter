@@ -1,4 +1,4 @@
-//
+    //
     //  YunoMethods.swift
     //  Pods
     //
@@ -11,37 +11,30 @@ import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     private let methodChannel: FlutterMethodChannel
-    private weak var paymentMethodsContainer: UIView!
-    private weak var paymentMethodsContainerHeight: NSLayoutConstraint!
+    private var paymentMethodsContainer: UIView = UIView()
+    private var paymentMethodsContainerHeight: NSLayoutConstraint = NSLayoutConstraint()
     private var generator: MethodsView!
     var viewController: UIViewController?
     var countryCode: String = ""
     var checkoutSession: String = ""
     var language: String?
-
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
-
     init(methodChannel: FlutterMethodChannel) {
         viewController = UIViewController()
         self.methodChannel = methodChannel
         generator = Yuno.methodsView(delegate: self)
     }
-
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
     }
-
     func yunoDidSelect(enrollmentMethod: any YunoSDK.EnrollmentMethodSelected) {
     }
-
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
         paymentMethodsContainerHeight.constant = height
     }
-
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
     }
-
     func yunoCreatePayment(with token: String) {
         handleOTT(token: token)
         removeViews()
@@ -57,7 +50,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
         controller.dismiss(animated: true)
         rc.dismiss(animated: true)
     }
-
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let yunoConfig = app.yunoConfig
@@ -89,83 +81,111 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
 }
 
 extension YunoMethods {
-    
-    
-    func showPaymentMethods(call: FlutterMethodCall, result: @escaping FlutterResult){
-        guard let controller = self.viewController else { return }
-        UIView.animate(withDuration: 0.33, animations: {
-            self.paymentMethodsContainer.alpha = 0.0
-        }, completion: { _ in
-            self.paymentMethodsContainer.alpha = 1.0
-            self.generator.getPaymentMethodsView(checkoutSession: self.checkoutSession,
-                                                 viewType: .separated) { [weak self] (view: UIView) in
-                guard let self else { return }
-                self.paymentMethodsContainer.addSubview(view)
-                view.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    view.topAnchor.constraint(equalTo: self.paymentMethodsContainer.topAnchor),
-                    view.leadingAnchor.constraint(equalTo: self.paymentMethodsContainer.leadingAnchor),
-                    view.trailingAnchor.constraint(equalTo: self.paymentMethodsContainer.trailingAnchor),
-                    view.bottomAnchor.constraint(equalTo: self.paymentMethodsContainer.bottomAnchor)
-                ])
-                
-                
+    func showPaymentMethods(call: FlutterMethodCall, result: @escaping FlutterResult) {
+
+        guard let args = call.arguments as? [String: Any] else {
+            result(YunoError.invalidArguments())
+            return
+        }
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
+            let decoder = JSONDecoder()
+            let arguments = try decoder
+                .decode(ShowPaymentMethods.self, from: jsonData)
+            guard let controller = self.viewController
+            else {
+                return
             }
-        })
-        controller.view.addSubview(paymentMethodsContainer)
-        controller.view.backgroundColor = .white
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
+                self.paymentMethodsContainer.alpha = 1.0
+            self.generator.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
+                                                 viewType: .separated) { [weak self] (view: UIView) in
+
+                let scrollView = UIScrollView()
+                scrollView.translatesAutoresizingMaskIntoConstraints = false
+                let screenWidth = UIScreen.main.bounds.width
+                let contentHeight = paymentMethodsContainerHeight.constant
+
+                NSLayoutConstraint.activate([
+                    view.widthAnchor.constraint(equalToConstant: screenWidth),
+                    view.heightAnchor.constraint(equalToConstant: contentHeight)
+                ])
+                view.center = CGPoint(x: view.frame.size.width / 2, y: view.frame.size.height / 2)
+                controller.view.removeAllSubviews()
+                controller.view.addSubview(scrollView)
+                scrollView.addSubview(view)
+
+                NSLayoutConstraint.activate([
+                    scrollView.topAnchor.constraint(equalTo: controller.view.topAnchor),
+                    scrollView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor),
+                    scrollView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor),
+                    scrollView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor),
+                    view.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                    view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                    view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                    view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+                ])
+
+                controller.view.backgroundColor = .white
+            }
+
+            presentController {
+                return result(YunoError.somethingWentWrong())
+            }
+        } catch {
+            result(YunoError.somethingWentWrong())
+            return
+        }
     }
-    
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
     func handleReceiveDeeplink(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? String,
-              let safeURL = URL(string:args) else {
-            return result(YunoError.invalidArguments())
+              let safeURL = URL(string: args) else {
+            result(YunoError.invalidArguments())
+            return
         }
-
         if args.isEmpty {
-            return result(YunoError.invalidArguments())
+            result(YunoError.invalidArguments())
+            return
         }
         Yuno.receiveDeeplink(safeURL)
     }
-
     func handleOTT(token: String) {
         methodChannel.invokeMethod(Keys.ott.rawValue, arguments: token)
     }
     func handleHideLoader(call: FlutterMethodCall, result: @escaping FlutterResult) {
-            Yuno.hideLoader()
+        Yuno.hideLoader()
     }
     func continuePayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? Bool else {
-            return result(YunoError.invalidArguments())
+            result(YunoError.invalidArguments())
+            return
         }
-            Yuno.continuePayment(showPaymentStatus: args)
-            presentController {
-                return result(YunoError.somethingWentWrong())
-            }
+        Yuno.continuePayment(showPaymentStatus: args)
+        presentController {
+            return result(YunoError.somethingWentWrong())
+        }
     }
-
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-          return result(YunoError.invalidArguments())
+            result(YunoError.invalidArguments())
+            return
         }
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
             let startPayment = try decoder
-            .decode(StartPayment.self, from: jsonData)
+                .decode(StartPayment.self, from: jsonData)
             if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
-               startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
-                 result(YunoError
+                startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
+                result(YunoError
                     .customError(
-                    code: "6",
-                    message: "Missing params",
-                    details: "param:\(startPayment.paymentMetdhodSelected.paymentMethodType) is empty"
+                        code: "6",
+                        message: "Missing params",
+                        details: "param:\(startPayment.paymentMetdhodSelected.paymentMethodType) is empty"
+                    )
                 )
-              )
             }
             self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
@@ -173,7 +193,6 @@ extension YunoMethods {
                 paymentSelected: startPayment.paymentMetdhodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus
             )
-
             presentController {
                 return result(YunoError.somethingWentWrong())
             }
@@ -181,24 +200,23 @@ extension YunoMethods {
             result(YunoError.somethingWentWrong())
         }
     }
-
     func handleInitialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
-           return result(YunoError.invalidArguments())
+            result(YunoError.invalidArguments())
+            return
         }
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
             let app = try decoder.decode(AppConfiguration.self, from: jsonData)
-
             if app.apiKey.isEmpty {
-                 result(YunoError.missingParams())
+                result(YunoError.missingParams())
             }
             self.language = app.yunoConfig.lang
             self.initialize(app: app )
-             result(true)
+            result(true)
         } catch {
-             result(YunoError.somethingWentWrong())
+            result(YunoError.somethingWentWrong())
         }
     }
     private func presentController(error: @escaping () -> Void ) {
@@ -211,5 +229,16 @@ extension YunoMethods {
         } else {
             error()
         }
+    }
+}
+
+extension UIView {
+    func removeAllSubviews() {
+        subviews.forEach { $0.removeFromSuperview() }
+    }
+    func removeAllSubviews<T: UIView>(type: T.Type) {
+        subviews
+            .filter { $0.isMember(of: type) }
+            .forEach { $0.removeFromSuperview() }
     }
 }

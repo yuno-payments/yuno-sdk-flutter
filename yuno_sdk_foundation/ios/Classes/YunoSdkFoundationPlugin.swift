@@ -27,6 +27,8 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
         instance.handleHideLoader(call: call, result: result)
     case Keys.receiveDeeplink.rawValue:
         instance.handleReceiveDeeplink(call: call, result: result)
+    case Keys.showPaymentMethods.rawValue:
+        instance.showPaymentMethods(call: call, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
