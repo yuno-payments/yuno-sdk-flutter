@@ -232,6 +232,24 @@ class _ExecutePaymentsState extends State<ExecutePayments> {
                   ),
                 ),
                 const Divider(),
+                ListTile(
+                  minVerticalPadding: 3,
+                  minTileHeight: 2,
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await context.openPaymentMethodsScreen(
+                        arguments: PaymentMethodsArgs(
+                          checkoutSession: _checkoutSession.text,
+                        ),
+                      );
+                    }
+                  },
+                  title: const Text('Execute payment FULL'),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios_outlined,
+                  ),
+                ),
+                const Divider(),
                 Consumer(
                   builder: (context, ref, child) {
                     final controller = ref.watch(checkoutSessionNotifier);
