@@ -32,6 +32,8 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
         paymentMethodsContainerHeight.constant = height
+        print(height)
+        print(paymentMethodsContainerHeight.constant)
     }
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
     }
@@ -96,10 +98,12 @@ extension YunoMethods {
             else {
                 return
             }
-                self.paymentMethodsContainer.alpha = 1.0
+            self.paymentMethodsContainer.alpha = 1.0
             self.generator.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
                                                  viewType: .separated) { [weak self] (view: UIView) in
-
+                guard let self = self else {
+                    return
+                }
                 let scrollView = UIScrollView()
                 scrollView.translatesAutoresizingMaskIntoConstraints = false
                 let screenWidth = UIScreen.main.bounds.width
