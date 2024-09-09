@@ -5,8 +5,6 @@ import com.example.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.example.yuno_sdk_android.features.app_config.models.toCardFLowSDK
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.core.YunoConfig
-import com.yuno.payments.features.payment.updateCheckoutSession
-import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
@@ -15,9 +13,9 @@ class InitHandler {
     fun handler(call: MethodCall, result: Result, context: Context){
         try {
             val argument = call.arguments<Map<String, Any>>()
-            val resultConverter = argument?.toApiConfig()
+            val either = argument?.toApiConfig()
 
-            resultConverter?.onSuccess { appConfig ->
+            either?.onSuccess { appConfig ->
                 val config = appConfig.configuration;
                 if (appConfig.apiKey.isEmpty()) {
                     return result.error(

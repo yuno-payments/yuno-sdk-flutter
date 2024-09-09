@@ -85,8 +85,12 @@ final class YunoMethodChannel implements YunoPlatform {
     required StartPayment arguments,
     String countryCode = '',
   }) async {
-    final data = arguments.toMap(countryCode: countryCode);
-    await _methodChannel.invokeMethod('startPaymentLite', data);
+    try {
+      final data = arguments.toMap(countryCode: countryCode);
+      await _methodChannel.invokeMethod('startPaymentLite', data);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

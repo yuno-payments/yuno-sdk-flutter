@@ -31,6 +31,7 @@ class YunoSdkAndroidPlugin :
     private lateinit var activity: FlutterFragmentActivity
     private lateinit var startActivityForResultLauncher: ActivityResultLauncher<Intent>
 
+
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         activity.startCheckout(
@@ -61,12 +62,15 @@ class YunoSdkAndroidPlugin :
             }
             Key.startPaymentLite -> {
                 val startPaymentLiteHandler = StartPaymentLiteHandler()
-                startPaymentLiteHandler.handler(
-                    call = call,
-                    result = result,
-                    context = context,
-                    activity = activity
-                )
+
+                    startPaymentLiteHandler.handler(
+                        call = call,
+                        result = result,
+                        context = context,
+                        activity = activity
+                    )
+
+
             }
 
             else -> {
@@ -76,12 +80,13 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity as FlutterFragmentActivity
-        activity.lifecycle.addObserver(this)
-        startActivityForResultLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-        }
+            activity = binding.activity as FlutterFragmentActivity
+            activity.lifecycle.addObserver(this)
+            startActivityForResultLauncher = activity.registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+            }
+
     }
 
     override fun onDetachedFromActivity() {
@@ -102,13 +107,15 @@ class YunoSdkAndroidPlugin :
     }
 
     fun onTokenUpdated(token: String?) {
+
         token?.let {
        
         }
     }
 
     fun onPaymentStateChange(paymentState: String?) {
-        paymentState?.let {     
+        println("${paymentState}")
+        paymentState?.let {
         }
     }
 }

@@ -97,14 +97,13 @@ final class _YunoChannels implements Yuno {
   const _YunoChannels({
     required this.countryCodeIncome,
   });
-
+  final String countryCodeIncome;
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
     __platform ??= YunoPlatform.instance;
     return __platform!;
   }
 
-  final String countryCodeIncome;
   Future<void> init({
     required String apiKey,
     required YunoConfig yunoConfig,
