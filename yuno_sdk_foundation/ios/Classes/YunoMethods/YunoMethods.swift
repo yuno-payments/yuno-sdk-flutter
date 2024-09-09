@@ -118,9 +118,7 @@ extension YunoMethods {
             self.paymentMethodsContainer.alpha = 1.0
             self.generator.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
                                                  viewType: .separated) { [weak self] (view: UIView) in
-                guard let self else {
-                    return
-                }
+                guard let self else { return }
                 let scrollView = UIScrollView()
                 scrollView.translatesAutoresizingMaskIntoConstraints = false
                 let screenWidth = UIScreen.main.bounds.width
