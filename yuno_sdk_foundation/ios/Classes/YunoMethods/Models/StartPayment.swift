@@ -11,15 +11,15 @@ class StartPayment: Codable {
     var countryCode: String
     var showPaymentStatus: Bool
     var checkoutSession: String
-    var paymentMetdhodSelected: PaymentMethod
+    var paymentMethodSelected: PaymentMethod
     init(
          countryCode: String,
-         paymentMetdhodSelected: PaymentMethod,
+         paymentMethodSelected: PaymentMethod,
          showPaymentStatus: Bool,
          checkoutSession: String
     ) {
         self.countryCode = countryCode
-        self.paymentMetdhodSelected = paymentMetdhodSelected
+        self.paymentMethodSelected = paymentMethodSelected
         self.showPaymentStatus = showPaymentStatus
         self.checkoutSession = checkoutSession
     }
