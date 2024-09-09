@@ -231,14 +231,3 @@ extension YunoMethods {
         }
     }
 }
-
-extension UIView {
-    func removeAllSubviews() {
-        subviews.forEach { $0.removeFromSuperview() }
-    }
-    func removeAllSubviews<T: UIView>(type: T.Type) {
-        subviews
-            .filter { $0.isMember(of: type) }
-            .forEach { $0.removeFromSuperview() }
-    }
-}
