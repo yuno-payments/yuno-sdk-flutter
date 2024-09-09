@@ -147,7 +147,8 @@ extension YunoMethods {
         guard let args = call.arguments as? String,
               !args.isEmpty,
               let safeURL = URL(string: args) else {
-            return result(YunoError.invalidArguments())
+            result(YunoError.invalidArguments())
+            return
         }
         Yuno.receiveDeeplink(safeURL)
     }
