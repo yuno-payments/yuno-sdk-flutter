@@ -32,8 +32,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
         paymentMethodsContainerHeight.constant = height
-        print(height)
-        print(paymentMethodsContainerHeight.constant)
     }
     func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
     }
