@@ -16,7 +16,7 @@ class InitHandler {
             val either = argument?.toApiConfig()
 
             either?.onSuccess { appConfig ->
-                val config = appConfig.configuration;
+
                 if (appConfig.apiKey.isEmpty()) {
                     return result.error(
                         "4",
@@ -29,7 +29,7 @@ class InitHandler {
                     appConfig.apiKey,
                     config = YunoConfig(
                         saveCardEnabled = appConfig.yunoConfiguration.saveCardEnable,
-                        cardFormDeployed = config.cardFormDeployed,
+                        cardFormDeployed = appConfig.yunoConfiguration.cardFormDeployed,
                         isDynamicViewEnabled = appConfig.yunoConfiguration.isDynamicViewEnable,
                         keepLoader = appConfig.yunoConfiguration.keepLoader,
                         cardFlow = appConfig.yunoConfiguration.cardFlow.toCardFLowSDK()
