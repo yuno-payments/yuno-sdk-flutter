@@ -196,6 +196,7 @@ extension YunoMethods {
                 return result(YunoError.somethingWentWrong())
             }
         } catch {
+            print(error)
             result(YunoError.somethingWentWrong())
         }
     }

@@ -2,7 +2,6 @@ package com.example.yuno_sdk_android
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.yuno.payments.features.payment.startCheckout
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -13,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.example.yuno_sdk_android.core.utils.keys.Key
 import com.example.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.example.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
@@ -107,15 +107,10 @@ class YunoSdkAndroidPlugin :
     }
 
     fun onTokenUpdated(token: String?) {
-
-        token?.let {
-       
-        }
+        channel.invokeMethod("ott", token)
     }
 
     fun onPaymentStateChange(paymentState: String?) {
-        println("${paymentState}")
-        paymentState?.let {
-        }
+       channel.invokeMethod("status", paymentState?.statusConverter())
     }
 }
