@@ -27,7 +27,6 @@ class StartPaymentLiteHandler {
                     ),
                     showPaymentStatus = model.showPaymentStatus
                 )
-                activity.continuePayment()
             }?.onFailure { exception ->  return result.error(
                 "5",
                 "Failure: An error occurred - ${exception.message}",
