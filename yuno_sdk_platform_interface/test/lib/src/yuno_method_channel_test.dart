@@ -76,7 +76,6 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
-      const countryCode = 'country_code';
       const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
@@ -89,7 +88,6 @@ void main() {
         keepLoader: keepLoader,
         lang: lang,
       );
-//TODO: consider is the following class [AndroidConfig] is neccesary
       const androidConfig = AndroidConfig();
 
       bool methodCalled = false;
@@ -101,9 +99,8 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'countryCode': countryCode,
           'yunoConfig': yunoConfig.toMap(),
-          'configuration': androidConfig.toMap(),
+          'configuration': null,
         });
 
         return null;
@@ -129,7 +126,7 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
-      const countryCode = 'country_code';
+
       const iosConfig = IosConfig();
       const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
@@ -153,7 +150,6 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
-          'countryCode': countryCode,
           'yunoConfig': yunoConfig.toMap(),
           'configuration': iosConfig.toMap(),
         });

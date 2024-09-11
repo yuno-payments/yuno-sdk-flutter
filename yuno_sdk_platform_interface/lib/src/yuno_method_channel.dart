@@ -35,19 +35,11 @@ final class YunoMethodChannel implements YunoPlatform {
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
-    ///TODO: Remove [androidConfig]
-    /// 'cause param [cardFormDeployed] work for IOS and Android
-    final mapper = isAndroid
-        ? Parser.toMap(
-            apiKey: apiKey,
-            yunoConfig: yunoConfig,
-            configuration: androidConfig?.toMap(),
-          )
-        : Parser.toMap(
-            apiKey: apiKey,
-            yunoConfig: yunoConfig,
-            configuration: iosConfig?.toMap(),
-          );
+    final mapper = Parser.toMap(
+      apiKey: apiKey,
+      yunoConfig: yunoConfig,
+      configuration: iosConfig?.toMap(),
+    );
     await _methodChannel.invokeMethod('initialize', mapper);
   }
 
@@ -85,12 +77,8 @@ final class YunoMethodChannel implements YunoPlatform {
     required StartPayment arguments,
     String countryCode = '',
   }) async {
-    try {
-      final data = arguments.toMap(countryCode: countryCode);
-      await _methodChannel.invokeMethod('startPaymentLite', data);
-    } catch (e) {
-      print(e);
-    }
+    final data = arguments.toMap(countryCode: countryCode);
+    await _methodChannel.invokeMethod('startPaymentLite', data);
   }
 
   @override

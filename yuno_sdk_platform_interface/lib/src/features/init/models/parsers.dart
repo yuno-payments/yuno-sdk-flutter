@@ -1,13 +1,5 @@
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
-extension ParserAndroidConfig on AndroidConfig {
-  Map<String, dynamic> toMap() {
-    return {
-      'cardFormDeployed': cardFormDeployed,
-    };
-  }
-}
-
 extension ParserIosConfig on IosConfig {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -24,6 +16,7 @@ extension ParserYunoConfig on YunoConfig {
       'saveCardEnable': saveCardEnable,
       'keepLoader': keepLoader,
       'isDynamicViewEnable': isDynamicViewEnable,
+      'cardFormDeployed': cardFormDeployed,
     };
   }
 }
