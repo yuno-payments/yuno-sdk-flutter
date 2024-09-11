@@ -1,8 +1,7 @@
 package com.example.yuno_sdk_android.features.start_payment_lite.method_channels
-
 import android.content.Context
-import com.example.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.example.yuno_sdk_android.features.start_payment_lite.models.toStartPaymentLite
+import com.yuno.payments.features.payment.continuePayment
 import com.yuno.payments.features.payment.startPaymentLite
 import com.yuno.payments.features.payment.ui.views.PaymentSelected
 import com.yuno.payments.features.payment.updateCheckoutSession
@@ -28,6 +27,7 @@ class StartPaymentLiteHandler {
                     ),
                     showPaymentStatus = model.showPaymentStatus
                 )
+                activity.continuePayment()
             }?.onFailure { exception ->  return result.error(
                 "5",
                 "Failure: An error occurred - ${exception.message}",

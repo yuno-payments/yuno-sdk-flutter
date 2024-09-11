@@ -4,6 +4,7 @@ export 'package:yuno_sdk_core/commons/external.dart';
 export 'package:yuno_sdk_platform_interface/lib.dart'
     hide YunoMethodChannel
     hide YunoPlatform
+    hide YunoState
     hide ParserIosConfig
     hide ParserAppearance
     hide YunoMethodChannelFactory

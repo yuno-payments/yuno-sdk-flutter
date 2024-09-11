@@ -21,8 +21,10 @@ typedef YunoWidgetListener = void Function(
 ///
 /// ```dart
 /// YunoListener(
-///   listenToken: (token) {
-///     // Handle token changes here
+///   listener: (state) {
+///     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
+///     // - [token]: One Time Token
+///     // - [status]: [reject,succeded,fail,processing,internalError,cancelByUser]
 ///   },
 ///   child: SomeWidget(),
 /// )
@@ -33,7 +35,7 @@ typedef YunoWidgetListener = void Function(
 ///
 /// - [child]: The widget that will be rendered as a descendant of
 ///   `YunoListener`.
-/// - [listenToken]: The callback function that listens to token changes.
+/// - [listener]: The callback function that listens to state changes.
 /// {@endtemplate}
 class YunoListener extends StatefulWidget {
   /// Creates a `YunoListener` widget.
@@ -43,7 +45,6 @@ class YunoListener extends StatefulWidget {
   const YunoListener({
     super.key,
     required this.listener,
-    // required this.listeResult,
     required this.child,
   });
 

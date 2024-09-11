@@ -29,28 +29,6 @@ final class YunoMethodChannel implements YunoPlatform {
   final bool _platformIsAndroid;
 
   @override
-  Future<void> initialize({
-    required String apiKey,
-    required YunoConfig yunoConfig,
-    IosConfig? iosConfig,
-    AndroidConfig? androidConfig,
-  }) async {
-    final mapper = Parser.toMap(
-      apiKey: apiKey,
-      yunoConfig: yunoConfig,
-      configuration: iosConfig?.toMap(),
-    );
-    await _methodChannel.invokeMethod('initialize', mapper);
-  }
-
-  @override
-  Future<void> continuePayment({
-    bool showPaymentStatus = true,
-  }) async {
-    await _methodChannel.invokeMethod('continuePayment', showPaymentStatus);
-  }
-
-  @override
   Future<void> init() async {
     _methodChannel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
@@ -70,6 +48,28 @@ final class YunoMethodChannel implements YunoPlatform {
               'Not implemented method: ${call.method}');
       }
     });
+  }
+
+  @override
+  Future<void> initialize({
+    required String apiKey,
+    required YunoConfig yunoConfig,
+    IosConfig? iosConfig,
+    AndroidConfig? androidConfig,
+  }) async {
+    final mapper = Parser.toMap(
+      apiKey: apiKey,
+      yunoConfig: yunoConfig,
+      configuration: iosConfig?.toMap(),
+    );
+    await _methodChannel.invokeMethod('initialize', mapper);
+  }
+
+  @override
+  Future<void> continuePayment({
+    bool showPaymentStatus = true,
+  }) async {
+    await _methodChannel.invokeMethod('continuePayment', showPaymentStatus);
   }
 
   @override

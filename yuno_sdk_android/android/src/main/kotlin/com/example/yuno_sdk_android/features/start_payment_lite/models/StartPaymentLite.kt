@@ -1,17 +1,10 @@
 package com.example.yuno_sdk_android.features.start_payment_lite.models
-
-import com.example.yuno_sdk_android.features.app_config.models.AppConfigModel
-import com.example.yuno_sdk_android.features.app_config.models.toApiConfig
-
 data class StartPaymentLite(
     val countryCode: String,
     val showPaymentStatus: Boolean,
     val checkoutSession: String,
     val paymentMethodSelected: PaymentMethod
 )
-
-
-
 fun Map<String, Any>.toStartPaymentLite(): Result<StartPaymentLite> {
 
         return try {

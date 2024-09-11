@@ -16,7 +16,6 @@ class InitHandler {
             val either = argument?.toApiConfig()
 
             either?.onSuccess { appConfig ->
-
                 if (appConfig.apiKey.isEmpty()) {
                     return result.error(
                         "4",
@@ -24,6 +23,7 @@ class InitHandler {
                         "ApiKey must be necessary for starting to use Yuno SDK"
                     )
                 }
+
                 Yuno.initialize(
                     context,
                     appConfig.apiKey,
