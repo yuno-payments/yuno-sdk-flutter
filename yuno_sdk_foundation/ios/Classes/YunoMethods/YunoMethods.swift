@@ -22,7 +22,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
     init(methodChannel: FlutterMethodChannel) {
-//        viewController = UIViewController()
         self.methodChannel = methodChannel
         generator = Yuno.methodsView(delegate: self)
     }
