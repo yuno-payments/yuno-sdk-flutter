@@ -172,7 +172,7 @@ extension YunoMethods {
         do {
             let decoder = JSONDecoder()
             let startPayment = try decoder.decode(StartPayment.self, from: args)
-            if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
+            if startPayment.paymentMethodSelected.paymentMethodType.isEmpty ||
                 startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                 result(YunoError
                     .customError(
