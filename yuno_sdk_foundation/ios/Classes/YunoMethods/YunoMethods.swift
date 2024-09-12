@@ -22,7 +22,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
     init(methodChannel: FlutterMethodChannel) {
-        viewController = UIViewController()
+//        viewController = UIViewController()
         self.methodChannel = methodChannel
         generator = Yuno.methodsView(delegate: self)
     }
@@ -105,10 +105,9 @@ extension YunoMethods {
             return
         }
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
-            let arguments = try decoder
-                .decode(ShowPaymentMethods.self, from: jsonData)
+            let arguments = try decoder.decode(ShowPaymentMethods.self, from: args)
+            viewController = UIViewController()
             guard let controller = self.viewController
             else {
                 return
@@ -120,7 +119,7 @@ extension YunoMethods {
                 let scrollView = UIScrollView()
                 scrollView.translatesAutoresizingMaskIntoConstraints = false
                 let screenWidth = UIScreen.main.bounds.width
-                let contentHeight = paymentMethodsContainerHeight.constant
+                var contentHeight = paymentMethodsContainerHeight.constant
                 viewConstraints(view: view, screenWidth: screenWidth, contentHeight: screenWidth)
                 view.center = CGPoint(x: view.frame.size.width / 2, y: view.frame.size.height / 2)
                 controller.view.removeAllSubviews()
@@ -172,10 +171,8 @@ extension YunoMethods {
             return
         }
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
-            let startPayment = try decoder
-                .decode(StartPayment.self, from: jsonData)
+            let startPayment = try decoder.decode(StartPayment.self, from: args)
             if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
                 startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                 result(YunoError
@@ -192,6 +189,7 @@ extension YunoMethods {
                 paymentSelected: startPayment.paymentMetdhodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus
             )
+            viewController = UIViewController()
             presentController {
                 return result(YunoError.somethingWentWrong())
             }
@@ -205,9 +203,8 @@ extension YunoMethods {
             return
         }
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: args, options: [])
             let decoder = JSONDecoder()
-            let app = try decoder.decode(AppConfiguration.self, from: jsonData)
+            let app = try decoder.decode(AppConfiguration.self, from: args)
             if app.apiKey.isEmpty {
                 result(YunoError.missingParams())
             }
