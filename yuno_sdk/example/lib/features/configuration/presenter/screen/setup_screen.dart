@@ -1,14 +1,13 @@
-import 'package:example/core/feature/utils/yuno_assets.dart';
-import 'package:example/features/configuration/presenter/ios_configuration_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
 import 'package:yuno/yuno.dart';
 
-class ConfigurationScreen extends StatelessWidget {
-  const ConfigurationScreen({super.key});
+class SetUpScreen extends StatelessWidget {
+  const SetUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,38 +61,16 @@ class __HomeLayoutState extends State<_HomeLayout> {
               ),
             ),
             ListTile(
-              title: Row(
-                children: [
-                  const Text('IOS Configuration '),
-                  Image.asset(
-                    YunoAssets.appleIC,
-                    height: 20,
-                    width: 20,
-                  )
-                ],
-              ),
+              title: const Text('Configuration '),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const IOSConfigurationScreen(),
+                    builder: (ctx) => const ConfigurationScreen(),
                   ),
                 );
               },
-            ),
-            ListTile(
-              title: Row(
-                children: [
-                  const Text('Android Configuration '),
-                  Image.asset(
-                    YunoAssets.androidIC,
-                    height: 20,
-                    width: 20,
-                  )
-                ],
-              ),
-              onTap: () {},
             ),
           ],
         ),
