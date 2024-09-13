@@ -1,4 +1,4 @@
-package com.example.yuno_sdk_android.core.utils.extensions
+package com.yuno_flutter.yuno_sdk_android.core.utils.extensions
 import com.yuno.payments.features.payment.PAYMENT_STATE_FAIL
 import com.yuno.payments.features.payment.PAYMENT_STATE_INTERNAL_ERROR
 import com.yuno.payments.features.payment.PAYMENT_STATE_PROCESSING

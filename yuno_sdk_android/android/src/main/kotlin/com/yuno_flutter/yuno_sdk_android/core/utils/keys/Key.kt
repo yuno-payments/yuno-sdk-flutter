@@ -1,4 +1,4 @@
-package com.example.yuno_sdk_android.core.utils.keys
+package com.yuno_flutter.yuno_sdk_android.core.utils.keys
 
 object Key {
     const val init = "initialize"

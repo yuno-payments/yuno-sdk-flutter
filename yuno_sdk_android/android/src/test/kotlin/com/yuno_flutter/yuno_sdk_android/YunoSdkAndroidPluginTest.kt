@@ -1,5 +1,6 @@
-package com.example.yuno_sdk_android
+package com.yuno_flutter.yuno_sdk_android
 
+import com.yuno_flutter.yuno_sdk_android.YunoSdkAndroidPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlin.test.Test

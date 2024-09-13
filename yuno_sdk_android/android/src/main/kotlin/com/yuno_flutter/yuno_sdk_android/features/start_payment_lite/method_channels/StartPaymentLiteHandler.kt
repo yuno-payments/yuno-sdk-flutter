@@ -1,6 +1,6 @@
-package com.example.yuno_sdk_android.features.start_payment_lite.method_channels
+package com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels
 import android.content.Context
-import com.example.yuno_sdk_android.features.start_payment_lite.models.toStartPaymentLite
+import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.models.toStartPaymentLite
 import com.yuno.payments.features.payment.continuePayment
 import com.yuno.payments.features.payment.startPaymentLite
 import com.yuno.payments.features.payment.ui.views.PaymentSelected

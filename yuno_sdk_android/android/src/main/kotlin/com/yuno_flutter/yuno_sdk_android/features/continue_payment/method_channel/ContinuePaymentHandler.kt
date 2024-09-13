@@ -1,4 +1,4 @@
-package com.example.yuno_sdk_android.features.continue_payment.method_channel
+package com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel
 
 import android.content.Context
 import com.yuno.payments.features.payment.continuePayment
