@@ -100,7 +100,9 @@
 */ios/Flutter/flutter_export_environment.sh
 */ios/ServiceDefinitions.json
 */ios/Runner/GeneratedPluginRegistrant.*
-
+*google-services.json
+*firebase.json
+*envs/
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift
 

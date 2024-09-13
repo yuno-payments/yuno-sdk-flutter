@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
@@ -210,24 +211,26 @@ class _ExecutePaymentsState extends State<ExecutePayments> {
                   ),
                 ),
                 const Divider(),
-                ListTile(
-                  minVerticalPadding: 3,
-                  minTileHeight: 2,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await context.openPaymentMethodsScreen(
-                        arguments: PaymentMethodsArgs(
-                          checkoutSession: _checkoutSession.text,
+                kDebugMode
+                    ? ListTile(
+                        minVerticalPadding: 3,
+                        minTileHeight: 2,
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await context.openPaymentMethodsScreen(
+                              arguments: PaymentMethodsArgs(
+                                checkoutSession: _checkoutSession.text,
+                              ),
+                            );
+                          }
+                        },
+                        title: const Text('Execute payment FULL'),
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios_outlined,
                         ),
-                      );
-                    }
-                  },
-                  title: const Text('Execute payment FULL'),
-                  trailing: const Icon(
-                    Icons.arrow_forward_ios_outlined,
-                  ),
-                ),
-                const Divider(),
+                      )
+                    : const SizedBox.shrink(),
+                kDebugMode ? const Divider() : const SizedBox.shrink(),
                 Consumer(
                   builder: (context, ref, child) {
                     final controller = ref.watch(checkoutSessionNotifier);

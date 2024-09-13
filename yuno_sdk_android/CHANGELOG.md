@@ -1,4 +1,4 @@
-## 0.0.1 - IOS
+## 0.0.1 - Android
 - feat: Yuno initialization
 - feat: Yuno start checkout
 - feat: Yuno start payment lite
