@@ -1,3 +1,4 @@
+import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';

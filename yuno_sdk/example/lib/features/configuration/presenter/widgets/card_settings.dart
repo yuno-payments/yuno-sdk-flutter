@@ -1,9 +1,8 @@
 import 'dart:io';
-
+import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/feature/utils/yuno_dialogs.dart';
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
-import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
