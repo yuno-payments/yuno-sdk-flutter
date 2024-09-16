@@ -2,9 +2,15 @@ import 'package:flutter/widgets.dart';
 import 'package:yuno_sdk_core/lib.dart';
 
 class YunoState {
-  const YunoState({required this.token, this.status});
+  const YunoState({
+    required this.token,
+    this.status,
+  });
 
-  factory YunoState.empty() => const YunoState(token: '', status: null);
+  factory YunoState.empty() => const YunoState(
+        token: '',
+        status: null,
+      );
 
   final String token;
   final PaymentStatus? status;

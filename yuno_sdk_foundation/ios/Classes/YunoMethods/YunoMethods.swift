@@ -172,20 +172,20 @@ extension YunoMethods {
         do {
             let decoder = JSONDecoder()
             let startPayment = try decoder.decode(StartPayment.self, from: args)
-            if startPayment.paymentMetdhodSelected.paymentMethodType.isEmpty ||
+            if startPayment.paymentMethodSelected.paymentMethodType.isEmpty ||
                 startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                 result(YunoError
                     .customError(
                         code: "6",
                         message: "Missing params",
-                        details: "param:\(startPayment.paymentMetdhodSelected.paymentMethodType) is empty"
+                        details: "param:\(startPayment.paymentMethodSelected.paymentMethodType) is empty"
                     )
                 )
             }
             self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
             Yuno.startPaymentLite(
-                paymentSelected: startPayment.paymentMetdhodSelected,
+                paymentSelected: startPayment.paymentMethodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus
             )
             viewController = UIViewController()
@@ -193,6 +193,7 @@ extension YunoMethods {
                 return result(YunoError.somethingWentWrong())
             }
         } catch {
+
             result(YunoError.somethingWentWrong())
         }
     }

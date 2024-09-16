@@ -27,7 +27,7 @@ class StartPayment {
       'countryCode': countryCode,
       'showPaymentStatus': showPaymentStatus,
       'checkoutSession': checkoutSession,
-      'paymentMetdhodSelected': methodSelected.toMap(),
+      'paymentMethodSelected': methodSelected.toMap(),
     };
   }
 

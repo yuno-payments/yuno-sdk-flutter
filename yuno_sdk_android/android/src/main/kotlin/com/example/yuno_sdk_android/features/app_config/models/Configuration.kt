@@ -12,7 +12,3 @@ fun CardFlow.toCardFLowSDK(): CardFormType {
         CardFlow.multiStep -> CardFormType.MULTI_STEP
     }
 }
-
-data class Configuration(
-    val cardFormDeployed: Boolean
-)

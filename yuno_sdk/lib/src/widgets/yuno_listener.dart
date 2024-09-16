@@ -11,18 +11,20 @@ typedef YunoWidgetListener = void Function(
 /// {@template yuno_listener_YunoListener}
 /// A widget that listens for a token change and provides a child widget.
 ///
-/// The `YunoListener` widget is a `StatelessWidget` that takes a child widget
-/// and a callback function `listenToken` as required parameters. The widget
+/// The `YunoListener` widget is a `StatefulWidget` that takes a child widget
+/// and a callback function `listener` as required parameters. The widget
 /// itself does not perform any actions but can be extended or used as a
 /// placeholder where a token listening mechanism is needed.
 ///
 /// This widget can be useful in scenarios where you need to trigger certain
-/// actions or updates in the UI when a specific token changes.
+/// actions or updates in the UI when a specific state changes.
 ///
 /// ```dart
 /// YunoListener(
-///   listenToken: (token) {
-///     // Handle token changes here
+///   listener: (state) {
+///     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
+///     // - [token]: One Time Token
+///     // - [status]: [reject,succeded,fail,processing,internalError,cancelByUser]
 ///   },
 ///   child: SomeWidget(),
 /// )
@@ -33,7 +35,7 @@ typedef YunoWidgetListener = void Function(
 ///
 /// - [child]: The widget that will be rendered as a descendant of
 ///   `YunoListener`.
-/// - [listenToken]: The callback function that listens to token changes.
+/// - [listener]: The callback function that listens to state changes.
 /// {@endtemplate}
 class YunoListener extends StatefulWidget {
   /// Creates a `YunoListener` widget.
@@ -43,7 +45,6 @@ class YunoListener extends StatefulWidget {
   const YunoListener({
     super.key,
     required this.listener,
-    // required this.listeResult,
     required this.child,
   });
 
@@ -52,9 +53,6 @@ class YunoListener extends StatefulWidget {
 
   /// The callback function that listens for token changes.
   final YunoWidgetListener listener;
-
-  /// The callback function that listens for result changes.
-  // final ResultBuilder listeResult;
 
   @override
   State<YunoListener> createState() => _YunoListenerState();

@@ -3,14 +3,14 @@ package com.example.yuno_sdk_android.features.app_config.models
 data class AppConfigModel(
     val apiKey: String,
     val yunoConfiguration: YunoConfiguration,
-    val configuration: Configuration
 )
 
 data class YunoConfiguration(
     val cardFlow: CardFlow,
     val saveCardEnable: Boolean,
     val keepLoader: Boolean,
-    val isDynamicViewEnable: Boolean
+    val isDynamicViewEnable: Boolean,
+    val cardFormDeployed: Boolean
 )
 
 fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
@@ -44,12 +44,8 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
                 IllegalArgumentException("Missing or invalid isDynamicViewEnable")
             )
 
-        val configurationMap = this["configuration"] as? Map<*, *> ?: return Result.failure(
-            IllegalArgumentException("Missing or invalid configuration")
-        )
-
         val cardFormDeployed =
-            configurationMap["cardFormDeployed"] as? Boolean ?: return Result.failure(
+            yunoConfigurationMap["cardFormDeployed"] as? Boolean ?: return Result.failure(
                 IllegalArgumentException("Missing or invalid cardFormDeployed")
             )
 
@@ -58,15 +54,13 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
             saveCardEnable = saveCardEnable,
             keepLoader = keepLoader,
             isDynamicViewEnable = isDynamicViewEnable,
+            cardFormDeployed = cardFormDeployed,
         )
-        val configuration = Configuration(
-            cardFormDeployed = cardFormDeployed
-        )
+
         Result.success(
             AppConfigModel(
                 apiKey = apiKey,
                 yunoConfiguration = yunoConfiguration,
-                configuration = configuration
             )
         )
 

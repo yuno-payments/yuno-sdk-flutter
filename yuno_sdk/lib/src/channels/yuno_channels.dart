@@ -1,12 +1,13 @@
 import '../internals.dart';
 
+/// {@template yuno_channels.Yuno}
 /// The `Yuno` class provides an abstract interface for initializing and interacting with the Yuno SDK.
 ///
 /// This class exposes the `init` method, which must be used to create an instance of `Yuno`.
 /// Once initialized, you can use the instance to interact with the SDK.
 ///
 /// Example usage:
-///
+///{@tool snippet}
 /// ```dart
 /// final yuno = await Yuno.init(
 ///   apiKey: 'your_api_key_here',
@@ -17,11 +18,12 @@ import '../internals.dart';
 ///     saveCardEnable: true,
 ///     keepLoader: true,
 ///     isDynamicViewEnable: true,
-///   ), // optional, can use default value
+///   ),
 ///   iosConfig: IosConfig(), // Optional, can use default value
-///   androidConfig: AndroidConfig(), // Optional, can use default value
 /// );
 /// ```
+/// {@end-tool}
+/// {@endtemplate}
 abstract interface class Yuno {
   /// Initializes the Yuno SDK.
   ///
@@ -54,7 +56,6 @@ abstract interface class Yuno {
   ///     isDynamicViewEnable: true,
   ///   ),
   ///   iosConfig: IosConfig(),
-  ///   androidConfig: AndroidConfig(),
   /// );
   /// ```
   static Future<Yuno> init({
@@ -62,7 +63,6 @@ abstract interface class Yuno {
     required String countryCode,
     YunoConfig yunoConfig = const YunoConfig(),
     IosConfig iosConfig = const IosConfig(),
-    AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
     final yuno = _YunoChannels(
       countryCodeIncome: countryCode,
@@ -72,7 +72,7 @@ abstract interface class Yuno {
       apiKey: apiKey,
       yunoConfig: yunoConfig,
       iosConfig: iosConfig,
-      androidConfig: androidConfig,
+      androidConfig: const AndroidConfig(),
     );
 
     return yuno;
@@ -81,13 +81,16 @@ abstract interface class Yuno {
   Future<void> openPaymentMethodsScreen({
     required PaymentMethodsArgs arguments,
   });
+
   Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
   });
+
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   });
+
   Future<void> hideLoader();
 
   Future<void> receiveDeeplink({required Uri url});
@@ -97,14 +100,13 @@ final class _YunoChannels implements Yuno {
   const _YunoChannels({
     required this.countryCodeIncome,
   });
-
+  final String countryCodeIncome;
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
     __platform ??= YunoPlatform.instance;
     return __platform!;
   }
 
-  final String countryCodeIncome;
   Future<void> init({
     required String apiKey,
     required YunoConfig yunoConfig,
@@ -119,7 +121,9 @@ final class _YunoChannels implements Yuno {
       );
 
   @override
-  Future<void> receiveDeeplink({required Uri url}) async =>
+  Future<void> receiveDeeplink({
+    required Uri url,
+  }) async =>
       await _platform.receiveDeeplink(url: url);
 
   Future<void> initInvoke() async => await _platform.init();
@@ -138,7 +142,9 @@ final class _YunoChannels implements Yuno {
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   }) async =>
-      await _platform.continuePayment(showPaymentStatus: showPaymentStatus);
+      await _platform.continuePayment(
+        showPaymentStatus: showPaymentStatus,
+      );
 
   @override
   Future<void> hideLoader() async => await _platform.hideLoader();
@@ -147,5 +153,7 @@ final class _YunoChannels implements Yuno {
   Future<void> openPaymentMethodsScreen({
     required PaymentMethodsArgs arguments,
   }) async =>
-      await _platform.showPaymentMethods(arguments: arguments);
+      await _platform.showPaymentMethods(
+        arguments: arguments,
+      );
 }
