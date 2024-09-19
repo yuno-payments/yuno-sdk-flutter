@@ -1,0 +1,4 @@
+ #Yuno Flutter
+ -keep class com.yuno.** { *; }
+ -keep class com.yuno.payments.network.manager.** { *; }
+ -keep class com.yuno.payments.network.manager.EnvMode { *; }
