@@ -1,4 +1,5 @@
 package com.yuno_flutter.yuno_sdk_android
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import com.yuno.payments.features.payment.startCheckout
@@ -11,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.yuno.payments.core.Yuno
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
@@ -19,6 +21,7 @@ import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_chan
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class YunoSdkAndroidPlugin :
     FlutterPlugin,
@@ -32,11 +35,17 @@ class YunoSdkAndroidPlugin :
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        activity.startCheckout(
-            checkoutSession = "",
-            callbackPaymentState = this::onPaymentStateChange,
-            callbackOTT = this::onTokenUpdated,
-        )
+           activity.startCheckout(
+               callbackOTT = this::onTokenUpdated,
+               callbackPaymentState = this::onPaymentStateChange
+           )
+    }
+
+    companion object {
+        @JvmStatic
+        fun initSdk(application: Application, androidApiKey: String) {
+           Yuno.initialize(application,androidApiKey)
+        }
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
