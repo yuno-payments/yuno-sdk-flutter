@@ -17,7 +17,7 @@ dependencies:
   country_code_picker: ^3.0.0
   yuno:
    path: ../
-  firebase_core: ^3.4.1
+  # firebase_core: ^3.4.1
 
 
 dev_dependencies:
