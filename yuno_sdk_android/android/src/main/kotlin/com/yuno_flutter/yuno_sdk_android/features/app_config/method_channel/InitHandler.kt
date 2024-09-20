@@ -5,6 +5,7 @@ import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toCardFLowSDK
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.core.YunoConfig
+import com.yuno.payments.core.YunoLanguage
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
@@ -28,6 +29,7 @@ class InitHandler {
                     context,
                     appConfig.apiKey,
                     config = YunoConfig(
+                        language = appConfig.yunoConfiguration.lang,
                         saveCardEnabled = appConfig.yunoConfiguration.saveCardEnable,
                         cardFormDeployed = appConfig.yunoConfiguration.cardFormDeployed,
                         isDynamicViewEnabled = appConfig.yunoConfiguration.isDynamicViewEnable,
