@@ -72,8 +72,8 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
                     checkboxColor: appearance?.checkboxColor),
                 saveCardEnabled: yunoConfig.saveCardEnable ?? false,
                 keepLoader: yunoConfig.keepLoader ?? false,
-                showUnfoldedCardForm: yunoConfig.cardFormDeployed ?? false,
-                isDynamicViewEnabled: yunoConfig.isDynamicViewEnable ?? false
+                showUnfoldedCardForm: yunoConfig.cardFormDeployed ?? false
+            
             )
         )
     }

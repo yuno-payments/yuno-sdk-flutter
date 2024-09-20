@@ -1,0 +1,15 @@
+{
+  "originHash" : "0319b9d57445cce0ee737c3d189696beac494c1274a9ccf74c9dd6088bb81ae6",
+  "pins" : [
+    {
+      "identity" : "yuno-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yuno-payments/yuno-sdk-ios.git",
+      "state" : {
+        "revision" : "5e4d0a59039d576c08dbb9e6d43a640de0ec012b",
+        "version" : "1.16.0"
+      }
+    }
+  ],
+  "version" : 3
+}

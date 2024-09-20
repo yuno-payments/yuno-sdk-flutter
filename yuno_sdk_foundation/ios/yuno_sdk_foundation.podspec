@@ -13,7 +13,9 @@ A new Flutter plugin project.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Yuno' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'yuno_sdk_foundation/Sources/yuno_sdk_foundation/**/*.{h,m,swift}'
+  s.public_header_files = 'yuno_sdk_foundation/Sources/yuno_sdk_foundation/**/*.h'
+  s.resource_bundles = {'PrivacyInfo' => ['yuno_sdk_foundation/Sources/yuno_sdk_foundation/Resrouces/PrivacyInfo.xcprivacy']}
   s.dependency 'Flutter'
   s.dependency 'YunoSDK'
   s.platform = :ios, '14.0'

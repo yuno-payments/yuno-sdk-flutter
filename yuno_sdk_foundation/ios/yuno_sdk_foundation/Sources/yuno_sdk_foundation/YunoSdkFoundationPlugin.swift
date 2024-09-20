@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import YunoSDK
 
+@objc(YunoSdkFoundationPlugin)
 public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     fileprivate var instance: YunoMethods?
 
@@ -12,6 +13,7 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     instanceSDK.instance = YunoMethods(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
   }
+    
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     guard let instance = self.instance else {
       return
