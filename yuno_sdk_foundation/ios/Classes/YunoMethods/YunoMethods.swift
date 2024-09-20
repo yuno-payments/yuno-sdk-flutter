@@ -193,6 +193,7 @@ extension YunoMethods {
                 return result(YunoError.somethingWentWrong())
             }
         } catch {
+
             result(YunoError.somethingWentWrong())
         }
     }
