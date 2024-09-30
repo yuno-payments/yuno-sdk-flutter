@@ -1,4 +1,4 @@
-group = "com.example.yuno_sdk_android"
+group = "com.yuno_flutter.yuno_sdk_android"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.0")
+        classpath("com.android.tools.build:gradle:8.5.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
@@ -27,7 +27,7 @@ apply plugin: "kotlin-android"
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace = "com.example.yuno_sdk_android"
+        namespace = "com.yuno_flutter.yuno_sdk_android"
     }
 
     compileSdk = 34
@@ -48,12 +48,13 @@ android {
 
     defaultConfig {
         minSdk = 21
+        consumerProguardFiles 'proguard-rules.txt'
     }
 
     dependencies {
-        implementation 'com.yuno.payments:android-sdk:1.12.1'
+        implementation 'com.yuno.payments:android-sdk:1.16.0'
         testImplementation("org.jetbrains.kotlin:kotlin-test")
-        testImplementation("org.mockito:mockito-core:5.0.0")
+        testImplementation("org.mockito:mockito-core:5.2.0")
     }
 
     testOptions {
