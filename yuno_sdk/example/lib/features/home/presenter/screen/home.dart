@@ -5,7 +5,7 @@ import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/features/configuration/presenter/screen/setup_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+// import 'package:flutter_slidable/flutter_slidable.dart';
 
 const logo = 'https://colombiafintech.co/static/uploads/logo_yuno_morado.png';
 
@@ -36,62 +36,90 @@ class HomeScreen extends StatelessWidget {
                         credential.apiKey.isEmpty) {
                       return const RegisterCard();
                     } else {
-                      return Slidable(
-                        key: const ValueKey(0),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              flex: 2,
-                              onPressed: (context) async {
-                                await ref.read(providerStorage).removeAll();
-                                final _ =
-                                    ref.refresh(credentialNotifier.future);
-
-                                ref.invalidate(langNotifier);
-                                ref.invalidate(cardFlowNotifier);
-                                ref.invalidate(appearanceNotifier);
-                                ref.invalidate(contryCodeNotifier);
-                                ref.invalidate(saveCardNotifier);
-                                ref.invalidate(keepLoaderNotifier);
-                                ref.invalidate(dynamicSDKNotifier);
-                              },
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            ),
-                          ],
+                      return Card(
+                        color: Colors.white,
+                        elevation: 0,
+                        shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(2),
                         ),
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 0,
-                          shape: BeveledRectangleBorder(
-                            borderRadius: BorderRadius.circular(2),
+                        child: ListTile(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SetUpScreen())),
+                          title: Text(
+                            credential.alias,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
                           ),
-                          child: ListTile(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SetUpScreen())),
-                            title: Text(
-                              credential.alias,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            subtitle: Text(
-                              credential.apiKey,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: Colors.grey,
-                            ),
+                          subtitle: Text(
+                            credential.apiKey,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.grey,
                           ),
                         ),
                       );
+                      // return Slidable(
+                      //   key: const ValueKey(0),
+                      //   endActionPane: ActionPane(
+                      //     motion: const ScrollMotion(),
+                      //     children: [
+                      //       SlidableAction(
+                      //         flex: 2,
+                      //         onPressed: (context) async {
+                      //           await ref.read(providerStorage).removeAll();
+                      //           final _ =
+                      //               ref.refresh(credentialNotifier.future);
+
+                      //           ref.invalidate(langNotifier);
+                      //           ref.invalidate(cardFlowNotifier);
+                      //           ref.invalidate(appearanceNotifier);
+                      //           ref.invalidate(contryCodeNotifier);
+                      //           ref.invalidate(saveCardNotifier);
+                      //           ref.invalidate(keepLoaderNotifier);
+                      //           ref.invalidate(dynamicSDKNotifier);
+                      //         },
+                      //         backgroundColor: Colors.red,
+                      //         foregroundColor: Colors.white,
+                      //         icon: Icons.delete,
+                      //         label: 'Delete',
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   child: Card(
+                      //     color: Colors.white,
+                      //     elevation: 0,
+                      //     shape: BeveledRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(2),
+                      //     ),
+                      //     child: ListTile(
+                      //       onTap: () => Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => const SetUpScreen())),
+                      //       title: Text(
+                      //         credential.alias,
+                      //         style: const TextStyle(
+                      //           fontWeight: FontWeight.bold,
+                      //           fontSize: 15,
+                      //         ),
+                      //       ),
+                      //       subtitle: Text(
+                      //         credential.apiKey,
+                      //         overflow: TextOverflow.ellipsis,
+                      //       ),
+                      //       trailing: const Icon(
+                      //         Icons.arrow_forward_ios_rounded,
+                      //         color: Colors.grey,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
                     }
                   },
                   error: (err, stk) => const RegisterCard(),
