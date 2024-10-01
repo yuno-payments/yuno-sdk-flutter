@@ -222,13 +222,15 @@ class CountryCodeNotiifer extends Notifier<CountryCode?> {
   @override
   CountryCode? build() => null;
 
-  void changeContryCode(CountryCode value) {
+  void changeContryCode(CountryCode value, {bool refresh = false}) {
     state = value;
     ref
         .read(providerStorage)
         .write(key: Keys.countryCode.name, value: value.code ?? 'CO');
-    final _ = ref.refresh(countryCodeFuture);
-    final __ = ref.refresh(yunoProvider);
+    if (refresh) {
+      final _ = ref.refresh(countryCodeFuture);
+      final __ = ref.refresh(yunoProvider);
+    }
   }
 }
 
