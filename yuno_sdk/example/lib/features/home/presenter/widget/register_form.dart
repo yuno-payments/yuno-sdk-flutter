@@ -1,4 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter/material.dart';
@@ -148,10 +149,13 @@ class _RegisterFormState extends State<RegisterForm> {
 }
 
 typedef Validator = String? Function(String?)?;
+typedef OnChange = void Function(String?)?;
 
 class YunoInput extends StatelessWidget {
   const YunoInput({
     super.key,
+    this.onChange,
+    this.onPaste,
     required this.title,
     required this.validator,
     required TextEditingController controller,
@@ -159,6 +163,8 @@ class YunoInput extends StatelessWidget {
 
   final TextEditingController _controller;
   final Validator validator;
+  final OnChange? onChange;
+  final VoidCallback? onPaste;
   final String title;
 
   @override
@@ -169,6 +175,7 @@ class YunoInput extends StatelessWidget {
           flex: 5,
           child: TextFormField(
             controller: _controller,
+            onChanged: onChange,
             validator: validator,
             decoration: InputDecoration(
               labelText: title,
@@ -186,6 +193,9 @@ class YunoInput extends StatelessWidget {
           onPressed: () async {
             var cdata = await Clipboard.getData(Clipboard.kTextPlain);
             _controller.text = cdata?.text ?? '';
+            if (onPaste != null) {
+              onPaste!();
+            }
           },
           icon: const Icon(
             Icons.paste_sharp,
@@ -193,8 +203,9 @@ class YunoInput extends StatelessWidget {
         ),
         IconButton(
           padding: EdgeInsets.zero,
-          onPressed: () async =>
-              await Clipboard.setData(ClipboardData(text: _controller.text)),
+          onPressed: () async {
+            await Clipboard.setData(ClipboardData(text: _controller.text));
+          },
           icon: const Icon(
             Icons.copy,
           ),
@@ -213,6 +224,11 @@ class CountryCodeNotiifer extends Notifier<CountryCode?> {
 
   void changeContryCode(CountryCode value) {
     state = value;
+    ref
+        .read(providerStorage)
+        .write(key: Keys.countryCode.name, value: value.code ?? 'CO');
+    final _ = ref.refresh(countryCodeFuture);
+    final __ = ref.refresh(yunoProvider);
   }
 }
 
