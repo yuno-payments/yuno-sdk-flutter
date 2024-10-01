@@ -228,8 +228,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                       title: const Text('Execute payment LITE'),
                       onTap: () async {
                         if (_formKey.currentState?.validate() ?? false) {
-                          final refresh =
-                              await ref.refresh(yunoProvider.future);
+                          ref.invalidate(yunoProvider);
                           await context.startPaymentLite(
                             arguments: StartPayment(
                               showPaymentStatus: true,
