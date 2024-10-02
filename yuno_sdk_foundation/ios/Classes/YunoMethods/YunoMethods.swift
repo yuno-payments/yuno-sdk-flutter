@@ -15,8 +15,8 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     private var paymentMethodsContainerHeight: NSLayoutConstraint = NSLayoutConstraint()
     private var generator: MethodsView!
     var viewController: UIViewController?
-    var countryCode: String = ""
-    var checkoutSession: String = ""
+    @Published var countryCode: String = ""
+    @Published var checkoutSession: String = ""
     var language: String?
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
@@ -53,7 +53,7 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
         let appearance = app.configuration?.appearance
         let yunoConfig = app.yunoConfig
         let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? String(describing: CardFormType.oneStep))
-        Yuno.startCheckout(with: self)
+
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -184,6 +184,7 @@ extension YunoMethods {
             }
             self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
+            Yuno.startCheckout(with: self)
             Yuno.startPaymentLite(
                 paymentSelected: startPayment.paymentMethodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus

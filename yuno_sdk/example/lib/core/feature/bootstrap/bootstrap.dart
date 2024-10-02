@@ -5,8 +5,7 @@ import 'package:yuno/yuno.dart';
 
 final yunoProvider = FutureProvider<Yuno>((ref) async {
   final apiKey = await ref.watch(providerStorage).read(key: Keys.apiKey.name);
-  final countryCode =
-      await ref.watch(providerStorage).read(key: Keys.countryCode.name);
+  final countryCode = await ref.watch(countryCodeFuture.future);
   final lang = await ref.watch(langNotifier.future);
   final cardFlow = await ref.watch(cardFlowNotifier.future);
   final appearance = await ref.watch(appearanceNotifier.future);
