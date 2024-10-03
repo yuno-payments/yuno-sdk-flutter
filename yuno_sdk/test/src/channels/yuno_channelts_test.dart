@@ -40,21 +40,5 @@ void main() {
             androidConfig: const AndroidConfig(),
           )).called(1);
     });
-
-//TODO: refactor the following test
-    test(
-        'openPaymentMethodsScreen should throw UnimplementedError for standard SDK',
-        () async {
-      final yuno = await Yuno.init(
-        apiKey: 'test_api_key',
-        countryCode: 'country_code',
-      );
-
-      expect(
-          () => yuno.openPaymentMethodsScreen(
-                arguments: any(named: 'argumens'),
-              ),
-          throwsA(isA<UnimplementedError>()));
-    });
   });
 }

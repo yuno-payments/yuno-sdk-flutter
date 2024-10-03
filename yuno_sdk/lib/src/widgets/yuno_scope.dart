@@ -69,9 +69,4 @@ extension YunoReader on BuildContext {
         countryCode: countryCode,
       );
   Future<void> continuePayment() async => await yuno.continuePayment();
-
-  Future<void> openPaymentMethodsScreen({
-    required PaymentMethodsArgs arguments,
-  }) async =>
-      yuno.openPaymentMethodsScreen(arguments: arguments);
 }

@@ -110,23 +110,7 @@ class __HomeLayoutState extends State<_HomeLayout> {
                     const Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                'PAYMENT',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 126, 126, 126),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        ExecutePayments()
-                      ],
+                      children: [ExecutePayments()],
                     ),
                   ],
                 ),
@@ -273,11 +257,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                             minTileHeight: 2,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                await context.openPaymentMethodsScreen(
-                                  arguments: PaymentMethodsArgs(
-                                    checkoutSession: _checkoutSession.text,
-                                  ),
-                                );
+                                //TODO: Impleent a new screen to handle sdk full
                               }
                             },
                             title: const Text('Execute payment FULL'),

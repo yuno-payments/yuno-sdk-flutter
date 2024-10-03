@@ -98,13 +98,6 @@ final class YunoMethodChannel implements YunoPlatform {
       url.toString(),
     );
   }
-
-  @override
-  Future<void> showPaymentMethods({
-    required PaymentMethodsArgs arguments,
-  }) async {
-    await _methodChannel.invokeMethod('showPaymentMethods', arguments.toMap());
-  }
 }
 
 /// {@template commons_YunoMethodChannelFactory}

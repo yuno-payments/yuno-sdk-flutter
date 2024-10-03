@@ -30,10 +30,6 @@ abstract interface class YunoPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<void> showPaymentMethods({
-    required PaymentMethodsArgs arguments,
-  });
-
   Future<void> initialize({
     required String apiKey,
     required YunoConfig yunoConfig,

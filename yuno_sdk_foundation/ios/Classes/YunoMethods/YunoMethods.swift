@@ -9,11 +9,8 @@ import Flutter
 import Foundation
 import YunoSDK
 
-class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
+class YunoMethods: YunoPaymentDelegate {
     private let methodChannel: FlutterMethodChannel
-    private var paymentMethodsContainer: UIView = UIView()
-    private var paymentMethodsContainerHeight: NSLayoutConstraint = NSLayoutConstraint()
-    private var generator: MethodsView!
     var viewController: UIViewController?
     @Published var countryCode: String = ""
     @Published var checkoutSession: String = ""
@@ -23,16 +20,6 @@ class YunoMethods: YunoPaymentDelegate, YunoMethodsViewDelegate {
     }()
     init(methodChannel: FlutterMethodChannel) {
         self.methodChannel = methodChannel
-        generator = Yuno.methodsView(delegate: self)
-    }
-    func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
-    }
-    func yunoDidSelect(enrollmentMethod: any YunoSDK.EnrollmentMethodSelected) {
-    }
-    func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
-        paymentMethodsContainerHeight.constant = height
-    }
-    func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
     }
     func yunoCreatePayment(with token: String) {
         handleOTT(token: token)
@@ -85,56 +72,6 @@ extension YunoMethods {
             view.widthAnchor.constraint(equalToConstant: screenWidth),
             view.heightAnchor.constraint(equalToConstant: contentHeight)
         ])
-    }
-    private func scrollViewConstraints(view: UIView, controller: UIViewController, scrollView: UIScrollView) {
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: controller.view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: controller.view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: controller.view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: controller.view.bottomAnchor),
-            view.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
-        ])
-    }
-    func showPaymentMethods(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let args = call.arguments as? [String: Any] else {
-            result(YunoError.invalidArguments())
-            return
-        }
-        do {
-            let decoder = JSONDecoder()
-            let arguments = try decoder.decode(ShowPaymentMethods.self, from: args)
-            viewController = UIViewController()
-            guard let controller = self.viewController
-            else {
-                return
-            }
-            self.paymentMethodsContainer.alpha = 1.0
-            self.generator.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
-                                                 viewType: .separated) { [weak self] (view: UIView) in
-                guard let self else { return }
-                let scrollView = UIScrollView()
-                scrollView.translatesAutoresizingMaskIntoConstraints = false
-                let screenWidth = UIScreen.main.bounds.width
-                var contentHeight = paymentMethodsContainerHeight.constant
-                viewConstraints(view: view, screenWidth: screenWidth, contentHeight: screenWidth)
-                view.center = CGPoint(x: view.frame.size.width / 2, y: view.frame.size.height / 2)
-                controller.view.removeAllSubviews()
-                controller.view.addSubview(scrollView)
-                scrollView.addSubview(view)
-                scrollViewConstraints(view: view, controller: controller, scrollView: scrollView)
-                controller.view.backgroundColor = .white
-            }
-
-            presentController {
-                return result(YunoError.somethingWentWrong())
-            }
-        } catch {
-            result(YunoError.somethingWentWrong())
-            return
-        }
     }
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
@@ -194,7 +131,6 @@ extension YunoMethods {
                 return result(YunoError.somethingWentWrong())
             }
         } catch {
-
             result(YunoError.somethingWentWrong())
         }
     }
