@@ -30,19 +30,19 @@ typedef YunoPaymentWidgetListener = void Function(
 class YunoPaymentMethods extends StatefulWidget {
   /// Creates a YunoPaymentMethods widget.
   ///
-  /// The [checkoutSession] parameter is required and represents the unique
+  /// The [config] parameter is required and represents the unique
   /// identifier for the current checkout session.
   ///
   /// The [listener] parameter is required and will be called whenever the
   /// selection state changes.
   const YunoPaymentMethods({
     super.key,
-    required this.checkoutSession,
+    required this.config,
     required this.listener,
   });
 
-  /// The checkout session identifier used to fetch payment methods.
-  final String checkoutSession;
+  /// The [config] permit custom native configuration.
+  final PaymentMethodConf config;
 
   /// A function that is called when the payment method selection changes.
   ///
@@ -88,10 +88,9 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                 onPlatformViewCreated: YunoPaymentMethodPlatform.init,
                 viewType: YunoPaymentMethodPlatform.viewType,
                 creationParamsCodec: const StandardMessageCodec(),
-                creationParams: {
-                  'checkoutSession': widget.checkoutSession,
-                  'width': currentWidth,
-                },
+                creationParams: widget.config.toMap(
+                  currentWidth: currentWidth,
+                ),
               ),
             );
           },

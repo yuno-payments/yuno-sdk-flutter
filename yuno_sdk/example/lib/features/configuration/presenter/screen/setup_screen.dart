@@ -99,10 +99,11 @@ class __HomeLayoutState extends State<_HomeLayout> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     YunoPaymentMethods(
-                      checkoutSession: '266bae13-15e3-4913-9d34-b8b438ee7a35',
-                      listener: (context, isSelected) {
-                        print(isSelected);
-                      },
+                      config: const PaymentMethodConf(
+                        iosViewType: IOSViewType.all,
+                        checkoutSession: '',
+                      ),
+                      listener: (context, isSelected) {},
                     ),
                     const SizedBox(
                       height: 50,
@@ -110,7 +111,9 @@ class __HomeLayoutState extends State<_HomeLayout> {
                     const Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [ExecutePayments()],
+                      children: [
+                        ExecutePayments(),
+                      ],
                     ),
                   ],
                 ),

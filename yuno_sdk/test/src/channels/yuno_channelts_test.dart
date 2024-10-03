@@ -15,7 +15,7 @@ void main() {
     registerFallbackValue(CardFlow.multiStep);
     registerFallbackValue(YunoLanguage.en);
     registerFallbackValue(const YunoConfig());
-    registerFallbackValue(const PaymentMethodsArgs(checkoutSession: '1234'));
+    registerFallbackValue(const PaymentMethodConf(checkoutSession: '1234'));
   });
 
   group('Yuno', () {
