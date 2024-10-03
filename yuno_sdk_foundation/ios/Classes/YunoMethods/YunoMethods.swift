@@ -67,7 +67,6 @@ class YunoMethods: YunoPaymentDelegate {
 }
 
 extension YunoMethods {
-   
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
