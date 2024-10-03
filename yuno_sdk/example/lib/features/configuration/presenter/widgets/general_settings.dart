@@ -37,8 +37,8 @@ class GeneralSettings extends ConsumerWidget {
                       CountryCodePicker(
                         padding: EdgeInsets.zero,
                         initialSelection: controllerNotifier.value ?? "GT",
-                        onChanged: (value) =>
-                            contryController.changeContryCode(value),
+                        onChanged: (value) => contryController
+                            .changeContryCode(value, refresh: true),
                       ),
                       const Text('Country'),
                     ],
