@@ -14,40 +14,65 @@ typedef YunoPaymentWidgetListener = void Function(
 /// This widget integrates with the Yuno SDK to show payment methods in a Flutter app.
 /// It dynamically adjusts its size based on the content and available width.
 ///
-/// The widget also provides a listener to notify about selection changes.
+/// The widget provides a listener to notify about selection changes, allowing
+/// the parent widget to react to user interactions with the payment methods.
 ///
 /// Usage:
 /// ```dart
 /// YunoPaymentMethods(
-///   checkoutSession: 'your_checkout_session_id',
+///   config: PaymentMethodConf(
+///     checkoutSession: 'your_checkout_session_id',
+///     // Add other configuration options as needed
+///   ),
 ///   listener: (context, isSelected) {
-///     // Handle selection change
+///     if (isSelected) {
+///       print('A payment method has been selected');
+///     } else {
+///       print('No payment method is currently selected');
+///     }
 ///   },
 /// )
 /// ```
 ///
 /// The widget listens to changes in the payment method state and rebuilds accordingly.
+/// This ensures that the UI always reflects the current state of the payment methods.
 class YunoPaymentMethods extends StatefulWidget {
   /// Creates a YunoPaymentMethods widget.
   ///
-  /// The [config] parameter is required and represents the unique
-  /// identifier for the current checkout session.
+  /// The [config] parameter is required and represents the configuration
+  /// for the payment methods display, including the checkout session ID
+  /// and any other custom settings.
   ///
   /// The [listener] parameter is required and will be called whenever the
-  /// selection state changes.
+  /// selection state of the payment methods changes.
   const YunoPaymentMethods({
     super.key,
     required this.config,
     required this.listener,
   });
 
-  /// The [config] permit custom native configuration.
+  /// The configuration for the payment methods display.
+  ///
+  /// This includes settings such as the checkout session ID, styling options,
+  /// and any other parameters required by the Yuno SDK.
   final PaymentMethodConf config;
 
   /// A function that is called when the payment method selection changes.
   ///
   /// The function is passed the current [BuildContext] and a boolean indicating
-  /// whether a payment method is selected.
+  /// whether a payment method is selected. This can be used to update the UI
+  /// or perform actions based on the selection state.
+  ///
+  /// Example:
+  /// ```dart
+  /// (context, isSelected) {
+  ///   if (isSelected) {
+  ///     ScaffoldMessenger.of(context).showSnackBar(
+  ///       SnackBar(content: Text('Payment method selected')),
+  ///     );
+  ///   }
+  /// }
+  /// ```
   final YunoPaymentWidgetListener listener;
 
   @override
@@ -65,6 +90,7 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
   ///
   /// This method invokes the [YunoPaymentWidgetListener] provided in the widget
   /// constructor, passing the current context and selection state.
+  /// It allows the parent widget to react to changes in the payment method selection.
   void _listener() {
     widget.listener(context, _selectController.value.isSelected);
   }
@@ -100,9 +126,15 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
   }
 
   /// The controller managing the payment method state.
+  ///
+  /// This controller handles updates to the payment method display,
+  /// including changes in size and content.
   YunoPaymentNotifier get _controller => YunoPaymentMethodPlatform.controller;
 
-  /// The controller managing the payment method selected.
+  /// The controller managing the payment method selection state.
+  ///
+  /// This controller tracks whether a payment method is currently selected
+  /// and notifies listeners of changes to this state.
   YunoPaymentSelectNotifier get _selectController =>
       YunoPaymentMethodPlatform.selectController;
 
