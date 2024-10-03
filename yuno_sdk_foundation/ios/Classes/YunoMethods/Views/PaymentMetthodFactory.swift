@@ -58,7 +58,7 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
             let decoder = JSONDecoder()
             let arguments = try decoder.decode(ViewArguments.self, from: arg)
             self.generator?.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
-                                                  viewType: .separated) { [weak self] (view: UIView) in
+                                                  viewType: arguments.viewType) { [weak self] (view: UIView) in
                 view.translatesAutoresizingMaskIntoConstraints = false
                 guard let self = self else {
                     return
