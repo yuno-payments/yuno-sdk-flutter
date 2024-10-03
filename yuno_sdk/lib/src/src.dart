@@ -3,10 +3,17 @@ export './channels/channels.dart';
 export 'package:yuno_sdk_core/commons/external.dart';
 export 'package:yuno_sdk_platform_interface/lib.dart'
     hide YunoMethodChannel
+    hide YunoPaymentMethodChannel
+    hide YunoPaymentMethodPlatform
+    hide YunoPaymentSelectNotifier
+    hide YunoPaymentMethodState
+    hide YunoPaymentSelectState
+    hide YunoPaymentNotifier
     hide YunoPlatform
     hide YunoState
     hide ParserIosConfig
     hide ParserAppearance
     hide YunoMethodChannelFactory
+    hide YunoPaymentMethodChannelFactory
     hide YunoNotifier
     hide Parser;

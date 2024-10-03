@@ -92,16 +92,22 @@ class __HomeLayoutState extends State<_HomeLayout> {
                 },
               );
             },
-            child: const Center(
+            child: Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    YunoPaymentMethods(
+                      checkoutSession: '266bae13-15e3-4913-9d34-b8b438ee7a35',
+                      listener: (context, isSelected) {
+                        print(isSelected);
+                      },
+                    ),
+                    const SizedBox(
                       height: 50,
                     ),
-                    Column(
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -121,7 +127,7 @@ class __HomeLayoutState extends State<_HomeLayout> {
                         ),
                         ExecutePayments()
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
