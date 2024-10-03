@@ -67,12 +67,7 @@ class YunoMethods: YunoPaymentDelegate {
 }
 
 extension YunoMethods {
-    private func viewConstraints(view: UIView, screenWidth: CGFloat, contentHeight: CGFloat) {
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalToConstant: screenWidth),
-            view.heightAnchor.constraint(equalToConstant: contentHeight)
-        ])
-    }
+   
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
