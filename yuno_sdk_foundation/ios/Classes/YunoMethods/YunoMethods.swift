@@ -11,36 +11,29 @@ import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate {
     private let methodChannel: FlutterMethodChannel
-    var viewController: UIViewController?
-    @Published var countryCode: String = ""
-    @Published var checkoutSession: String = ""
-    var language: String?
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
+    var viewController: UIViewController? {
+        window?.rootViewController
+    }
+    var countryCode: String = ""
+    var checkoutSession: String = ""
+    var language: String?
     init(methodChannel: FlutterMethodChannel) {
         self.methodChannel = methodChannel
     }
     func yunoCreatePayment(with token: String) {
         handleOTT(token: token)
-        removeViews()
     }
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
         handleStatus(status: result.rawValue)
-        removeViews()
-    }
-    private func removeViews() {
-        guard let window = self.window,
-              let controller = self.viewController,
-              let rc = window.rootViewController else { return }
-        controller.dismiss(animated: true)
-        rc.dismiss(animated: true)
     }
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let yunoConfig = app.yunoConfig
         let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? String(describing: CardFormType.oneStep))
-
+        self.countryCode = app.countryCode
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
@@ -67,6 +60,10 @@ class YunoMethods: YunoPaymentDelegate {
 }
 
 extension YunoMethods {
+    func startCheckoutUpdate() {
+        Yuno.startCheckout(with: self)
+    }
+
     func handleStatus(status: Int) {
         methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
     }
@@ -91,8 +88,22 @@ extension YunoMethods {
             return
         }
         Yuno.continuePayment(showPaymentStatus: args)
-        presentController {
-            return result(YunoError.somethingWentWrong())
+    }
+    func handleStartPayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? [String: Any] else {
+            result(YunoError.invalidArguments())
+            return
+        }
+        do {
+        let decoder = JSONDecoder()
+        let startPayment = try decoder.decode(StartPayment.self, from: args)
+        self.checkoutSession = startPayment.checkoutSession
+        Yuno.startPayment(
+            showPaymentStatus: startPayment.showPaymentStatus
+        )
+        } catch {
+            print(error)
+            result(YunoError.somethingWentWrong())
         }
     }
     func handleStartPaymentLite(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -102,7 +113,7 @@ extension YunoMethods {
         }
         do {
             let decoder = JSONDecoder()
-            let startPayment = try decoder.decode(StartPayment.self, from: args)
+            let startPayment = try decoder.decode(StartPaymentLite.self, from: args)
             if startPayment.paymentMethodSelected.paymentMethodType.isEmpty ||
                 startPayment.checkoutSession.isEmpty || startPayment.countryCode.isEmpty {
                 result(YunoError
@@ -120,10 +131,6 @@ extension YunoMethods {
                 paymentSelected: startPayment.paymentMethodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus
             )
-            viewController = UIViewController()
-            presentController {
-                return result(YunoError.somethingWentWrong())
-            }
         } catch {
             result(YunoError.somethingWentWrong())
         }
@@ -144,17 +151,6 @@ extension YunoMethods {
             result(true)
         } catch {
             result(YunoError.somethingWentWrong())
-        }
-    }
-    private func presentController(error: @escaping () -> Void ) {
-        guard let window = self.window,
-              let controller = self.viewController,
-              let rc = window.rootViewController else { return }
-        if rc.presentedViewController == nil {
-            rc.present(controller, animated: true)
-            window.makeKeyAndVisible()
-        } else {
-            error()
         }
     }
 }

@@ -63,10 +63,18 @@ extension YunoReader on BuildContext {
   @visibleForTesting
   Yuno get yuno => YunoScope.of(this);
   Future<void> startPaymentLite(
-          {required StartPayment arguments, String countryCode = ''}) =>
-      yuno.startPaymentLite(
+          {required StartPayment arguments, String countryCode = ''}) async =>
+      await yuno.startPaymentLite(
         arguments: arguments,
         countryCode: countryCode,
+      );
+  Future<void> startPayment({
+    required String checkoutSession,
+    bool showPaymentStatus = true,
+  }) async =>
+      await yuno.startPayment(
+        showPaymentStatus: showPaymentStatus,
+        checkoutSession: checkoutSession,
       );
   Future<void> continuePayment() async => await yuno.continuePayment();
 }

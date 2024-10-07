@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
@@ -92,23 +93,16 @@ class __HomeLayoutState extends State<_HomeLayout> {
                 },
               );
             },
-            child: Center(
+            child: const Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    YunoPaymentMethods(
-                      config: const PaymentMethodConf(
-                        iosViewType: IOSViewType.all,
-                        checkoutSession: '',
-                      ),
-                      listener: (context, isSelected) {},
-                    ),
-                    const SizedBox(
+                    SizedBox(
                       height: 50,
                     ),
-                    const Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -260,7 +254,15 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                             minTileHeight: 2,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                //TODO: Impleent a new screen to handle sdk full
+                                // ref.refresh(yunoProvider);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullSdkScreen(
+                                      checkoutSession: _checkoutSession.text,
+                                    ),
+                                  ),
+                                );
                               }
                             },
                             title: const Text('Execute payment FULL'),

@@ -11,7 +11,6 @@ abstract interface class YunoPaymentMethodPlatform extends PlatformInterface {
   ) {
     final instance =
         const YunoPaymentMethodChannelFactory().create(viewId: viewId);
-    // PlatformInterface.verifyToken(instance, _token);
     instance.setMethodCallHandler();
     return instance;
   }
@@ -19,7 +18,6 @@ abstract interface class YunoPaymentMethodPlatform extends PlatformInterface {
   static const _viewType = 'yuno/payment_methods_view';
   static String get viewType => _viewType;
   void setMethodCallHandler();
-
   static YunoPaymentNotifier get controller => _controller;
   static final _controller = YunoPaymentNotifier();
   static YunoPaymentSelectNotifier get selectController => _selectController;

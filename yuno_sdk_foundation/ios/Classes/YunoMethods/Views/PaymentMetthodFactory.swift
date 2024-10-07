@@ -12,8 +12,10 @@ import Flutter
 
 public class PaymentMetthodFactory: NSObject, FlutterPlatformViewFactory {
     private var messenger: FlutterBinaryMessenger
-    init(messenger: FlutterBinaryMessenger) {
+    private var yunoMethod: YunoMethods
+    init(messenger: FlutterBinaryMessenger, yunoMethod: YunoMethods) {
         self.messenger = messenger
+        self.yunoMethod = yunoMethod
         super.init()
     }
     public func create(
@@ -25,7 +27,8 @@ public class PaymentMetthodFactory: NSObject, FlutterPlatformViewFactory {
             frame: frame,
             viewIdentifier: viewId,
             arguments: args,
-            binaryMessenger: messenger
+            binaryMessenger: messenger,
+            yunoMethod: yunoMethod
         )
     }
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
@@ -34,7 +37,7 @@ public class PaymentMetthodFactory: NSObject, FlutterPlatformViewFactory {
 }
 
 class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate {
-
+    private var yunoMethod: YunoMethods
     private let channel: FlutterMethodChannel
     private lazy var generator: MethodsView? = nil
     var localView: UIView = UIView()
@@ -42,21 +45,26 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
         frame: CGRect,
         viewIdentifier viewId: Int64,
         arguments args: Any?,
-        binaryMessenger messenger: FlutterBinaryMessenger
+        binaryMessenger messenger: FlutterBinaryMessenger,
+        yunoMethod: YunoMethods
     ) {
+        self.yunoMethod = yunoMethod
         channel = FlutterMethodChannel(
             name: "yuno/payment_methods_view/\(viewId)", binaryMessenger: messenger)
         super.init()
-        generator = Yuno.methodsView(delegate: self)
+        self.yunoMethod.startCheckoutUpdate()
         generatorView(args: args)
     }
     func generatorView(args: Any?) {
+
         guard let arg = args as? [String: Any] else {
              return
         }
         do {
             let decoder = JSONDecoder()
             let arguments = try decoder.decode(ViewArguments.self, from: arg)
+            generator = nil
+            generator = Yuno.methodsView(delegate: self)
             self.generator?.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
                                                   viewType: arguments.viewType) { [weak self] (view: UIView) in
                 view.translatesAutoresizingMaskIntoConstraints = false

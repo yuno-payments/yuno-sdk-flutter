@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
 
+import 'features/start_payment/models/parsers.dart';
+
 final class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
 
@@ -53,12 +55,14 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<void> initialize({
     required String apiKey,
+    required String countryCode,
     required YunoConfig yunoConfig,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     final mapper = Parser.toMap(
       apiKey: apiKey,
+      countryCode: countryCode,
       yunoConfig: yunoConfig,
       configuration: iosConfig?.toMap(),
     );
@@ -98,6 +102,19 @@ final class YunoMethodChannel implements YunoPlatform {
       url.toString(),
     );
   }
+
+  @override
+  Future<void> startPayment({
+    required String checkoutSession,
+    bool showPaymentStatus = true,
+  }) async =>
+      await _methodChannel.invokeMethod(
+        'startPayment',
+        ParserStartPayment.toMap(
+          checkoutSession: checkoutSession,
+          showPaymentStatus: showPaymentStatus,
+        ),
+      );
 }
 
 /// {@template commons_YunoMethodChannelFactory}

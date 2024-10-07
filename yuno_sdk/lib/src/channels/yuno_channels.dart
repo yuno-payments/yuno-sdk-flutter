@@ -83,6 +83,11 @@ abstract interface class Yuno {
     String countryCode = '',
   });
 
+  Future<void> startPayment({
+    required String checkoutSession,
+    bool showPaymentStatus = true,
+  });
+
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   });
@@ -111,6 +116,7 @@ final class _YunoChannels implements Yuno {
   }) async =>
       await _platform.initialize(
         apiKey: apiKey,
+        countryCode: countryCodeIncome,
         yunoConfig: yunoConfig,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
@@ -144,4 +150,14 @@ final class _YunoChannels implements Yuno {
 
   @override
   Future<void> hideLoader() async => await _platform.hideLoader();
+
+  @override
+  Future<void> startPayment({
+    required String checkoutSession,
+    bool showPaymentStatus = true,
+  }) =>
+      _platform.startPayment(
+        showPaymentStatus: showPaymentStatus,
+        checkoutSession: checkoutSession,
+      );
 }
