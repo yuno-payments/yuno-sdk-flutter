@@ -17,6 +17,7 @@ import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
+import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -51,7 +52,11 @@ class YunoSdkAndroidPlugin :
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "yuno/payments")
         channel.setMethodCallHandler(this)
+        flutterPluginBinding
+            .platformViewRegistry
+            .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBinding))
         context = flutterPluginBinding.applicationContext
+
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {

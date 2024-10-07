@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yuno/src/internals.dart';
@@ -48,6 +53,8 @@ class YunoPaymentMethods extends StatefulWidget {
   const YunoPaymentMethods({
     super.key,
     required this.config,
+    this.androidPlatformViewRenderType =
+        AndroidPlatformViewRenderType.expensiveAndroidView,
     required this.listener,
   });
 
@@ -74,6 +81,12 @@ class YunoPaymentMethods extends StatefulWidget {
   /// }
   /// ```
   final YunoPaymentWidgetListener listener;
+
+  /// Type of platformview used for rendering on Android.
+  ///
+  /// This is an advanced option and changing this should be tested on multiple android devices.
+  /// Defaults to [AndroidPlatformViewRenderType.expensiveAndroidView]
+  final AndroidPlatformViewRenderType androidPlatformViewRenderType;
 
   @override
   State<YunoPaymentMethods> createState() => _YunoPaymentMethodsState();
@@ -109,15 +122,67 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
 
             return ConstrainedBox(
               constraints: BoxConstraints.expand(height: value.height),
-              child: UiKitView(
-                key: ValueKey(currentWidth),
-                onPlatformViewCreated: YunoPaymentMethodPlatform.init,
-                viewType: YunoPaymentMethodPlatform.viewType,
-                creationParamsCodec: const StandardMessageCodec(),
-                creationParams: widget.config.toMap(
-                  currentWidth: currentWidth,
-                ),
-              ),
+              child: Platform.isIOS
+                  ? UiKitView(
+                      key: ValueKey(currentWidth),
+                      onPlatformViewCreated: YunoPaymentMethodPlatform.init,
+                      viewType: YunoPaymentMethodPlatform.viewType,
+                      creationParamsCodec: const StandardMessageCodec(),
+                      creationParams: widget.config.toMap(
+                        currentWidth: currentWidth,
+                      ),
+                    )
+                  : PlatformViewLink(
+                      viewType: YunoPaymentMethodPlatform.viewType,
+                      surfaceFactory: (context, controller) =>
+                          AndroidViewSurface(
+                        controller: controller
+                            // ignore: avoid_as
+                            as AndroidViewController,
+                        gestureRecognizers: const <Factory<
+                            OneSequenceGestureRecognizer>>{},
+                        hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                      ),
+                      onCreatePlatformView: (params) {
+                        YunoPaymentMethodPlatform.init(params.id);
+                        switch (widget.androidPlatformViewRenderType) {
+                          case AndroidPlatformViewRenderType
+                                .expensiveAndroidView:
+                            return PlatformViewsService
+                                .initExpensiveAndroidView(
+                              id: params.id,
+                              viewType: YunoPaymentMethodPlatform.viewType,
+                              layoutDirection: Directionality.of(context),
+                              creationParams: widget.config.toMap(
+                                currentWidth: currentWidth,
+                              ),
+                              creationParamsCodec: const StandardMessageCodec(),
+                              onFocus: () {
+                                params.onFocusChanged(true);
+                              },
+                            )
+                              ..addOnPlatformViewCreatedListener(
+                                  params.onPlatformViewCreated)
+                              ..create();
+                          case AndroidPlatformViewRenderType.androidView:
+                            return PlatformViewsService.initAndroidView(
+                              id: params.id,
+                              viewType: YunoPaymentMethodPlatform.viewType,
+                              layoutDirection: Directionality.of(context),
+                              creationParams: widget.config.toMap(
+                                currentWidth: currentWidth,
+                              ),
+                              creationParamsCodec: const StandardMessageCodec(),
+                              onFocus: () {
+                                params.onFocusChanged(true);
+                              },
+                            )
+                              ..addOnPlatformViewCreatedListener(
+                                  params.onPlatformViewCreated)
+                              ..create();
+                        }
+                      },
+                    ),
             );
           },
         );
@@ -143,4 +208,14 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
     _selectController.removeListener(_listener);
     super.dispose();
   }
+}
+
+enum AndroidPlatformViewRenderType {
+  /// Controls an Android view that is composed using the Android view hierarchy
+  expensiveAndroidView,
+
+  /// Use an Android view composed using a GL texture.
+  ///
+  /// This is more efficient but has more issues on older Android devices.
+  androidView,
 }
