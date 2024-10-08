@@ -136,15 +136,14 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                       viewType: YunoPaymentMethodPlatform.viewType,
                       surfaceFactory: (context, controller) =>
                           AndroidViewSurface(
-                        controller: controller
-                            // ignore: avoid_as
-                            as AndroidViewController,
+                        controller: controller as AndroidViewController,
                         gestureRecognizers: const <Factory<
                             OneSequenceGestureRecognizer>>{},
                         hitTestBehavior: PlatformViewHitTestBehavior.opaque,
                       ),
                       onCreatePlatformView: (params) {
                         YunoPaymentMethodPlatform.init(params.id);
+
                         switch (widget.androidPlatformViewRenderType) {
                           case AndroidPlatformViewRenderType
                                 .expensiveAndroidView:
@@ -153,9 +152,8 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               id: params.id,
                               viewType: YunoPaymentMethodPlatform.viewType,
                               layoutDirection: Directionality.of(context),
-                              creationParams: widget.config.toMap(
-                                currentWidth: currentWidth,
-                              ),
+                              creationParams: widget.config
+                                  .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
                               onFocus: () {
                                 params.onFocusChanged(true);
@@ -164,14 +162,14 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               ..addOnPlatformViewCreatedListener(
                                   params.onPlatformViewCreated)
                               ..create();
+
                           case AndroidPlatformViewRenderType.androidView:
                             return PlatformViewsService.initAndroidView(
                               id: params.id,
                               viewType: YunoPaymentMethodPlatform.viewType,
                               layoutDirection: Directionality.of(context),
-                              creationParams: widget.config.toMap(
-                                currentWidth: currentWidth,
-                              ),
+                              creationParams: widget.config
+                                  .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
                               onFocus: () {
                                 params.onFocusChanged(true);

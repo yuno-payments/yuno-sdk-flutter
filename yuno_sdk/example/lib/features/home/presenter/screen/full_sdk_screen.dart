@@ -53,16 +53,22 @@ class _SDKLayoutState extends State<_SDKLayout> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            const SizedBox(height: 16),
-            YunoPaymentMethods(
-              config: PaymentMethodConf(
-                checkoutSession: widget.checkoutSession,
+            const SizedBox(height: 6),
+            ColoredBox(
+              color: Colors.transparent,
+              child: SizedBox(
+                height: 500,
+                child: YunoPaymentMethods(
+                  config: PaymentMethodConf(
+                    checkoutSession: widget.checkoutSession,
+                  ),
+                  listener: (context, isSelected) {
+                    setState(() {
+                      this.isSelected = isSelected;
+                    });
+                  },
+                ),
               ),
-              listener: (context, isSelected) {
-                setState(() {
-                  this.isSelected = isSelected;
-                });
-              },
             ),
             const SizedBox(height: 16),
             ElevatedButton(
