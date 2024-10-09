@@ -50,7 +50,6 @@ abstract interface class YunoPlatform extends PlatformInterface {
   });
 
   Future<void> startPayment({
-    required String checkoutSession,
     bool showPaymentStatus = true,
   });
   Future<void> continuePayment({

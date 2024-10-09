@@ -5,11 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
     <ScrollView
-        android:id="@+id/payment_method_container"
+        android:id="@+id/scrollView_paymentListContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/yuno_spacing_empty"
+        android:layout_marginTop="@dimen/yuno_spacing_large"
         android:visibility="gone">
+
     </ScrollView>
+
+<!--    <com.yuno.payments.features.payment.ui.views.PaymentMethodItemView-->
+<!--        android:id="@+id/list_payment_methods"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+
 </FrameLayout>

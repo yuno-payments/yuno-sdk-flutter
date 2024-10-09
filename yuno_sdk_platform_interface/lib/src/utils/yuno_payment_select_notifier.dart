@@ -23,11 +23,12 @@ final class YunoPaymentSelectNotifier
   YunoPaymentSelectNotifier() : super(YunoPaymentSelectState._empty());
 
   void isSelectedUpdate(bool isSelected) {
-    _safeUpdate(
-      () {
-        value = value.copyWith(isSelected: isSelected);
-      },
-    );
+    value = value.copyWith(isSelected: isSelected);
+    // _safeUpdate(
+    //   () {
+
+    //   },
+    // );
   }
 
   void _safeUpdate(VoidCallback update) {

@@ -84,7 +84,6 @@ abstract interface class Yuno {
   });
 
   Future<void> startPayment({
-    required String checkoutSession,
     bool showPaymentStatus = true,
   });
 
@@ -153,11 +152,9 @@ final class _YunoChannels implements Yuno {
 
   @override
   Future<void> startPayment({
-    required String checkoutSession,
     bool showPaymentStatus = true,
   }) =>
       _platform.startPayment(
         showPaymentStatus: showPaymentStatus,
-        checkoutSession: checkoutSession,
       );
 }

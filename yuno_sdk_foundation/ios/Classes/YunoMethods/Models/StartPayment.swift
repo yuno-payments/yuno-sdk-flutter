@@ -6,16 +6,11 @@
 //
 
 class StartPayment: Codable {
-    var countryCode: String?
-    var checkoutSession: String
+
     var showPaymentStatus: Bool
     init(
-        countryCode: String?,
-        showPaymentStatus: Bool,
-        checkoutSession: String
+        showPaymentStatus: Bool
     ) {
-        self.countryCode = countryCode
         self.showPaymentStatus = showPaymentStatus
-        self.checkoutSession = checkoutSession
     }
 }

@@ -60,8 +60,11 @@ class YunoMethods: YunoPaymentDelegate {
 }
 
 extension YunoMethods {
-    func startCheckoutUpdate() {
+    func startCheckoutUpdate(cc:String, cs:String) {
+        countryCode = cc
+        checkoutSession = cs
         Yuno.startCheckout(with: self)
+       
     }
 
     func handleStatus(status: Int) {
@@ -97,12 +100,10 @@ extension YunoMethods {
         do {
         let decoder = JSONDecoder()
         let startPayment = try decoder.decode(StartPayment.self, from: args)
-        self.checkoutSession = startPayment.checkoutSession
         Yuno.startPayment(
             showPaymentStatus: startPayment.showPaymentStatus
         )
         } catch {
-            print(error)
             result(YunoError.somethingWentWrong())
         }
     }

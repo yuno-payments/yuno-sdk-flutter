@@ -1,18 +1,17 @@
 package com.yuno_flutter.yuno_sdk_android
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import com.yuno.payments.features.payment.startCheckout
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
+import com.yuno.payments.features.payment.startPayment
+import com.yuno.payments.features.payment.updateCheckoutSession
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
@@ -22,7 +21,6 @@ import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_chan
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class YunoSdkAndroidPlugin :
     FlutterPlugin,
@@ -32,8 +30,7 @@ class YunoSdkAndroidPlugin :
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
     private lateinit var activity: FlutterFragmentActivity
-    private lateinit var startActivityForResultLauncher: ActivityResultLauncher<Intent>
-
+    private  lateinit var flutterPluginBindingMajor: FlutterPlugin.FlutterPluginBinding
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
            activity.startCheckout(
@@ -50,13 +47,10 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        flutterPluginBindingMajor = flutterPluginBinding
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "yuno/payments")
         channel.setMethodCallHandler(this)
-        flutterPluginBinding
-            .platformViewRegistry
-            .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBinding))
         context = flutterPluginBinding.applicationContext
-
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -69,7 +63,8 @@ class YunoSdkAndroidPlugin :
                     context = context
                 )
             }
-            "paymentMethods" -> {
+            Key.startPayment -> {
+                activity.startPayment()
             }
             Key.startPaymentLite -> {
                 val startPaymentLiteHandler = StartPaymentLiteHandler()
@@ -98,10 +93,9 @@ class YunoSdkAndroidPlugin :
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
             activity = binding.activity as FlutterFragmentActivity
             activity.lifecycle.addObserver(this)
-            startActivityForResultLauncher = activity.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) { result ->
-            }
+        flutterPluginBindingMajor
+            .platformViewRegistry
+            .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
 
     }
 

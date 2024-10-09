@@ -52,17 +52,19 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
         channel = FlutterMethodChannel(
             name: "yuno/payment_methods_view/\(viewId)", binaryMessenger: messenger)
         super.init()
-        self.yunoMethod.startCheckoutUpdate()
+  
         generatorView(args: args)
     }
     func generatorView(args: Any?) {
-
         guard let arg = args as? [String: Any] else {
              return
         }
         do {
+          
             let decoder = JSONDecoder()
             let arguments = try decoder.decode(ViewArguments.self, from: arg)
+        
+            self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode,cs: arguments.checkoutSession)
             generator = nil
             generator = Yuno.methodsView(delegate: self)
             self.generator?.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,

@@ -54,7 +54,7 @@ class YunoPaymentMethods extends StatefulWidget {
     super.key,
     required this.config,
     this.androidPlatformViewRenderType =
-        AndroidPlatformViewRenderType.expensiveAndroidView,
+        AndroidPlatformViewRenderType.androidView,
     required this.listener,
   });
 
@@ -121,7 +121,9 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
             }
 
             return ConstrainedBox(
-              constraints: BoxConstraints.expand(height: value.height),
+              constraints: Platform.isIOS
+                  ? BoxConstraints.expand(height: value.height)
+                  : const BoxConstraints.expand(height: _kMinimunHeight),
               child: Platform.isIOS
                   ? UiKitView(
                       key: ValueKey(currentWidth),
@@ -217,3 +219,5 @@ enum AndroidPlatformViewRenderType {
   /// This is more efficient but has more issues on older Android devices.
   androidView,
 }
+
+const _kMinimunHeight = 120.0;

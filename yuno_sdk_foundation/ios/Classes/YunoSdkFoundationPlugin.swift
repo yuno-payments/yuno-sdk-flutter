@@ -11,12 +11,13 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     let instanceSDK = YunoSdkFoundationPlugin()
     // Method Channel
     instanceSDK.instance = YunoMethods(methodChannel: channel)
+    
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
     // Payment Method View
-    let cardFieldFactory = PaymentMetthodFactory(
+    let paymentFactory = PaymentMetthodFactory(
     messenger: registrar.messenger(),
     yunoMethod: instanceSDK.instance ?? YunoMethods(methodChannel: channel))
-    registrar.register(cardFieldFactory, withId: "yuno/payment_methods_view")
+    registrar.register(paymentFactory, withId: "yuno/payment_methods_view")
   }
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     guard let instance = self.instance else {

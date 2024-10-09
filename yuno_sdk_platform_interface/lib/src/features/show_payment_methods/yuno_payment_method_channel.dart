@@ -30,7 +30,7 @@ final class YunoPaymentMethodChannel implements YunoPaymentMethodPlatform {
         case 'onHeightChange':
           if (call.arguments is! double) return;
           final height = call.arguments as double;
-          controller.updateHeight(height);
+          controller.updateHeight(height.toDouble());
           break;
 
         case 'onSelected':

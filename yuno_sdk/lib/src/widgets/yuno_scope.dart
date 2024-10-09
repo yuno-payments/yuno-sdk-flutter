@@ -74,7 +74,6 @@ extension YunoReader on BuildContext {
   }) async =>
       await yuno.startPayment(
         showPaymentStatus: showPaymentStatus,
-        checkoutSession: checkoutSession,
       );
   Future<void> continuePayment() async => await yuno.continuePayment();
 }

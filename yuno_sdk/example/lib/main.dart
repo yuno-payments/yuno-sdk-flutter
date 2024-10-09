@@ -15,6 +15,7 @@ Future<void> main() async {
   //     options: DefaultFirebaseOptions.currentPlatform,
   //   );
   // }
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
