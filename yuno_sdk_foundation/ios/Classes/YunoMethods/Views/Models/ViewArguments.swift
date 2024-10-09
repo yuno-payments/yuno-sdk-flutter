@@ -13,7 +13,7 @@ class ViewArguments: Codable {
     var countryCode: String
     var width: CGFloat
     var viewType: PaymentMethodsViewType
-    init?(checkoutSession: String,countryCode: String, width: CGFloat, viewType: Int) {
+    init?(checkoutSession: String, countryCode: String, width: CGFloat, viewType: Int) {
         self.checkoutSession = checkoutSession
         self.countryCode = countryCode
         self.width = width

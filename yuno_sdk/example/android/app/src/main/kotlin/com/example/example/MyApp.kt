@@ -6,6 +6,5 @@ class MyApp: Application() {
     override fun onCreate() {
         super.onCreate()
        YunoSdkAndroidPlugin.initSdk(this, BuildConfig.YUNO_API_KEY)
-
     }
 }

@@ -11,7 +11,6 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     let instanceSDK = YunoSdkFoundationPlugin()
     // Method Channel
     instanceSDK.instance = YunoMethods(methodChannel: channel)
-    
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
     // Payment Method View
     let paymentFactory = PaymentMetthodFactory(

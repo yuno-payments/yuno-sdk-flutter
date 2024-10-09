@@ -24,18 +24,5 @@ final class YunoPaymentSelectNotifier
 
   void isSelectedUpdate(bool isSelected) {
     value = value.copyWith(isSelected: isSelected);
-    // _safeUpdate(
-    //   () {
-
-    //   },
-    // );
-  }
-
-  void _safeUpdate(VoidCallback update) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        update();
-      },
-    );
   }
 }

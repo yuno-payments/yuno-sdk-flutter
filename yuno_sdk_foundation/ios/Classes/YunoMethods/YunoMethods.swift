@@ -60,11 +60,10 @@ class YunoMethods: YunoPaymentDelegate {
 }
 
 extension YunoMethods {
-    func startCheckoutUpdate(cc:String, cs:String) {
+    func startCheckoutUpdate(cc: String, cs: String) {
         countryCode = cc
         checkoutSession = cs
         Yuno.startCheckout(with: self)
-       
     }
 
     func handleStatus(status: Int) {
