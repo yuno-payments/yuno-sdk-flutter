@@ -36,6 +36,6 @@ class YunoSharedSingleton {
 }
 
 enum KeysSingleton {
-  /// The key for the greeting message.
+  /// The key for the countryCode.
   countryCode,
 }

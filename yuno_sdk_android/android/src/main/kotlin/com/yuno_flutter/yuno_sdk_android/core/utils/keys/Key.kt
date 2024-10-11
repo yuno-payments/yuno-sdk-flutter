@@ -5,4 +5,8 @@ object Key {
     const val startPaymentLite = "startPaymentLite"
     const val startPayment = "startPayment"
     const val continuePayment = "continuePayment"
+    const val ott = "ott"
+    const val status = "status"
+    const val onSelected = "onSelected"
+    const val onHeightChange = "onHeightChange"
 }

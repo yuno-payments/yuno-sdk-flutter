@@ -1,11 +1,9 @@
 package com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel
-
 import android.content.Context
 import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toCardFLowSDK
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.core.YunoConfig
-import com.yuno.payments.core.YunoLanguage
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
@@ -15,7 +13,6 @@ class InitHandler {
         try {
             val argument = call.arguments<Map<String, Any>>()
             val either = argument?.toApiConfig()
-
             either?.onSuccess { appConfig ->
                 if (appConfig.apiKey.isEmpty()) {
                     return result.error(
@@ -24,7 +21,6 @@ class InitHandler {
                         "ApiKey must be necessary for starting to use Yuno SDK"
                     )
                 }
-
                 Yuno.initialize(
                     context,
                     appConfig.apiKey,

@@ -69,7 +69,6 @@ extension YunoReader on BuildContext {
         countryCode: countryCode,
       );
   Future<void> startPayment({
-    required String checkoutSession,
     bool showPaymentStatus = true,
   }) async =>
       await yuno.startPayment(

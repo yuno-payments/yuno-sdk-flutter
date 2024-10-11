@@ -254,7 +254,6 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                             minTileHeight: 2,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                // ref.refresh(yunoProvider);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

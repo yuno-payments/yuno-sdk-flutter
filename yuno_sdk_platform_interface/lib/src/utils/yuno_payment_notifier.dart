@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class YunoPaymentMethodState {
@@ -6,8 +7,8 @@ class YunoPaymentMethodState {
     required this.width,
   });
 
-  factory YunoPaymentMethodState._empty() => const YunoPaymentMethodState(
-        height: 0.0,
+  factory YunoPaymentMethodState._empty() => YunoPaymentMethodState(
+        height: Platform.isIOS ? 0.0 : 15.0,
         width: 0.0,
       );
 

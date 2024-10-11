@@ -120,12 +120,10 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
               _controller.updateLastWidth(currentWidth);
             }
 
-            return ConstrainedBox(
-              constraints: Platform.isIOS
-                  ? BoxConstraints.expand(height: value.height)
-                  : const BoxConstraints.expand(height: _kMinimunHeight),
-              child: Platform.isIOS
-                  ? UiKitView(
+            return Platform.isIOS
+                ? ConstrainedBox(
+                    constraints: BoxConstraints.expand(height: value.height),
+                    child: UiKitView(
                       key: ValueKey(currentWidth),
                       onPlatformViewCreated: YunoPaymentMethodPlatform.init,
                       viewType: YunoPaymentMethodPlatform.viewType,
@@ -133,8 +131,13 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                       creationParams: widget.config.toMap(
                         currentWidth: currentWidth,
                       ),
-                    )
-                  : PlatformViewLink(
+                    ),
+                  )
+                : AnimatedContainer(
+                    curve: Curves.slowMiddle,
+                    duration: const Duration(milliseconds: 10),
+                    height: value.height,
+                    child: PlatformViewLink(
                       viewType: YunoPaymentMethodPlatform.viewType,
                       surfaceFactory: (context, controller) =>
                           AndroidViewSurface(
@@ -145,7 +148,6 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                       ),
                       onCreatePlatformView: (params) {
                         YunoPaymentMethodPlatform.init(params.id);
-
                         switch (widget.androidPlatformViewRenderType) {
                           case AndroidPlatformViewRenderType
                                 .expensiveAndroidView:
@@ -183,7 +185,7 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                         }
                       },
                     ),
-            );
+                  );
           },
         );
       },
@@ -219,5 +221,3 @@ enum AndroidPlatformViewRenderType {
   /// This is more efficient but has more issues on older Android devices.
   androidView,
 }
-
-const _kMinimunHeight = 120.0;

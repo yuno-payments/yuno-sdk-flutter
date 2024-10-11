@@ -54,28 +54,31 @@ class _SDKLayoutState extends State<_SDKLayout> {
         child: Column(
           children: [
             const SizedBox(height: 6),
-            YunoPaymentMethods(
-              config: PaymentMethodConf(
-                  checkoutSession: widget.checkoutSession, countryCode: 'BR'),
-              listener: (context, isSelected) {
-                setState(() {
-                  this.isSelected = isSelected;
-                });
-              },
+            Column(
+              children: [
+                YunoPaymentMethods(
+                  config: PaymentMethodConf(
+                    checkoutSession: widget.checkoutSession,
+                  ),
+                  listener: (context, isSelected) {
+                    setState(() {
+                      this.isSelected = isSelected;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: isSelected
+                      ? () async {
+                          if (isSelected) {
+                            context.startPayment();
+                          }
+                        }
+                      : null,
+                  child: const Text('Pay'),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: isSelected
-                  ? () async {
-                      if (isSelected) {
-                        context.startPayment(
-                          checkoutSession: widget.checkoutSession,
-                        );
-                      }
-                    }
-                  : null,
-              child: const Text('Pay'),
-            )
           ],
         ),
       ),

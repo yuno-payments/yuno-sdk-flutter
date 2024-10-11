@@ -10,13 +10,12 @@ import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
-import com.yuno.payments.features.payment.startPayment
-import com.yuno.payments.features.payment.updateCheckoutSession
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
+import com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel.StartPaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -38,7 +37,6 @@ class YunoSdkAndroidPlugin :
                callbackPaymentState = this::onPaymentStateChange
            )
     }
-
     companion object {
         @JvmStatic
         fun initSdk(application: Application, androidApiKey: String) {
@@ -64,7 +62,12 @@ class YunoSdkAndroidPlugin :
                 )
             }
             Key.startPayment -> {
-                activity.startPayment()
+                val init = StartPaymentHandler()
+                init.handler(
+                    call = call,
+                    result = result,
+                    context = context, activity,
+                )
             }
             Key.startPaymentLite -> {
                 val startPaymentLiteHandler = StartPaymentLiteHandler()
@@ -96,7 +99,6 @@ class YunoSdkAndroidPlugin :
         flutterPluginBindingMajor
             .platformViewRegistry
             .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
-
     }
 
     override fun onDetachedFromActivity() {
@@ -117,10 +119,10 @@ class YunoSdkAndroidPlugin :
     }
 
     fun onTokenUpdated(token: String?) {
-        channel.invokeMethod("ott", token)
+        channel.invokeMethod(Key.ott, token)
     }
 
     fun onPaymentStateChange(paymentState: String?) {
-       channel.invokeMethod("status", paymentState?.statusConverter())
+       channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }
 }
