@@ -6,7 +6,6 @@ class YunoPaymentMethodState {
     required this.height,
     required this.width,
   });
-
   factory YunoPaymentMethodState._empty() => YunoPaymentMethodState(
         height: Platform.isIOS ? 0.0 : 15.0,
         width: 0.0,
@@ -26,7 +25,6 @@ class YunoPaymentMethodState {
   @override
   bool operator ==(covariant YunoPaymentMethodState other) {
     if (identical(this, other)) return true;
-
     return other.height == height && other.width == width;
   }
 

@@ -9,7 +9,6 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
-
 class PaymentMethodFactory(
     private val flutterPluginBinding: FlutterPlugin.FlutterPluginBinding,
     private val activity: FlutterFragmentActivity

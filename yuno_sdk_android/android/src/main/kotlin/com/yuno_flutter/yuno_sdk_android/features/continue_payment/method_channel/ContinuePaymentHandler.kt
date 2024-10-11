@@ -11,7 +11,7 @@ class ContinuePaymentHandler {
        try {
            val showPaymentStatus = call.arguments<Boolean>()
            activity.continuePayment(showPaymentStatus = showPaymentStatus ?: true)
-       }catch (e:Exception){
+       } catch (e:Exception){
            result.error("4",e.message ?: "Unexpected Error",e.cause)
        }
     }

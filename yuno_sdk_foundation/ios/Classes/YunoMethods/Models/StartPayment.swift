@@ -6,7 +6,6 @@
 //
 
 class StartPayment: Codable {
-
     var showPaymentStatus: Bool
     init(
         showPaymentStatus: Bool
