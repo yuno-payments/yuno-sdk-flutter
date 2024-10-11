@@ -9,6 +9,6 @@ enum class CardFlow {
 fun CardFlow.toCardFLowSDK(): CardFormType {
     return when (this) {
         CardFlow.oneStep -> CardFormType.ONE_STEP
-        CardFlow.multiStep -> CardFormType.MULTI_STEP
+        CardFlow.multiStep -> CardFormType.STEP_BY_STEP
     }
 }

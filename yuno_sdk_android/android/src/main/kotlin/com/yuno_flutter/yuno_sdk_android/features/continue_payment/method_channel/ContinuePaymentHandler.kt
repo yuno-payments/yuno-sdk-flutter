@@ -7,12 +7,11 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
 class ContinuePaymentHandler {
-
     fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity){
        try {
            val showPaymentStatus = call.arguments<Boolean>()
-           activity.continuePayment(showPaymentStatus = showPaymentStatus ?: false)
-       }catch (e:Exception){
+           activity.continuePayment(showPaymentStatus = showPaymentStatus ?: true)
+       } catch (e:Exception){
            result.error("4",e.message ?: "Unexpected Error",e.cause)
        }
     }

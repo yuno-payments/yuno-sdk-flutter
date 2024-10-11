@@ -76,6 +76,7 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
+      const countryCode = 'country_code';
       const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
       const isDynamicViewEnable = false;
@@ -99,6 +100,7 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
+          'countryCode': countryCode,
           'yunoConfig': yunoConfig.toMap(),
           'configuration': null,
         });
@@ -108,6 +110,7 @@ void main() {
 
       await yunoMethodChannel.initialize(
         apiKey: apiKey,
+        countryCode: countryCode,
         androidConfig: androidConfig,
         yunoConfig: yunoConfig,
       );
@@ -126,7 +129,7 @@ void main() {
       );
 
       const apiKey = 'test_api_key';
-
+      const countryCode = 'country_code';
       const iosConfig = IosConfig();
       const cardFlow = CardFlow.oneStep;
       const saveCardEnable = false;
@@ -150,6 +153,7 @@ void main() {
         expect(methodCall.method, 'initialize');
         expect(methodCall.arguments, {
           'apiKey': apiKey,
+          'countryCode': countryCode,
           'yunoConfig': yunoConfig.toMap(),
           'configuration': iosConfig.toMap(),
         });
@@ -159,6 +163,7 @@ void main() {
 
       await yunoMethodChannel.initialize(
         apiKey: apiKey,
+        countryCode: countryCode,
         iosConfig: iosConfig,
         yunoConfig: yunoConfig,
       );

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

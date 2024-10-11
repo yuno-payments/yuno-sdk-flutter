@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
@@ -104,8 +105,10 @@ class __HomeLayoutState extends State<_HomeLayout> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [ExecutePayments()],
-                    )
+                      children: [
+                        ExecutePayments(),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -251,9 +254,12 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                             minTileHeight: 2,
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                await context.openPaymentMethodsScreen(
-                                  arguments: PaymentMethodsArgs(
-                                    checkoutSession: _checkoutSession.text,
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullSdkScreen(
+                                      checkoutSession: _checkoutSession.text,
+                                    ),
                                   ),
                                 );
                               }

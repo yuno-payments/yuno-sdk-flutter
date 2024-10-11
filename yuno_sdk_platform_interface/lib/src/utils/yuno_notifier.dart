@@ -7,7 +7,7 @@ class YunoState {
     this.status,
   });
 
-  factory YunoState.empty() => const YunoState(
+  factory YunoState._empty() => const YunoState(
         token: '',
         status: null,
       );
@@ -17,7 +17,7 @@ class YunoState {
 }
 
 final class YunoNotifier extends ValueNotifier<YunoState> {
-  YunoNotifier() : super(YunoState.empty());
+  YunoNotifier() : super(YunoState._empty());
 
   void add(String token) {
     value = YunoState(token: token);
