@@ -25,6 +25,7 @@ let package = Package(
             sources: [
                 "YunoMethods/Core",
                 "YunoMethods/Models",
+                "YunoMethods/Views",
                 "YunoMethods/YunoMethods.swift",
                 "YunoSdkFoundationPlugin.swift"
             ], resources: [
