@@ -10,8 +10,14 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(
       name: "yuno/payments", binaryMessenger: registrar.messenger())
     let instanceSDK = YunoSdkFoundationPlugin()
+    // Method Channel
     instanceSDK.instance = YunoMethods(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
+    // Payment Method View
+    let paymentFactory = PaymentMetthodFactory(
+    messenger: registrar.messenger(),
+    yunoMethod: instanceSDK.instance ?? YunoMethods(methodChannel: channel))
+    registrar.register(paymentFactory, withId: "yuno/payment_methods_view")
   }
     
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -29,8 +35,8 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
         instance.handleHideLoader(call: call, result: result)
     case Keys.receiveDeeplink.rawValue:
         instance.handleReceiveDeeplink(call: call, result: result)
-    case Keys.showPaymentMethods.rawValue:
-        instance.showPaymentMethods(call: call, result: result)
+    case Keys.startPayment.rawValue:
+        instance.handleStartPayment(call: call, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }

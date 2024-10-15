@@ -45,11 +45,13 @@ extension ParserAppearance on Appearance {
 extension Parser on Never {
   static Map<String, dynamic> toMap({
     required String apiKey,
+    required String countryCode,
     required YunoConfig yunoConfig,
     Map<String, dynamic>? configuration,
   }) {
     return <String, dynamic>{
       'apiKey': apiKey,
+      'countryCode': countryCode,
       'yunoConfig': yunoConfig.toMap(),
       'configuration': configuration,
     };

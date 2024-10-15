@@ -1,11 +1,14 @@
 package com.yuno_flutter.yuno_sdk_android.features.app_config.models
 
+import com.yuno.payments.core.YunoLanguage
+
 data class AppConfigModel(
     val apiKey: String,
     val yunoConfiguration: YunoConfiguration,
 )
 
 data class YunoConfiguration(
+    val lang: YunoLanguage,
     val cardFlow: CardFlow,
     val saveCardEnable: Boolean,
     val keepLoader: Boolean,
@@ -49,7 +52,15 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
                 IllegalArgumentException("Missing or invalid cardFormDeployed")
             )
 
+        val lang =
+            yunoConfigurationMap["lang"] as? String ?: return Result.failure(
+                IllegalArgumentException("Missing or invalid isDynamicViewEnable")
+            )
+
+        val language = stringToYunoLanguage(lang)
+        val safeLang = language ?: YunoLanguage.ENGLISH;
         val yunoConfiguration = YunoConfiguration(
+            lang = safeLang,
             cardFlow = cardflow,
             saveCardEnable = saveCardEnable,
             keepLoader = keepLoader,
@@ -67,4 +78,17 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
     } catch (e: Exception) {
         Result.failure(e)
     }
+}
+
+val languageMap = mapOf(
+    "EN" to YunoLanguage.ENGLISH,
+    "ES" to YunoLanguage.SPANISH,
+    "PT" to YunoLanguage.PORTUGUESE,
+    "ID" to YunoLanguage.INDONESIAN,
+    "MS" to YunoLanguage.MALAYSIAN,
+)
+
+
+fun stringToYunoLanguage(languageCode: String): YunoLanguage? {
+    return languageMap[languageCode.uppercase()]
 }

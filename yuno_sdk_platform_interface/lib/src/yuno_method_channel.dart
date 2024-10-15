@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
 import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'features/start_payment/models/parsers.dart';
+import 'utils/utils.dart';
 
 final class YunoMethodChannel implements YunoPlatform {
   /// The method channel used to interact with the native platform.
@@ -53,15 +55,18 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<void> initialize({
     required String apiKey,
+    required String countryCode,
     required YunoConfig yunoConfig,
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
     final mapper = Parser.toMap(
       apiKey: apiKey,
+      countryCode: countryCode,
       yunoConfig: yunoConfig,
       configuration: iosConfig?.toMap(),
     );
+    YunoSharedSingleton.setValue(KeysSingleton.countryCode.name, countryCode);
     await _methodChannel.invokeMethod('initialize', mapper);
   }
 
@@ -100,11 +105,15 @@ final class YunoMethodChannel implements YunoPlatform {
   }
 
   @override
-  Future<void> showPaymentMethods({
-    required PaymentMethodsArgs arguments,
-  }) async {
-    await _methodChannel.invokeMethod('showPaymentMethods', arguments.toMap());
-  }
+  Future<void> startPayment({
+    bool showPaymentStatus = true,
+  }) async =>
+      await _methodChannel.invokeMethod(
+        'startPayment',
+        ParserStartPayment.toMap(
+          showPaymentStatus: showPaymentStatus,
+        ),
+      );
 }
 
 /// {@template commons_YunoMethodChannelFactory}

@@ -81,6 +81,7 @@ struct YunoConfiguration: Codable, Sendable {
 
 struct AppConfiguration: Codable, Sendable {
     let apiKey: String
+    let countryCode: String
     let yunoConfig: YunoConfiguration
     let configuration: Configuration?
 }

@@ -17,7 +17,7 @@ A new Flutter plugin project.
   s.public_header_files = 'yuno_sdk_foundation/Sources/yuno_sdk_foundation/**/*.h'
   s.resource_bundles = {'PrivacyInfo' => ['yuno_sdk_foundation/Sources/yuno_sdk_foundation/Resrouces/PrivacyInfo.xcprivacy']}
   s.dependency 'Flutter'
-  s.dependency 'YunoSDK'
+  s.dependency 'YunoSDK', '1.15.0'
   s.platform = :ios, '14.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES'}
   s.swift_version = '5.0'

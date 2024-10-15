@@ -36,7 +36,7 @@ abstract interface class Yuno {
   ///
   /// ### Optional Parameters:
   /// - `lang`: The language for the SDK's user interface. Defaults to `YunoLanguage.en` (English).
-  /// - `cardflow`: The card flow configuration for the payment process. Defaults to `CARDFLOW.oneStep`.
+  /// - `CardFlow`: The card flow configuration for the payment process. Defaults to `CARDFLOW.oneStep`.
   /// - `saveCardEnable`: A boolean flag indicating whether the option to save card details is enabled. Defaults to `false`.
   /// - `keepLoader`: A boolean flag indicating whether to keep the loader visible during SDK operations. Defaults to `false`.
   /// - `isDynamicViewEnable`: A boolean flag indicating whether dynamic view updates are enabled. Defaults to `false`.
@@ -50,7 +50,7 @@ abstract interface class Yuno {
   ///   countryCode: 'your_country_code',
   ///   yunoConfig: YunoConfig(
   ///     lang: YunoLanguage.en,
-  ///     cardflow: CARDFLOW.twoStep,
+  ///     cardflow: CardFlow.twoStep,
   ///     saveCardEnable: true,
   ///     keepLoader: true,
   ///     isDynamicViewEnable: true,
@@ -78,13 +78,13 @@ abstract interface class Yuno {
     return yuno;
   }
 
-  Future<void> openPaymentMethodsScreen({
-    required PaymentMethodsArgs arguments,
-  });
-
   Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
+  });
+
+  Future<void> startPayment({
+    bool showPaymentStatus = true,
   });
 
   Future<void> continuePayment({
@@ -115,6 +115,7 @@ final class _YunoChannels implements Yuno {
   }) async =>
       await _platform.initialize(
         apiKey: apiKey,
+        countryCode: countryCodeIncome,
         yunoConfig: yunoConfig,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
@@ -150,10 +151,10 @@ final class _YunoChannels implements Yuno {
   Future<void> hideLoader() async => await _platform.hideLoader();
 
   @override
-  Future<void> openPaymentMethodsScreen({
-    required PaymentMethodsArgs arguments,
-  }) async =>
-      await _platform.showPaymentMethods(
-        arguments: arguments,
+  Future<void> startPayment({
+    bool showPaymentStatus = true,
+  }) =>
+      _platform.startPayment(
+        showPaymentStatus: showPaymentStatus,
       );
 }
