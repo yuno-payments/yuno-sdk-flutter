@@ -21,12 +21,9 @@ class SetUpScreen extends StatelessWidget {
         AsyncError(:final error) => Scaffold(
             body: Text('Error: $error'),
           ),
-        AsyncData<Yuno>(:final value) => YunoScope(
-            yuno: value,
-            child: const _HomeLayout(),
-          ),
+        AsyncData<void>() => const _HomeLayout(),
         _ => const Scaffold(
-            body: CircularProgressIndicator(),
+            body: Center(child: CircularProgressIndicator()),
           ),
       };
     });

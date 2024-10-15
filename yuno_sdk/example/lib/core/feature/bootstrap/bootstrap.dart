@@ -3,7 +3,7 @@ import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
-final yunoProvider = FutureProvider<Yuno>((ref) async {
+final yunoProvider = FutureProvider<void>((ref) async {
   final apiKey = await ref.watch(providerStorage).read(key: Keys.apiKey.name);
   final countryCode = await ref.watch(countryCodeFuture.future);
   final lang = await ref.watch(langNotifier.future);
@@ -15,7 +15,7 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
   final cardForm = await ref.watch(cardFormDeployedNotifier.future);
 
   try {
-    final yuno = await Yuno.init(
+    return await Yuno.init(
       apiKey: apiKey,
       countryCode: countryCode,
       yunoConfig: YunoConfig(
@@ -30,7 +30,6 @@ final yunoProvider = FutureProvider<Yuno>((ref) async {
         appearance: appearance,
       ),
     );
-    return yuno;
   } catch (e) {
     throw Exception();
   }
