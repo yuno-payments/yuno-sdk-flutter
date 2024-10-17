@@ -1,6 +1,6 @@
 name: yuno_sdk_foundation
 description: "A Yuno Project for Android"
-version: 0.0.1
+version: 1.0.0
 publish_to: 'none' #Remove this line if you gonna publish the project
 
 
