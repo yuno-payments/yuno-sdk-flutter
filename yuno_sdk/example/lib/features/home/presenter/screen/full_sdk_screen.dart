@@ -19,11 +19,8 @@ class FullSdkScreen extends StatelessWidget {
         AsyncError(:final error) => Scaffold(
             body: Text('Error: $error'),
           ),
-        AsyncData<Yuno>(:final value) => YunoScope(
-            yuno: value,
-            child: _SDKLayout(
-              checkoutSession: checkoutSession,
-            ),
+        AsyncData<void>() => _SDKLayout(
+            checkoutSession: checkoutSession,
           ),
         _ => const Scaffold(
             body: CircularProgressIndicator(),

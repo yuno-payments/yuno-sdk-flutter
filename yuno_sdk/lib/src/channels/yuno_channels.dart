@@ -58,49 +58,74 @@ abstract interface class Yuno {
   ///   iosConfig: IosConfig(),
   /// );
   /// ```
-  static Future<Yuno> init({
+  static Future<void> init({
     required String apiKey,
     required String countryCode,
     YunoConfig yunoConfig = const YunoConfig(),
     IosConfig iosConfig = const IosConfig(),
   }) async {
-    final yuno = _YunoChannels(
-      countryCodeIncome: countryCode,
-    );
+    _YunoChannels.setCountryCode(countryCode);
+    const yuno = _YunoChannels();
     await yuno.initInvoke();
     await yuno.init(
       apiKey: apiKey,
+      countryCode: countryCode,
       yunoConfig: yunoConfig,
       iosConfig: iosConfig,
       androidConfig: const AndroidConfig(),
     );
-
-    return yuno;
   }
 
-  Future<void> startPaymentLite({
+  static Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
-  });
+  }) async =>
+      await _YunoChannels.startPaymentLite(
+        arguments: arguments,
+        countryCode: countryCode,
+      );
 
-  Future<void> startPayment({
+  static Future<void> startPayment({
     bool showPaymentStatus = true,
-  });
+  }) async =>
+      await _YunoChannels.startPayment(
+        showPaymentStatus: showPaymentStatus,
+      );
 
-  Future<void> continuePayment({
+  static Future<void> continuePayment({
     bool showPaymentStatus = true,
-  });
+  }) async =>
+      _YunoChannels.continuePayment(
+        showPaymentStatus: showPaymentStatus,
+      );
 
-  Future<void> hideLoader();
+  static Future<void> hideLoader() async => _YunoChannels.hideLoader();
 
-  Future<void> receiveDeeplink({required Uri url});
+  static Future<void> receiveDeeplink({
+    required Uri url,
+  }) async =>
+      _YunoChannels.receiveDeeplink(
+        url: url,
+      );
 }
 
 final class _YunoChannels implements Yuno {
-  const _YunoChannels({
-    required this.countryCodeIncome,
-  });
-  final String countryCodeIncome;
+  const _YunoChannels();
+
+  static String? _countryCode;
+
+  static void setCountryCode(String code) {
+    _countryCode = code;
+  }
+
+  static String getCountryCode() {
+    if (_countryCode == null) {
+      throw StateError(
+          'Country code has not been initialized. Call Yuno.init() first.');
+    }
+    return _countryCode!;
+  }
+
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
     __platform ??= YunoPlatform.instance;
@@ -109,52 +134,48 @@ final class _YunoChannels implements Yuno {
 
   Future<void> init({
     required String apiKey,
+    required String countryCode,
     required YunoConfig yunoConfig,
     required IosConfig iosConfig,
     required AndroidConfig androidConfig,
   }) async =>
       await _platform.initialize(
         apiKey: apiKey,
-        countryCode: countryCodeIncome,
+        countryCode: countryCode,
         yunoConfig: yunoConfig,
         iosConfig: iosConfig,
         androidConfig: androidConfig,
       );
 
-  @override
-  Future<void> receiveDeeplink({
+  static Future<void> receiveDeeplink({
     required Uri url,
   }) async =>
       await _platform.receiveDeeplink(url: url);
 
   Future<void> initInvoke() async => await _platform.init();
 
-  @override
-  Future<void> startPaymentLite({
+  static Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
   }) async =>
       await _platform.startPaymentLite(
         arguments: arguments,
-        countryCode: countryCode.isEmpty ? countryCodeIncome : countryCode,
+        countryCode: countryCode.isEmpty ? getCountryCode() : countryCode,
       );
 
-  @override
-  Future<void> continuePayment({
+  static Future<void> startPayment({
+    bool showPaymentStatus = true,
+  }) async =>
+      await _platform.startPayment(
+        showPaymentStatus: showPaymentStatus,
+      );
+
+  static Future<void> continuePayment({
     bool showPaymentStatus = true,
   }) async =>
       await _platform.continuePayment(
         showPaymentStatus: showPaymentStatus,
       );
 
-  @override
-  Future<void> hideLoader() async => await _platform.hideLoader();
-
-  @override
-  Future<void> startPayment({
-    bool showPaymentStatus = true,
-  }) =>
-      _platform.startPayment(
-        showPaymentStatus: showPaymentStatus,
-      );
+  static Future<void> hideLoader() async => await _platform.hideLoader();
 }
