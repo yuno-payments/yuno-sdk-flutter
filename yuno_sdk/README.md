@@ -1,4 +1,7 @@
 # Yuno - Flutter
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=for-the-badge)](https://github.com/invertase/melos)
+[![Maintained by Yuno](https://img.shields.io/badge/maintained_by-Yuno-4E3DD8?style=for-the-badge)](https://www.y.uno/)
+
 <?code-excerpt path-base="example/lib"?>
 
 Yuno Flutter SDK empowers you to create seamless payment experiences in your native Android and iOS apps built with Flutter. It offers powerful and customizable UI components that can be used directly to gather payment details from your users efficiently and effectively.
@@ -8,6 +11,7 @@ Yuno Flutter SDK empowers you to create seamless payment experiences in your nat
 |             | Android | iOS   | Linux | macOS  | Web | Windows     |
 |-------------|---------|-------|-------|--------|-----|-------------|
 | **Support** | SDK 16+ | 14.0+ | None   | None  | None| None        |
+
 
 ## Features
 
@@ -25,21 +29,17 @@ Yuno Flutter SDK empowers you to create seamless payment experiences in your nat
 - **Automatic Error Handling**: Built-in error messaging and form validation, ensuring that issues like incorrect card details are clearly communicated to users.
 - **Localized UI**: Offers built-in localization for multiple languages, ensuring the payment experience feels native to all your users.
 
-#### 4. Easy Integration
-- **SDK Compatibility**: Compatible with Android and iOS native development environments, providing straightforward integration with existing applications.
-- **Comprehensive Documentation**: Includes thorough guides and examples, making it easy for developers of all skill levels to integrate Yuno’s SDK.
-
-#### 5. Security Features
+#### 4. Security Features
 - **PCI Compliance**: Adheres to PCI DSS standards, ensuring that your payment processing meets industry security requirements.
 - **3D Secure Support**: Supports 3D Secure for additional user authentication, reducing fraud risk.
 - **Data Encryption**: All transactions are protected with advanced encryption protocols, ensuring that sensitive information remains secure.
 
-#### 6. Developer-Friendly Tools
+#### 5. Developer-Friendly Tools
 - **Sandbox Environment**: Provides a sandbox mode for testing payment flows before going live.
 - **Real-Time Logs**: Access to real-time logs helps developers quickly identify and troubleshoot issues.
 - **Flexible API**: Offers a flexible and well-documented API, allowing for advanced customizations when needed.
 
-#### 7. Real-Time Analytics
+#### 6. Real-Time Analytics
 - **Insights Dashboard**: Gain insights into payment performance with a real-time analytics dashboard.
 - **Error Reporting**: Get notified about transaction issues, enabling quick resolution.
 
@@ -62,6 +62,9 @@ This plugin requires several changes to be able to work on Android devices. Plea
 6. Using `FlutterFragmentActivity` instead of `FlutterActivity` in `MainActivity.kt`.
 7. Colors or custumizations of the SDK for android you can do this by following the steps: [customs](https://docs.y.uno/docs/sdk-customizations-android)
 8. Rebuild the app, as the above changes don't update with hot reload
+
+#### IOS
+1. Use iOS version 14.0 or above
 
 ## Android Configuration
 #### build.graddle - project level 
@@ -113,8 +116,6 @@ class MyApp : Application() {
 ```
 
 
-#### IOS
-1. Use iOS version 14.0 or above
 
 
 ## Usage

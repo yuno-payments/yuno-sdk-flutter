@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: yuno
+dependency_overrides:
+  yuno:
+    path: yuno_sdk
