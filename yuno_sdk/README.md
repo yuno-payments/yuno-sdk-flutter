@@ -63,8 +63,7 @@ This plugin requires several changes to be able to work on Android devices. Plea
 7. Colors or custumizations of the SDK for android you can do this by following the steps: [customs](https://docs.y.uno/docs/sdk-customizations-android)
 8. Rebuild the app, as the above changes don't update with hot reload
 
-
-### Android Configuration
+## Android Configuration
 #### build.graddle - project level 
 ```groovy
 allprojects {
@@ -80,6 +79,43 @@ allprojects {
 ```kotlin
 class MainActivity: FlutterFragmentActivity()
 ```
+#### MyApp.kt
+According to the documentation, Yuno must be initialized in the Application onCreate. So follow the below steps to achieve the same:
+- Setup custom application class if you don't have any.
+- Create a custom `android.app.Application` class named `MyApp`.
+- Add an `onCreate()` override. The class should look like this:
+```kotlin
+import android.app.Applicatio
+class MyApp: Application() 
+    override fun onCreate() {
+        super.onCreate()
+    }
+}
+```
+- Open your `AndroidManifest.xml` and find the `application` tag. In it, add an `android:name` attribute, and set the value to your class' name, prefixed by a dot (.).
+    ```xml
+    <application
+      android:name=".MyApp" >
+    ```
+- Now initialize the Yuno SDK inside the `onCreate()` of custom application class according to the following:
+```kotlin
+import android.app.Application
+import com.yuno_flutter.yuno_sdk_android.YunoSdkAndroidPlugin
+
+class MyApp : Application() {
+  override fun onCreate() {
+    super.onCreate()
+
+    // Add this line with your keys
+    YunoSdkAndroidPlugin.initSdk(this, "YUNO_API_KEY")
+  }
+}
+```
+
+
+#### IOS
+1. Use iOS version 14.0 or above
+
 
 ## Usage
 
@@ -91,7 +127,7 @@ Here are small examples that show you how to use the API.
 ```dart
 await Yuno.init(
   apiKey: 'your_api_key_here',
-  countryCode: 'your_country_code',
+  countryCode: 'your_country_code', // The complete list of country_codes is available on https://docs.y.uno/docs/country-coverage-yuno-sdk
   yunoConfig: YunoConfig(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
     cardflow: CARDFLOW.twoStep, // default cardflow
@@ -103,18 +139,44 @@ await Yuno.init(
 );
 ```
 
+## Yuno Dart API
 
+The library offers several methods to handle Yuno related actions:
 
-
-### Migration and Prefixes
-
-
-
-### Testing
-
-
-
-<?code-excerpt "readme_excerpts.dart (Tests)"?>
 ```dart
+Future<void> startPayment(...);
+Future<void> startPaymentLite(...);
+Future<void> continuePayment(...);
+Future<void> hideLoader(...);
+//Avialable only for IOS devices
+Future<void> receiveDeeplink(...);
+```
+## Widgets
 
+### YunoListener
+ ```dart
+ YunoListener(
+   listener: (state) {
+     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
+     // - [token]: One Time Token
+     // - [status]: [reject,succeded,fail,processing,internalError,cancelByUser]
+   },
+   child: SomeWidget(),
+ )
+ ```
+### YunoPaymentMethods
+```dart
+YunoPaymentMethods(
+  config: PaymentMethodConf(
+    checkoutSession: 'your_checkout_session_id',
+    // Add other configuration options as needed
+  ),
+  listener: (context, isSelected) {
+    if (isSelected) {
+      print('A payment method has been selected');
+    } else {
+      print('No payment method is currently selected');
+    }
+  },
+)
 ```
