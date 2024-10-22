@@ -1,6 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
@@ -127,6 +126,7 @@ class ExecutePayments extends ConsumerStatefulWidget {
 
 class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
   final _checkoutSession = TextEditingController();
+  final _vaultedToken = TextEditingController();
   final _paymentType = TextEditingController(text: 'CARD');
   final _formKey = GlobalKey<FormState>();
 
@@ -156,6 +156,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                   ref.read(checkoutSessionNotifier.notifier).resetSession();
                   ref.read(formNotifier.notifier).changeValue(value: false);
                   _checkoutSession.clear();
+                  _vaultedToken.clear();
                 },
               ),
             ),
@@ -221,6 +222,13 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                     const SizedBox(
                       height: 10,
                     ),
+                    YunoInput(
+                      title: 'Vaulted token',
+                      onPaste: () {},
+                      controller: _vaultedToken,
+                      onChange: (p0) {},
+                      validator: (p0) => null,
+                    ),
                     const Divider(),
                     ListTile(
                       minVerticalPadding: 3,
@@ -234,6 +242,9 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                               showPaymentStatus: true,
                               checkoutSession: _checkoutSession.text,
                               methodSelected: MethodSelected(
+                                vaultedToken: _vaultedToken.text.isEmpty
+                                    ? null
+                                    : _vaultedToken.text,
                                 paymentMethodType: _paymentType.text,
                               ),
                             ),
