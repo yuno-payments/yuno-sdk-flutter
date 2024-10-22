@@ -16,6 +16,8 @@ class SDKSettings extends ConsumerWidget {
     final dynamicSDKController = ref.watch(dynamicSDKNotifier);
     final keepLoaderController = ref.watch(keepLoaderNotifier);
     final langController = ref.watch(langNotifier);
+    final showPaymentStatus = ref.watch(showPaymentStatusProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,6 +102,29 @@ class SDKSettings extends ConsumerWidget {
                             value: value,
                             ref: ref,
                           ),
+                        ),
+                ),
+                ListTile(
+                  minVerticalPadding: 10,
+                  minTileHeight: 10,
+                  title: const Text('Show Status Screen'),
+                  leading: const Icon(Icons.check_box),
+                  trailing: Platform.isIOS
+                      ? CupertinoSwitch(
+                          value: showPaymentStatus.value ?? true,
+                          onChanged: (value) async {
+                            await ref.watch(providerStorage).writeBool(
+                                key: Keys.showPaymentStatus.name, value: value);
+                            ref.invalidate(showPaymentStatusProvider);
+                          },
+                        )
+                      : Switch(
+                          value: showPaymentStatus.value ?? true,
+                          onChanged: (value) async {
+                            await ref.watch(providerStorage).writeBool(
+                                key: Keys.showPaymentStatus.name, value: value);
+                            ref.invalidate(showPaymentStatusProvider);
+                          },
                         ),
                 ),
               ],

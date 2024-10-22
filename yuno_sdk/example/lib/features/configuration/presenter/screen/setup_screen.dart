@@ -1,5 +1,8 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/configuration/presenter/widgets/execute_payment_cards.dart';
+import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
@@ -205,9 +208,15 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
                       onTap: () async {
                         if (_formKey.currentState?.validate() ?? false) {
                           ref.invalidate(yunoProvider);
-                          await context.enrollmentPayment(
-                            arguments: EnrollmentArguments(
-                              customerSession: _enrollmentPayment.text,
+                          await context.startPaymentLite(
+                            arguments: StartPayment(
+                              checkoutSession: _checkoutSession.text,
+                              methodSelected: MethodSelected(
+                                vaultedToken: _vaultedToken.text.isEmpty
+                                    ? null
+                                    : _vaultedToken.text,
+                                paymentMethodType: _paymentType.text,
+                              ),
                             ),
                           );
                         }
@@ -215,6 +224,106 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
                       trailing: const Icon(
                         Icons.arrow_forward_ios_outlined,
                       ),
+                    ),
+                    const Divider(),
+                    ListTile(
+                      minVerticalPadding: 3,
+                      minTileHeight: 2,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FullSdkScreen(
+                                checkoutSession: _checkoutSession.text,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      title: const Text('Execute payment FULL'),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios_outlined,
+                      ),
+                    ),
+                    const Divider(),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final controller = ref.watch(checkoutSessionNotifier);
+
+                        return controller.isEmpty
+                            ? const SizedBox.shrink()
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'OTT:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          controller,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () async =>
+                                              await Clipboard.setData(
+                                                  ClipboardData(
+                                                      text: controller)),
+                                          icon: const Icon(
+                                            Icons.copy,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      var showPaymentStatus = await ref.read(
+                                          showPaymentStatusProvider.future);
+
+                                      await Yuno.continuePayment(
+                                          showPaymentStatus: showPaymentStatus);
+                                    },
+                                    style: ButtonStyle(
+                                      elevation:
+                                          const WidgetStatePropertyAll(0),
+                                      shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          const WidgetStatePropertyAll(
+                                        Colors.green,
+                                      ),
+                                    ),
+                                    child: const SizedBox(
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                          'Continue Payment',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                      },
                     ),
                   ],
                 ),
