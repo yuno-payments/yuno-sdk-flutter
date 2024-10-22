@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
@@ -239,7 +240,6 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                           ref.invalidate(yunoProvider);
                           await context.startPaymentLite(
                             arguments: StartPayment(
-                              showPaymentStatus: true,
                               checkoutSession: _checkoutSession.text,
                               methodSelected: MethodSelected(
                                 vaultedToken: _vaultedToken.text.isEmpty
@@ -318,8 +318,13 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                                     ],
                                   ),
                                   ElevatedButton(
-                                    onPressed: () async =>
-                                        context.continuePayment(),
+                                    onPressed: () async {
+                                      var showPaymentStatus = await ref.read(
+                                          showPaymentStatusProvider.future);
+
+                                      await Yuno.continuePayment(
+                                          showPaymentStatus: showPaymentStatus);
+                                    },
                                     style: ButtonStyle(
                                       elevation:
                                           const WidgetStatePropertyAll(0),

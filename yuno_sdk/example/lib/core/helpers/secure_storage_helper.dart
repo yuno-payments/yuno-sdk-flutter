@@ -203,6 +203,14 @@ final langNotifier = FutureProvider<YunoLanguage?>(
   },
 );
 
+final showPaymentStatusProvider = FutureProvider<bool>(
+  (ref) async {
+    return await ref
+        .watch(providerStorage)
+        .getBool(key: Keys.showPaymentStatus.name);
+  },
+);
+
 final countryCodeFuture = FutureProvider<String>(
   (ref) async {
     return await ref.watch(providerStorage).read(key: Keys.countryCode.name);
