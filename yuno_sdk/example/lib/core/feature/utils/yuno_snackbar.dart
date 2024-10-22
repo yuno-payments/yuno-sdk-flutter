@@ -3,11 +3,11 @@ import 'package:yuno/yuno.dart';
 
 class YunoSnackBar {
   static void showSnackBar(
-      context, PaymentStatus? status, VoidCallback doSomething) {
+      context, YunoStatus? status, VoidCallback doSomething) {
     switch (status) {
       case null:
         return;
-      case PaymentStatus.reject:
+      case YunoStatus.reject:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Payment rejected ❌'),
@@ -16,7 +16,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.succeded:
+      case YunoStatus.succeded:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Center(
@@ -31,7 +31,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.fail:
+      case YunoStatus.fail:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Something went wrong ❌'),
@@ -40,7 +40,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.processing:
+      case YunoStatus.processing:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Processing ...'),
@@ -49,7 +49,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.internalError:
+      case YunoStatus.internalError:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Internal error 🤔'),
@@ -58,7 +58,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.cancelByUser:
+      case YunoStatus.cancelByUser:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Transaction had been canceled 😢'),

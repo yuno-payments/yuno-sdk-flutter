@@ -96,4 +96,7 @@ extension YunoReader on BuildContext {
   /// context.hideLoader();
   /// ```
   Future<void> hideLoader() async => await Yuno.hideLoader();
+
+  Future<void> enrollmentPayment({required EnrollmentArguments arguments}) =>
+      Yuno.enrollmentPayment(arguments: arguments);
 }

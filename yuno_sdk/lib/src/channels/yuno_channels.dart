@@ -76,6 +76,11 @@ abstract interface class Yuno {
     );
   }
 
+  static Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  }) async =>
+      await _YunoChannels.enrollmentPayment(arguments: arguments);
+
   static Future<void> startPaymentLite({
     required StartPayment arguments,
     String countryCode = '',
@@ -118,7 +123,7 @@ final class _YunoChannels implements Yuno {
     _countryCode = code;
   }
 
-  static String getCountryCode() {
+  static String _getCountryCode() {
     if (_countryCode == null) {
       throw StateError(
           'Country code has not been initialized. Call Yuno.init() first.');
@@ -131,6 +136,17 @@ final class _YunoChannels implements Yuno {
     __platform ??= YunoPlatform.instance;
     return __platform!;
   }
+
+  static Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  }) async =>
+      await _platform.enrollmentPayment(
+        arguments: EnrollmentArguments(
+          customerSession: arguments.customerSession,
+          showPaymentStatus: arguments.showPaymentStatus,
+          countryCode: arguments.countryCode ?? _getCountryCode(),
+        ),
+      );
 
   Future<void> init({
     required String apiKey,
@@ -160,7 +176,7 @@ final class _YunoChannels implements Yuno {
   }) async =>
       await _platform.startPaymentLite(
         arguments: arguments,
-        countryCode: countryCode.isEmpty ? getCountryCode() : countryCode,
+        countryCode: countryCode.isEmpty ? _getCountryCode() : countryCode,
       );
 
   static Future<void> startPayment({

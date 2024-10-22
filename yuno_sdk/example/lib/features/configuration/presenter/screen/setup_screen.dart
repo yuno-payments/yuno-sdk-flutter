@@ -1,12 +1,11 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
-import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:example/features/configuration/presenter/widgets/execute_payment_cards.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
+import 'package:flutter/material.dart';
 
 class SetUpScreen extends StatelessWidget {
   const SetUpScreen({super.key});
@@ -83,7 +82,7 @@ class __HomeLayoutState extends State<_HomeLayout> {
                   .recoverySession(state.token);
               YunoSnackBar.showSnackBar(
                 context,
-                state.status,
+                state.paymentStatus ?? state.enrollmentStatus,
                 () {
                   ref.read(checkoutSessionNotifier.notifier).resetSession();
                 },
@@ -96,12 +95,16 @@ class __HomeLayoutState extends State<_HomeLayout> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 50,
+                      height: 10,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        ExecuteEnrollments(),
+                        SizedBox(
+                          height: 10,
+                        ),
                         ExecutePayments(),
                       ],
                     ),
@@ -116,20 +119,17 @@ class __HomeLayoutState extends State<_HomeLayout> {
   }
 }
 
-class ExecutePayments extends ConsumerStatefulWidget {
-  const ExecutePayments({super.key});
+class ExecuteEnrollments extends ConsumerStatefulWidget {
+  const ExecuteEnrollments({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ExecutePaymentsState();
+      _ExecuteEnrollmentsState();
 }
 
-class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
-  final _checkoutSession = TextEditingController();
-  final _vaultedToken = TextEditingController();
-  final _paymentType = TextEditingController(text: 'CARD');
+class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
+  final _enrollmentPayment = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -140,23 +140,24 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'PAYMENT',
+                'Enrollment',
                 style: TextStyle(
                   color: Color.fromARGB(255, 126, 126, 126),
-                  fontSize: 12,
+                  fontSize: 15,
                 ),
               ),
             ),
             AnimatedOpacity(
-              opacity: !ref.watch(formNotifier) ? 0 : 1,
+              opacity: !ref.watch(customerFormNotifier) ? 0 : 1,
               duration: Durations.short3,
               child: ActionChip(
                 label: const Text('Clean'),
                 onPressed: () {
-                  ref.read(checkoutSessionNotifier.notifier).resetSession();
-                  ref.read(formNotifier.notifier).changeValue(value: false);
-                  _checkoutSession.clear();
-                  _vaultedToken.clear();
+                  ref.read(customerSessionNotifier.notifier).resetSession();
+                  ref
+                      .read(customerFormNotifier.notifier)
+                      .changeValue(value: false);
+                  _enrollmentPayment.clear();
                 },
               ),
             ),
@@ -177,76 +178,36 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                 child: Column(
                   children: [
                     YunoInput(
-                      title: 'Checkout session',
+                      title: 'Customer Session',
+                      controller: _enrollmentPayment,
                       onPaste: () => ref
-                          .read(formNotifier.notifier)
+                          .read(customerFormNotifier.notifier)
                           .changeValue(
                               value:
                                   _formKey.currentState?.validate() ?? false),
-                      controller: _checkoutSession,
                       onChange: (p0) => ref
-                          .read(formNotifier.notifier)
+                          .read(customerFormNotifier.notifier)
                           .changeValue(
                               value:
                                   _formKey.currentState?.validate() ?? false),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a checkout session';
+                          return 'Please enter a customer session';
                         }
                         return null;
                       },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    YunoInput(
-                      title: 'Payment type',
-                      onPaste: () => ref
-                          .read(formNotifier.notifier)
-                          .changeValue(
-                              value:
-                                  _formKey.currentState?.validate() ?? false),
-                      onChange: (p0) => ref
-                          .read(formNotifier.notifier)
-                          .changeValue(
-                              value:
-                                  _formKey.currentState?.validate() ?? false),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an payment type';
-                        }
-                        return null;
-                      },
-                      controller: _paymentType,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    YunoInput(
-                      title: 'Vaulted token',
-                      onPaste: () {},
-                      controller: _vaultedToken,
-                      onChange: (p0) {},
-                      validator: (p0) => null,
                     ),
                     const Divider(),
                     ListTile(
                       minVerticalPadding: 3,
                       minTileHeight: 2,
-                      title: const Text('Execute payment LITE'),
+                      title: const Text('Execute payment Enrollment'),
                       onTap: () async {
                         if (_formKey.currentState?.validate() ?? false) {
                           ref.invalidate(yunoProvider);
-                          await context.startPaymentLite(
-                            arguments: StartPayment(
-                              showPaymentStatus: true,
-                              checkoutSession: _checkoutSession.text,
-                              methodSelected: MethodSelected(
-                                vaultedToken: _vaultedToken.text.isEmpty
-                                    ? null
-                                    : _vaultedToken.text,
-                                paymentMethodType: _paymentType.text,
-                              ),
+                          await context.enrollmentPayment(
+                            arguments: EnrollmentArguments(
+                              customerSession: _enrollmentPayment.text,
                             ),
                           );
                         }
@@ -254,101 +215,6 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                       trailing: const Icon(
                         Icons.arrow_forward_ios_outlined,
                       ),
-                    ),
-                    const Divider(),
-                    ListTile(
-                      minVerticalPadding: 3,
-                      minTileHeight: 2,
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FullSdkScreen(
-                                checkoutSession: _checkoutSession.text,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      title: const Text('Execute payment FULL'),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                    ),
-                    const Divider(),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        final controller = ref.watch(checkoutSessionNotifier);
-
-                        return controller.isEmpty
-                            ? const SizedBox.shrink()
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'OTT:',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: Text(
-                                          controller,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () async =>
-                                              await Clipboard.setData(
-                                                  ClipboardData(
-                                                      text: controller)),
-                                          icon: const Icon(
-                                            Icons.copy,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async =>
-                                        context.continuePayment(),
-                                    style: ButtonStyle(
-                                      elevation:
-                                          const WidgetStatePropertyAll(0),
-                                      shape: WidgetStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          const WidgetStatePropertyAll(
-                                        Colors.green,
-                                      ),
-                                    ),
-                                    child: const SizedBox(
-                                      width: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          'Continue Payment',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                      },
                     ),
                   ],
                 ),
@@ -361,14 +227,15 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
   }
 }
 
-final checkoutSessionNotifier =
-    NotifierProvider.autoDispose<CheckoutSessionNotifier, String>(
-        CheckoutSessionNotifier.new);
+final customerSessionNotifier =
+    NotifierProvider.autoDispose<CustomerSessionNotifier, String>(
+        CustomerSessionNotifier.new);
 
-final formNotifier = NotifierProvider.autoDispose<FormValidatorNotifier, bool>(
-    FormValidatorNotifier.new);
+final customerFormNotifier =
+    NotifierProvider.autoDispose<CustomerFormNotifier, bool>(
+        CustomerFormNotifier.new);
 
-class CheckoutSessionNotifier extends AutoDisposeNotifier<String> {
+class CustomerSessionNotifier extends AutoDisposeNotifier<String> {
   @override
   String build() => '';
 
@@ -377,7 +244,7 @@ class CheckoutSessionNotifier extends AutoDisposeNotifier<String> {
   void resetSession() => state = '';
 }
 
-class FormValidatorNotifier extends AutoDisposeNotifier<bool> {
+class CustomerFormNotifier extends AutoDisposeNotifier<bool> {
   @override
   bool build() => false;
 

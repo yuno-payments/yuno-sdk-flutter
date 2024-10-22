@@ -24,7 +24,8 @@ typedef YunoWidgetListener = void Function(
 ///   listener: (state) {
 ///     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
 ///     // - [token]: One Time Token
-///     // - [status]: [reject,succeded,fail,processing,internalError,cancelByUser]
+///     // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+///     // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
 ///   },
 ///   child: SomeWidget(),
 /// )
