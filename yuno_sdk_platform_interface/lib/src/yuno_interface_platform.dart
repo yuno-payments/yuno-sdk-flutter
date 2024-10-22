@@ -52,10 +52,16 @@ abstract interface class YunoPlatform extends PlatformInterface {
   Future<void> startPayment({
     bool showPaymentStatus = true,
   });
+
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   });
 
   Future<void> init();
+
+  Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  });
+
   YunoNotifier get controller;
 }

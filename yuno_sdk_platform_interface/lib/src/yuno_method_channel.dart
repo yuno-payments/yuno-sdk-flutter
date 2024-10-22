@@ -43,7 +43,12 @@ final class YunoMethodChannel implements YunoPlatform {
         case 'status':
           if (call.arguments is! int) return;
           final index = call.arguments as int;
-          _yunoNotifier.addStatus(PaymentStatus.values[index]);
+          _yunoNotifier.addStatus(YunoStatus.values[index]);
+          break;
+        case 'enrollmentStatus':
+          if (call.arguments is! int) return;
+          final index = call.arguments as int;
+          _yunoNotifier.addEnrollmentStatus(YunoStatus.values[index]);
           break;
         default:
           throw MissingPluginException(
@@ -113,6 +118,15 @@ final class YunoMethodChannel implements YunoPlatform {
         ParserStartPayment.toMap(
           showPaymentStatus: showPaymentStatus,
         ),
+      );
+
+  @override
+  Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  }) async =>
+      await _methodChannel.invokeMethod(
+        'enrollmentPayment',
+        arguments.toMap(),
       );
 }
 

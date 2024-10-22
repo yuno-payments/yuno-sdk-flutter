@@ -4,26 +4,45 @@ import 'package:yuno_sdk_core/lib.dart';
 class YunoState {
   const YunoState({
     required this.token,
-    this.status,
+    this.paymentStatus,
+    this.enrollmentStatus,
   });
 
   factory YunoState._empty() => const YunoState(
         token: '',
-        status: null,
+        paymentStatus: null,
+        enrollmentStatus: null,
       );
 
   final String token;
-  final PaymentStatus? status;
+  final YunoStatus? paymentStatus;
+  final YunoStatus? enrollmentStatus;
 }
 
 final class YunoNotifier extends ValueNotifier<YunoState> {
   YunoNotifier() : super(YunoState._empty());
 
   void add(String token) {
-    value = YunoState(token: token);
+    value = YunoState(
+      token: token,
+      paymentStatus: value.paymentStatus,
+      enrollmentStatus: value.enrollmentStatus,
+    );
   }
 
-  void addStatus(PaymentStatus status) {
-    value = YunoState(token: value.token, status: status);
+  void addStatus(YunoStatus status) {
+    value = YunoState(
+      token: value.token,
+      paymentStatus: status,
+      enrollmentStatus: value.enrollmentStatus,
+    );
+  }
+
+  void addEnrollmentStatus(YunoStatus status) {
+    value = YunoState(
+      token: value.token,
+      enrollmentStatus: status,
+      paymentStatus: value.paymentStatus,
+    );
   }
 }

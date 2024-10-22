@@ -1,4 +1,4 @@
-enum PaymentStatus {
+enum YunoStatus {
   reject,
   succeded,
   fail,

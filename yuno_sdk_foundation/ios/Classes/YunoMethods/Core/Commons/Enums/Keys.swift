@@ -14,8 +14,10 @@ enum Keys: String {
     case ott
     case onError
     case status
+    case enrollmentStatus
     case hideLoader
     case receiveDeeplink
     case showPaymentMethods
     case startPayment
+    case enrollmentPayment
 }
