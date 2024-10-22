@@ -1,14 +1,13 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
-import 'package:example/features/configuration/presenter/widgets/execute_payment_cards.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
-import 'package:flutter/material.dart';
 
 class SetUpScreen extends StatelessWidget {
   const SetUpScreen({super.key});
@@ -98,16 +97,12 @@ class __HomeLayoutState extends State<_HomeLayout> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ExecuteEnrollments(),
-                        SizedBox(
-                          height: 10,
-                        ),
                         ExecutePayments(),
                       ],
                     ),
@@ -122,17 +117,20 @@ class __HomeLayoutState extends State<_HomeLayout> {
   }
 }
 
-class ExecuteEnrollments extends ConsumerStatefulWidget {
-  const ExecuteEnrollments({super.key});
+class ExecutePayments extends ConsumerStatefulWidget {
+  const ExecutePayments({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ExecuteEnrollmentsState();
+      _ExecutePaymentsState();
 }
 
-class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
-  final _enrollmentPayment = TextEditingController();
+class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
+  final _checkoutSession = TextEditingController();
+  final _vaultedToken = TextEditingController();
+  final _paymentType = TextEditingController(text: 'CARD');
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -143,24 +141,23 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Enrollment',
+                'PAYMENT',
                 style: TextStyle(
                   color: Color.fromARGB(255, 126, 126, 126),
-                  fontSize: 15,
+                  fontSize: 12,
                 ),
               ),
             ),
             AnimatedOpacity(
-              opacity: !ref.watch(customerFormNotifier) ? 0 : 1,
+              opacity: !ref.watch(formNotifier) ? 0 : 1,
               duration: Durations.short3,
               child: ActionChip(
                 label: const Text('Clean'),
                 onPressed: () {
-                  ref.read(customerSessionNotifier.notifier).resetSession();
-                  ref
-                      .read(customerFormNotifier.notifier)
-                      .changeValue(value: false);
-                  _enrollmentPayment.clear();
+                  ref.read(checkoutSessionNotifier.notifier).resetSession();
+                  ref.read(formNotifier.notifier).changeValue(value: false);
+                  _checkoutSession.clear();
+                  _vaultedToken.clear();
                 },
               ),
             ),
@@ -181,30 +178,63 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
                 child: Column(
                   children: [
                     YunoInput(
-                      title: 'Customer Session',
-                      controller: _enrollmentPayment,
+                      title: 'Checkout session',
                       onPaste: () => ref
-                          .read(customerFormNotifier.notifier)
+                          .read(formNotifier.notifier)
                           .changeValue(
                               value:
                                   _formKey.currentState?.validate() ?? false),
+                      controller: _checkoutSession,
                       onChange: (p0) => ref
-                          .read(customerFormNotifier.notifier)
+                          .read(formNotifier.notifier)
                           .changeValue(
                               value:
                                   _formKey.currentState?.validate() ?? false),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a customer session';
+                          return 'Please enter a checkout session';
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    YunoInput(
+                      title: 'Payment type',
+                      onPaste: () => ref
+                          .read(formNotifier.notifier)
+                          .changeValue(
+                              value:
+                                  _formKey.currentState?.validate() ?? false),
+                      onChange: (p0) => ref
+                          .read(formNotifier.notifier)
+                          .changeValue(
+                              value:
+                                  _formKey.currentState?.validate() ?? false),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter an payment type';
+                        }
+                        return null;
+                      },
+                      controller: _paymentType,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    YunoInput(
+                      title: 'Vaulted token',
+                      onPaste: () {},
+                      controller: _vaultedToken,
+                      onChange: (p0) {},
+                      validator: (p0) => null,
                     ),
                     const Divider(),
                     ListTile(
                       minVerticalPadding: 3,
                       minTileHeight: 2,
-                      title: const Text('Execute payment Enrollment'),
+                      title: const Text('Execute payment LITE'),
                       onTap: () async {
                         if (_formKey.currentState?.validate() ?? false) {
                           ref.invalidate(yunoProvider);
@@ -336,15 +366,14 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
   }
 }
 
-final customerSessionNotifier =
-    NotifierProvider.autoDispose<CustomerSessionNotifier, String>(
-        CustomerSessionNotifier.new);
+final checkoutSessionNotifier =
+    NotifierProvider.autoDispose<CheckoutSessionNotifier, String>(
+        CheckoutSessionNotifier.new);
 
-final customerFormNotifier =
-    NotifierProvider.autoDispose<CustomerFormNotifier, bool>(
-        CustomerFormNotifier.new);
+final formNotifier = NotifierProvider.autoDispose<FormValidatorNotifier, bool>(
+    FormValidatorNotifier.new);
 
-class CustomerSessionNotifier extends AutoDisposeNotifier<String> {
+class CheckoutSessionNotifier extends AutoDisposeNotifier<String> {
   @override
   String build() => '';
 
@@ -353,7 +382,7 @@ class CustomerSessionNotifier extends AutoDisposeNotifier<String> {
   void resetSession() => state = '';
 }
 
-class CustomerFormNotifier extends AutoDisposeNotifier<bool> {
+class FormValidatorNotifier extends AutoDisposeNotifier<bool> {
   @override
   bool build() => false;
 
