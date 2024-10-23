@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:yuno/yuno.dart';
 
+enum YunoSnackbarOptions {
+  enrollment,
+  payment,
+}
+
 class YunoSnackBar {
   static void showSnackBar(
-      context, YunoStatus? status, VoidCallback doSomething) {
+    context,
+    YunoSnackbarOptions option,
+    YunoStatus? status,
+    VoidCallback doSomething,
+  ) {
     switch (status) {
       case null:
         return;
       case YunoStatus.reject:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Payment rejected ❌'),
+          SnackBar(
+            content: Text('${option.name} rejected ❌'),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -18,11 +27,11 @@ class YunoSnackBar {
         return;
       case YunoStatus.succeded:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Center(
                 child: Text(
-              'Success ✅',
-              style: TextStyle(
+              '${option.name} Success ✅',
+              style: const TextStyle(
                 color: Colors.black,
               ),
             )),
@@ -60,8 +69,8 @@ class YunoSnackBar {
         return;
       case YunoStatus.cancelByUser:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Transaction had been canceled 😢'),
+          SnackBar(
+            content: Text('${option.name} had been canceled 😢'),
             backgroundColor: Colors.red,
           ),
         );

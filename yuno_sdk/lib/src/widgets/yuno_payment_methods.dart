@@ -11,10 +11,10 @@ import 'package:yuno/src/internals.dart';
 /// Signature for the `listener` function which takes the `BuildContext` along
 /// with the `isSelected` state and is responsible for executing in response to
 /// state changes.
-typedef YunoPaymentWidgetListener = void Function(
+typedef YunoPaymentMethodSelectedWidgetListener = void Function(
     BuildContext context, bool isSelected);
 
-/// A widget that displays payment methods using a native iOS view.
+/// A Flutter widget that displays payment methods using a native iOS and Android views.
 ///
 /// This widget integrates with the Yuno SDK to show payment methods in a Flutter app.
 /// It dynamically adjusts its size based on the content and available width.
@@ -80,7 +80,7 @@ class YunoPaymentMethods extends StatefulWidget {
   ///   }
   /// }
   /// ```
-  final YunoPaymentWidgetListener listener;
+  final YunoPaymentMethodSelectedWidgetListener listener;
 
   /// Type of platformview used for rendering on Android.
   ///
@@ -101,7 +101,7 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
 
   /// Listener method called when the payment method state changes.
   ///
-  /// This method invokes the [YunoPaymentWidgetListener] provided in the widget
+  /// This method invokes the [YunoPaymentMethodSelectedWidgetListener] provided in the widget
   /// constructor, passing the current context and selection state.
   /// It allows the parent widget to react to changes in the payment method selection.
   void _listener() {
@@ -196,7 +196,8 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
   ///
   /// This controller handles updates to the payment method display,
   /// including changes in size and content.
-  YunoPaymentNotifier get _controller => YunoPaymentMethodPlatform.controller;
+  YunoPaymentMethodSelectNotifier get _controller =>
+      YunoPaymentMethodPlatform.controller;
 
   /// The controller managing the payment method selection state.
   ///

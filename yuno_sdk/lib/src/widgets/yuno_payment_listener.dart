@@ -1,73 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:yuno/src/internals.dart';
-part '../channels/yuno_controller.dart';
 
 /// Signature for the `listener` function which takes the `BuildContext` along
 /// with the `state` and is responsible for executing in response to
 /// `state` changes.
-typedef YunoWidgetListener = void Function(
-    BuildContext context, YunoState state);
+typedef YunoPaymentWidgetListener = void Function(
+    BuildContext context, YunoPaymentState state);
 
-/// {@template yuno_listener_YunoListener}
-/// A widget that listens for a token change and provides a child widget.
+/// {@template yuno_listener_YunoPaymentListener}
+/// A widget that listens for a payment state change and provides a child widget.
 ///
-/// The `YunoListener` widget is a `StatefulWidget` that takes a child widget
+/// The `YunoPaymentListener`  is a Flutter Widget that takes a child widget
 /// and a callback function `listener` as required parameters. The widget
 /// itself does not perform any actions but can be extended or used as a
-/// placeholder where a token listening mechanism is needed.
+/// placeholder where a state listening mechanism is needed.
 ///
 /// This widget can be useful in scenarios where you need to trigger certain
 /// actions or updates in the UI when a specific state changes.
 ///
 /// ```dart
-/// YunoListener(
+/// YunoPaymentListener(
 ///   listener: (state) {
 ///     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
 ///     // - [token]: One Time Token
 ///     // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
-///     // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
 ///   },
 ///   child: SomeWidget(),
 /// )
 /// ```
 ///
-/// The `YunoListener` widget essentially wraps its `child` and can be
+/// The `YunoPaymentListener` widget essentially wraps its `child` and can be
 /// extended to include additional logic for token handling in the future.
 ///
 /// - [child]: The widget that will be rendered as a descendant of
-///   `YunoListener`.
+///   `YunoPaymentListener`.
 /// - [listener]: The callback function that listens to state changes.
 /// {@endtemplate}
-class YunoListener extends StatefulWidget {
-  /// Creates a `YunoListener` widget.
+class YunoPaymentListener extends StatefulWidget {
+  /// Creates a `YunoPaymentListener` widget.
   ///
   /// The [child] and [listenToken] parameters are required.
-  /// {@macro yuno_listener_YunoListener}
-  const YunoListener({
+  /// {@macro yuno_listener_YunoPaymentListener}
+  const YunoPaymentListener({
     super.key,
     required this.listener,
     required this.child,
   });
 
-  /// The widget that will be displayed as the child of this `YunoListener`.
+  /// The widget that will be displayed as the child of this `YunoPaymentListener`.
   final Widget child;
 
   /// The callback function that listens for token changes.
-  final YunoWidgetListener listener;
+  final YunoPaymentWidgetListener listener;
 
   @override
-  State<YunoListener> createState() => _YunoListenerState();
+  State<YunoPaymentListener> createState() => _YunoPaymentListenerState();
 }
 
-class _YunoListenerState extends State<YunoListener> {
+class _YunoPaymentListenerState extends State<YunoPaymentListener> {
   @override
   void initState() {
     super.initState();
-    _YunoController.instance.controller.addListener(_listener);
+    _controller.addListener(_listener);
   }
 
   void _listener() {
-    widget.listener(context, _YunoController.instance.controller.value);
+    widget.listener(context, _controller.value);
   }
 
   @override
@@ -79,7 +77,9 @@ class _YunoListenerState extends State<YunoListener> {
 
   @override
   void dispose() {
-    _YunoController.instance.controller.removeListener(_listener);
+    _controller.removeListener(_listener);
     super.dispose();
   }
+
+  YunoPaymentNotifier get _controller => YunoPlatform.instance.controller;
 }

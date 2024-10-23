@@ -63,5 +63,6 @@ abstract interface class YunoPlatform extends PlatformInterface {
     required EnrollmentArguments arguments,
   });
 
-  YunoNotifier get controller;
+  YunoPaymentNotifier get controller;
+  YunoEnrollmentNotifier get enrollmentController;
 }

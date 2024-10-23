@@ -96,10 +96,10 @@ class MyApp: Application()
 }
 ```
 - Open your `AndroidManifest.xml` and find the `application` tag. In it, add an `android:name` attribute, and set the value to your class' name, prefixed by a dot (.).
-    ```xml
-    <application
-      android:name=".MyApp" >
-    ```
+```xml
+<application
+  android:name=".MyApp" >
+```
 - Now initialize the Yuno SDK inside the `onCreate()` of custom application class according to the following:
 ```kotlin
 import android.app.Application
@@ -114,12 +114,7 @@ class MyApp : Application() {
   }
 }
 ```
-
-
-
-
 ## Usage
-
 ### Examples
 Here are small examples that show you how to use the API.
 
@@ -140,33 +135,62 @@ await Yuno.init(
 );
 ```
 
-## Yuno Dart API
 
-The library offers several methods to handle Yuno related actions:
+## Yuno Widgets
 
+### Listeners
+**YunotListeners** are Flutter widgets that take a child widget.
+And a callback function `listener` as required parameters. The widgets
+itself does not perform any actions but can be extended or used as a
+placeholder where a state listening mechanism is needed.
+This widget can be useful in scenarios where you need to trigger certain actions or updates in the UI when a specific state changes.
+
+### YunoPaymentListener
 ```dart
-Future<void> startPayment(...);
-Future<void> startPaymentLite(...);
-Future<void> continuePayment(...);
-Future<void> hideLoader(...);
-//Avialable only for IOS devices
-Future<void> receiveDeeplink(...);
+YunoPaymentListener(
+  listener: (state) {
+    // Handle [state] it is YunoState [String token] && [PaymentStatus status]
+    // - [token]: One Time Token
+    // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+  },
+  child: SomeWidget(),
+)
 ```
-## Widgets
 
-### YunoListener
- ```dart
- YunoListener(
-   listener: (state) {
-     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
-     // - [token]: One Time Token
-     // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
-     // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
-   },
-   child: SomeWidget(),
- )
- ```
+### YunoEnrollmentListener
+```dart
+YunoEnrollmentListener(
+  listener: (state) {
+    // Handle [state] it is YunoEnrollmentState
+    // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+  },
+  child: SomeWidget(),
+)
+```
+### YunoMultiListener
+```dart
+YunoMultiListener(
+  enrollmentListener: (state) {
+    // Handle [state] it is YunoEnrollmentState
+    // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+  },
+  paymentListener: (state) {
+    // Handle [state] it is YunoPaymentState [String token] && [PaymentStatus status]
+    // - [token]: One Time Token
+    // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+  }
+  child: SomeWidget(),
+)
+```
 ### YunoPaymentMethods
+**YunoPaymentMethods** 
+is a Flutter widget that displays payment methods using a native iOS and Android views.
+This widget integrates with the Yuno SDK to show payment methods in a Flutter app.
+It dynamically adjusts its size based on the content and available width.
+The widget provides a listener to notify about selection changes, allowing
+the parent widget to react to user interactions with the payment methods.
+
+***The following widget works only with Yuno's full SDK version.***
 ```dart
 YunoPaymentMethods(
   config: PaymentMethodConf(
@@ -182,3 +206,65 @@ YunoPaymentMethods(
   },
 )
 ```
+
+## Yuno Dart API
+The library offers several methods to handle Yuno related actions:
+
+```dart
+Future<void> startPayment(...);
+Future<void> startPaymentLite(...);
+Future<void> enrollmentPayment(...)
+Future<void> continuePayment(...);
+Future<void> hideLoader(...);
+//Avialable only for IOS devices
+Future<void> receiveDeeplink(...);
+```
+
+## Sugar Syntax
+```dart
+class Sample extends StatelessWidget {
+  const Sample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    context.startPaymentLite(...)
+    context.startPayment(...)
+    context.enrollmentPayment(...)
+    context.continuePayment(...)
+    context.receiveDeeplink(...)
+    context.hideLoader(...)
+  }
+}
+```
+## Or Use
+```dart
+Yuno.startPaymentLite(...)
+Yuno.startPayment(...)
+Yuno.enrollmentPayment(...)
+Yuno.continuePayment(...)
+Yuno.receiveDeeplink(...)
+Yuno.hideLoader(...)
+```
+
+
+## Contributing
+
+You can help us make this project better, feel free to open an new issue or a pull request.
+
+##### Setup
+
+This project uses [melos](https://github.com/invertase/melos) to manage all the packages inside this repo.
+
+- Install melos: `dart pub global activate melos`
+- Setup melos in your local folder: `melos bootstrap`
+
+##### Useful commands
+
+- Format `melos run format`
+- Analyze `melos run analyze`
+- Test `melos run unittest`
+- Pub get `melos run get`
+
+##### Publishing
+
+- Use `melos version` and `melos publish` to keep all the repositories in sync

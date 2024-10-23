@@ -1,57 +1,35 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:yuno_sdk_core/lib.dart';
 
-class YunoPaymentMethodState {
-  const YunoPaymentMethodState({
-    required this.height,
-    required this.width,
+class YunoPaymentState {
+  const YunoPaymentState({
+    required this.token,
+    this.paymentStatus,
   });
-  factory YunoPaymentMethodState._empty() => YunoPaymentMethodState(
-        height: Platform.isIOS ? 0.0 : 15.0,
-        width: 0.0,
+
+  factory YunoPaymentState._empty() => const YunoPaymentState(
+        token: '',
+        paymentStatus: null,
       );
 
-  YunoPaymentMethodState copyWith(
-      {double? height, double? width, bool? isSelected}) {
-    return YunoPaymentMethodState(
-      height: height ?? this.height,
-      width: width ?? this.width,
+  final String token;
+  final YunoStatus? paymentStatus;
+}
+
+final class YunoPaymentNotifier extends ValueNotifier<YunoPaymentState> {
+  YunoPaymentNotifier() : super(YunoPaymentState._empty());
+
+  void add(String token) {
+    value = YunoPaymentState(
+      token: token,
+      paymentStatus: value.paymentStatus,
     );
   }
 
-  final double height;
-  final double width;
-
-  @override
-  bool operator ==(covariant YunoPaymentMethodState other) {
-    if (identical(this, other)) return true;
-    return other.height == height && other.width == width;
-  }
-
-  @override
-  int get hashCode => height.hashCode ^ width.hashCode;
-}
-
-final class YunoPaymentNotifier extends ValueNotifier<YunoPaymentMethodState> {
-  YunoPaymentNotifier() : super(YunoPaymentMethodState._empty());
-
-  void updateHeight(double height) {
-    _safeUpdate(() {
-      value = value.copyWith(height: height);
-    });
-  }
-
-  void updateLastWidth(double width) {
-    _safeUpdate(() {
-      value = value.copyWith(width: width);
-    });
-  }
-
-  void _safeUpdate(VoidCallback update) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        update();
-      },
+  void addStatus(YunoStatus status) {
+    value = YunoPaymentState(
+      token: value.token,
+      paymentStatus: status,
     );
   }
 }
