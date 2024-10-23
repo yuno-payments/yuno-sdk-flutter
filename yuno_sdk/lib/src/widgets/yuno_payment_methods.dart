@@ -85,7 +85,7 @@ class YunoPaymentMethods extends StatefulWidget {
   /// Type of platformview used for rendering on Android.
   ///
   /// This is an advanced option and changing this should be tested on multiple android devices.
-  /// Defaults to [AndroidPlatformViewRenderType.expensiveAndroidView]
+  /// Defaults to [AndroidPlatformViewRenderType.androidView]
   final AndroidPlatformViewRenderType androidPlatformViewRenderType;
 
   @override

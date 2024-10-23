@@ -1,6 +1,6 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
@@ -127,6 +127,7 @@ class ExecutePayments extends ConsumerStatefulWidget {
 
 class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
   final _checkoutSession = TextEditingController();
+  final _vaultedToken = TextEditingController();
   final _paymentType = TextEditingController(text: 'CARD');
   final _formKey = GlobalKey<FormState>();
 
@@ -156,6 +157,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                   ref.read(checkoutSessionNotifier.notifier).resetSession();
                   ref.read(formNotifier.notifier).changeValue(value: false);
                   _checkoutSession.clear();
+                  _vaultedToken.clear();
                 },
               ),
             ),
@@ -221,6 +223,13 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                     const SizedBox(
                       height: 10,
                     ),
+                    YunoInput(
+                      title: 'Vaulted token',
+                      onPaste: () {},
+                      controller: _vaultedToken,
+                      onChange: (p0) {},
+                      validator: (p0) => null,
+                    ),
                     const Divider(),
                     ListTile(
                       minVerticalPadding: 3,
@@ -231,9 +240,11 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                           ref.invalidate(yunoProvider);
                           await context.startPaymentLite(
                             arguments: StartPayment(
-                              showPaymentStatus: true,
                               checkoutSession: _checkoutSession.text,
                               methodSelected: MethodSelected(
+                                vaultedToken: _vaultedToken.text.isEmpty
+                                    ? null
+                                    : _vaultedToken.text,
                                 paymentMethodType: _paymentType.text,
                               ),
                             ),
@@ -245,29 +256,27 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                       ),
                     ),
                     const Divider(),
-                    kDebugMode
-                        ? ListTile(
-                            minVerticalPadding: 3,
-                            minTileHeight: 2,
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FullSdkScreen(
-                                      checkoutSession: _checkoutSession.text,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            title: const Text('Execute payment FULL'),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios_outlined,
+                    ListTile(
+                      minVerticalPadding: 3,
+                      minTileHeight: 2,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FullSdkScreen(
+                                checkoutSession: _checkoutSession.text,
+                              ),
                             ),
-                          )
-                        : const SizedBox.shrink(),
-                    kDebugMode ? const Divider() : const SizedBox.shrink(),
+                          );
+                        }
+                      },
+                      title: const Text('Execute payment FULL'),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios_outlined,
+                      ),
+                    ),
+                    const Divider(),
                     Consumer(
                       builder: (context, ref, child) {
                         final controller = ref.watch(checkoutSessionNotifier);
@@ -309,8 +318,13 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                                     ],
                                   ),
                                   ElevatedButton(
-                                    onPressed: () async =>
-                                        context.continuePayment(),
+                                    onPressed: () async {
+                                      var showPaymentStatus = await ref.read(
+                                          showPaymentStatusProvider.future);
+
+                                      await Yuno.continuePayment(
+                                          showPaymentStatus: showPaymentStatus);
+                                    },
                                     style: ButtonStyle(
                                       elevation:
                                           const WidgetStatePropertyAll(0),

@@ -26,6 +26,7 @@ class YunoSdkAndroidPlugin :
     MethodCallHandler,
     ActivityAware,
     DefaultLifecycleObserver {
+    private var initializationError: String? = null
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
     private lateinit var activity: FlutterFragmentActivity
@@ -52,6 +53,17 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
+        if (initializationError != null ) {
+            result.error(
+                "yuno initialization failed",
+                """The plugin failed to initialize:
+${initializationError ?: "Yuno SDK did not initialize."}
+Please make sure you follow all the steps detailed inside the README: ""
+If you continue to have trouble, follow this discussion to get some support """,
+                null
+            )
+            return
+        }
         when (call.method) {
             Key.init -> {
                 val init = InitHandler()
@@ -94,11 +106,21 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-            activity = binding.activity as FlutterFragmentActivity
-            activity.lifecycle.addObserver(this)
-        flutterPluginBindingMajor
-            .platformViewRegistry
-            .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
+        when {
+            binding.activity !is FlutterFragmentActivity -> {
+                initializationError =
+                    "Your Main Activity ${binding.activity.javaClass} is not a subclass FlutterFragmentActivity."
+            }
+
+            else -> {
+                activity = binding.activity as FlutterFragmentActivity
+                activity.lifecycle.addObserver(this)
+                flutterPluginBindingMajor
+                    .platformViewRegistry
+                    .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
+            }
+        }
+
     }
 
     override fun onDetachedFromActivity() {

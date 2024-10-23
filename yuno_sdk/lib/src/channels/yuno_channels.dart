@@ -9,7 +9,7 @@ import '../internals.dart';
 /// Example usage:
 ///{@tool snippet}
 /// ```dart
-/// final yuno = await Yuno.init(
+///  await Yuno.init(
 ///   apiKey: 'your_api_key_here',
 ///   countryCode: 'your_country_code',
 ///   yunoConfig: YunoConfig(
@@ -45,7 +45,7 @@ abstract interface class Yuno {
   ///
   /// ### Example usage:
   /// ```dart
-  /// final yuno = await Yuno.init(
+  ///  await Yuno.init(
   ///   apiKey: 'your_api_key_here',
   ///   countryCode: 'your_country_code',
   ///   yunoConfig: YunoConfig(

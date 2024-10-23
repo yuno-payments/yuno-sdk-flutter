@@ -73,7 +73,8 @@ extension YunoReader on BuildContext {
   /// ```dart
   /// context.continuePayment();
   /// ```
-  Future<void> continuePayment() async => await Yuno.continuePayment();
+  Future<void> continuePayment({bool showPaymentStatus = true}) async =>
+      await Yuno.continuePayment(showPaymentStatus: showPaymentStatus);
 
   /// Receives a deep link to continue a payment process using the Yuno SDK.
   ///

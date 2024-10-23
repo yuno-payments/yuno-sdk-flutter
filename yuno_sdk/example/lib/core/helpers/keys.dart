@@ -20,4 +20,5 @@ enum Keys {
   disableButtonBackgrounColor,
   disableButtonTitleBackgrounColor,
   checkboxColor,
+  showPaymentStatus,
 }

@@ -10,16 +10,17 @@ class ShowBottomDialog {
   static Future show(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            height: 650,
+            height: 720,
             color: Colors.white,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(25.0),
                   child: Text(
                     'Add API Key',
@@ -30,11 +31,17 @@ class ShowBottomDialog {
                     textAlign: TextAlign.left,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                RegisterForm(),
-                Spacer(),
+                Expanded(
+                  child: ListView(
+                    children: const [
+                      RegisterForm(),
+                    ],
+                  ),
+                ),
+                const Spacer(),
               ],
             ),
           ),
