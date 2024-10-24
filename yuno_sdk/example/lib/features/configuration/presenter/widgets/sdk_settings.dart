@@ -13,7 +13,6 @@ class SDKSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dynamicSDKController = ref.watch(dynamicSDKNotifier);
     final keepLoaderController = ref.watch(keepLoaderNotifier);
     final langController = ref.watch(langNotifier);
     final showPaymentStatus = ref.watch(showPaymentStatusProvider);
@@ -61,23 +60,6 @@ class SDKSettings extends ConsumerWidget {
                 const Divider(
                   thickness: 0.5,
                   height: 0,
-                ),
-                ListTile(
-                  minVerticalPadding: 10,
-                  minTileHeight: 10,
-                  title: const Text('Dynamic SDK'),
-                  leading: const Icon(Icons.dynamic_feed_rounded),
-                  trailing: Platform.isIOS
-                      ? CupertinoSwitch(
-                          value: dynamicSDKController.value ?? false,
-                          onChanged: (value) async =>
-                              onToggleDynamicSDK(value: value, ref: ref),
-                        )
-                      : Switch(
-                          value: dynamicSDKController.value ?? false,
-                          onChanged: (value) async =>
-                              onToggleDynamicSDK(value: value, ref: ref),
-                        ),
                 ),
                 const Divider(
                   thickness: 0.5,
