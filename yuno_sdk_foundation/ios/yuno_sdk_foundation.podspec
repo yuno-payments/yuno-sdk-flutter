@@ -4,18 +4,18 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'yuno_sdk_foundation'
-  s.version          = '0.0.1'
+  s.version          = '1.0.0'
   s.summary          = 'A Yuno project'
   s.description      = <<-DESC
 A new Flutter plugin project.
                        DESC
   s.homepage         = 'https://www.y.uno/'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Yuno' => 'email@example.com' }
+  s.author           = { 'Yuno' => 'support@yunopayments.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'YunoSDK', '1.15.0'
+  s.dependency 'YunoSDK', '1.18.0'
   s.platform = :ios, '14.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES'}
   s.swift_version = '5.0'

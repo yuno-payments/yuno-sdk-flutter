@@ -2,3 +2,32 @@
  -keep class com.yuno.** { *; }
  -keep class com.yuno.payments.network.manager.** { *; }
  -keep class com.yuno.payments.network.manager.EnvMode { *; }
+ -keep class com.yuno.payments.** { *; }
+ -keep class com.yuno.components.** { *; }
+ -keep class com.yuno.payments.network.services.payments.models.** { *; }
+
+ -keepnames class * implements java.io.Serializable
+ -keepclassmembers class * implements java.io.Serializable {
+     static final long serialVersionUID;
+     private static final java.io.ObjectStreamField[] serialPersistentFields;
+     !static !transient <fields>;
+     private void writeObject(java.io.ObjectOutputStream);
+     private void readObject(java.io.ObjectInputStream);
+     java.lang.Object writeReplace();
+     java.lang.Object readResolve();
+ }
+ -keep,allowobfuscation interface * {
+     @retrofit2.http.* <methods>;
+ }
+  -keep class com.squareup.retrofit2.** { *; }
+  -keep class com.google.gson.** { *; }
+ -keep class retrofit2.** { *; }
+ -keep class okhttp3.** { *; }
+ -keep interface okhttp3.** { *; }
+ -dontwarn retrofit2.**
+ -dontwarn okhttp3.**
+ -dontwarn okio.**
+
+ -keepattributes Signature
+ -keepattributes *Annotation*
+ -dontwarn com.google.gson.**
