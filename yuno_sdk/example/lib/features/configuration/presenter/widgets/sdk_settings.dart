@@ -13,7 +13,6 @@ class SDKSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dynamicSDKController = ref.watch(dynamicSDKNotifier);
     final keepLoaderController = ref.watch(keepLoaderNotifier);
     final langController = ref.watch(langNotifier);
     final showPaymentStatus = ref.watch(showPaymentStatusProvider);

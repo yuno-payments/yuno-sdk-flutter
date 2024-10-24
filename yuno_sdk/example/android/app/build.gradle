@@ -67,6 +67,13 @@ android {
             minifyEnabled true
 
         }
+        profile {
+            initWith debug
+            matchingFallbacks = ['release']
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+        }
     }
 }
 
