@@ -23,7 +23,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
         cardFlow: cardFlow,
         keepLoader: keepLoader,
         saveCardEnable: saveCard,
-        isDynamicViewEnable: isDynamic,
         cardFormDeployed: cardForm,
       ),
       iosConfig: IosConfig(
