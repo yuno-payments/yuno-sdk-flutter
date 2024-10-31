@@ -1,4 +1,4 @@
-## 1.0.0 - Flutter
+## 0.1.0 - Flutter
 - feat: Yuno initialization API
 - feat: Yuno start checkout API
 - feat: Yuno start payment lite API

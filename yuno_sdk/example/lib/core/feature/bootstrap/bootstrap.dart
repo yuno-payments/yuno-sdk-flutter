@@ -10,7 +10,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
   final cardFlow = await ref.watch(cardFlowNotifier.future);
   final appearance = await ref.watch(appearanceNotifier.future);
   final saveCard = await ref.watch(saveCardNotifier.future);
-  final isDynamic = await ref.watch(dynamicSDKNotifier.future);
   final keepLoader = await ref.watch(keepLoaderNotifier.future);
   final cardForm = await ref.watch(cardFormDeployedNotifier.future);
 

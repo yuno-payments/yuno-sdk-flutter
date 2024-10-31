@@ -1,4 +1,4 @@
-## 1.0.0 - Android & IOS
+## 0.1.0 - Android & IOS
 - feat: Yuno initialization
 - feat: Yuno start checkout
 - feat: Yuno start payment lite
