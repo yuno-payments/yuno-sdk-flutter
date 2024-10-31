@@ -8,13 +8,13 @@ export 'package:yuno_sdk_platform_interface/lib.dart'
     hide YunoPaymentSelectNotifier
     hide YunoPaymentMethodState
     hide YunoPaymentSelectState
-    hide YunoPaymentNotifier
+    hide YunoPaymentMethodSelectNotifier
     hide YunoPlatform
-    hide YunoState
+    hide YunoPaymentState
     hide ParserIosConfig
     hide ParserAppearance
     hide YunoMethodChannelFactory
     hide YunoPaymentMethodChannelFactory
-    hide YunoNotifier
+    hide YunoPaymentNotifier
     hide PaymentMethodsParser
     hide Parser;

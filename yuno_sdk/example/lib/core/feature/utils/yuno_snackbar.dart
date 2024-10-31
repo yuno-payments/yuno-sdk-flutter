@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:yuno/yuno.dart';
 
+enum YunoSnackbarOptions {
+  enrollment,
+  payment,
+}
+
 class YunoSnackBar {
   static void showSnackBar(
-      context, PaymentStatus? status, VoidCallback doSomething) {
+    context,
+    YunoSnackbarOptions option,
+    YunoStatus? status,
+    VoidCallback doSomething,
+  ) {
     switch (status) {
       case null:
         return;
-      case PaymentStatus.reject:
+      case YunoStatus.reject:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Payment rejected ❌'),
+          SnackBar(
+            content: Text('${option.name} rejected ❌'),
             backgroundColor: Colors.redAccent,
           ),
         );
         doSomething();
         return;
-      case PaymentStatus.succeded:
+      case YunoStatus.succeded:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Center(
                 child: Text(
-              'Success ✅',
-              style: TextStyle(
+              '${option.name} Success ✅',
+              style: const TextStyle(
                 color: Colors.black,
               ),
             )),
@@ -31,7 +40,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.fail:
+      case YunoStatus.fail:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Something went wrong ❌'),
@@ -40,7 +49,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.processing:
+      case YunoStatus.processing:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Processing ...'),
@@ -49,7 +58,7 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.internalError:
+      case YunoStatus.internalError:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Internal error 🤔'),
@@ -58,10 +67,10 @@ class YunoSnackBar {
         );
         doSomething();
         return;
-      case PaymentStatus.cancelByUser:
+      case YunoStatus.cancelByUser:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Transaction had been canceled 😢'),
+          SnackBar(
+            content: Text('${option.name} had been canceled 😢'),
             backgroundColor: Colors.red,
           ),
         );

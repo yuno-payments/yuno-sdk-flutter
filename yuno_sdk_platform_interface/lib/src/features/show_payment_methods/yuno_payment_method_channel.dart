@@ -46,7 +46,8 @@ final class YunoPaymentMethodChannel implements YunoPaymentMethodPlatform {
     });
   }
 
-  final YunoPaymentNotifier controller = YunoPaymentMethodPlatform.controller;
+  final YunoPaymentMethodSelectNotifier controller =
+      YunoPaymentMethodPlatform.controller;
   final YunoPaymentSelectNotifier selectController =
       YunoPaymentMethodPlatform.selectController;
 }

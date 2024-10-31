@@ -10,19 +10,22 @@ import Foundation
 import YunoSDK
 
 class YunoMethods: YunoPaymentDelegate {
-    private let methodChannel: FlutterMethodChannel
+    var customerSession: String = ""
+    var countryCode: String = ""
+    var checkoutSession: String = ""
+    var language: String?
+    let methodChannel: FlutterMethodChannel
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
     var viewController: UIViewController? {
         window?.rootViewController
     }
-    var countryCode: String = ""
-    var checkoutSession: String = ""
-    var language: String?
+
     init(methodChannel: FlutterMethodChannel) {
         self.methodChannel = methodChannel
     }
+
     func yunoCreatePayment(with token: String) {
         handleOTT(token: token)
     }
