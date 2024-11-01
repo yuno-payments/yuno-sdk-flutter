@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 import 'features/start_payment/models/parsers.dart';
 import 'utils/utils.dart';
 

@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 
 abstract interface class YunoPaymentMethodPlatform extends PlatformInterface {
   /// Constructs a YunoPaymentMethodPlatform.
