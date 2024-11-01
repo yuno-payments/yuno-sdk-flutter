@@ -1,8 +1,7 @@
 name: yuno_sdk_foundation
 description: "A Yuno Project for Android"
 version: 0.1.0
-publish_to: 'none' #Remove this line if you gonna publish the project
-
+homepage: https://www.y.uno/
 
 environment:
   sdk: '>=3.4.3 <4.0.0'

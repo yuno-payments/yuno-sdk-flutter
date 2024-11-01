@@ -246,6 +246,60 @@ Yuno.receiveDeeplink(...)
 Yuno.hideLoader(...)
 ```
 
+## Using Yuno key with `--dart-define`
+
+Use `--dart-define` variables to avoid hardcoding Yuno keys. 
+
+### Pass the Yuno key with `flutter run` or `flutter build` command using `--dart-define`.
+```dart
+flutter run --dart-define="YUNO_API_KEY=apiKey"
+```
+Note: You can also use `--dart-define-from-file` which is introduced in Flutter 3.7.
+
+### Reading keys in Dart side and initialize the SDK.
+```dart
+String yunoApi = String.fromEnvironment("YUNO_API", "");
+```
+
+### Reading keys in Android native side and initialize the SDK.
+
+* Add the following code to `build.gradle`.
+```
+def dartEnvironmentVariables = []
+if (project.hasProperty('dart-defines')) {
+  dartEnvironmentVariables = project.property('dart-defines')
+      .split(',')
+      .collectEntries { entry ->
+        def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+        [(pair.first()): pair.last()]
+      }
+}
+```
+
+* Place `dartEnvironmentVariables` inside the build config
+```
+defaultConfig {
+    ...
+   
+  buildConfigField 'String', 'YUNO_API_KEY', "\"${dartEnvironmentVariables.yunoApiKey}\""
+}
+```
+
+* Read the build config fields
+```kotlin
+import android.app.Application
+import android.os.Build
+import com.yuno_flutter.yuno_sdk_android.YunoSdkAndroidPlugin
+
+class MyApp : Application() {
+  override fun onCreate() {
+    super.onCreate()
+    
+    // Add this line with your keys
+   YunoSdkAndroidPlugin.initSdk(this, BuildConfig.YUNO_API_KEY)
+  }
+}
+```
 
 ## Contributing
 

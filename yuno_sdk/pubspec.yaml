@@ -1,7 +1,7 @@
 name: yuno
 description: "A Yuno project"
 version: 0.1.0
-publish_to: none
+homepage: https://www.y.uno/
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -10,16 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  yuno_sdk_core:
-    path: ../yuno_sdk_core
-  yuno_sdk_android:
-    path: ../yuno_sdk_android
-  yuno_sdk_foundation:
-   path: ../yuno_sdk_foundation
-  yuno_sdk_platform_interface:
-   path: ../yuno_sdk_platform_interface
-
-
+  yuno_sdk_core: 0.1.0
+  yuno_sdk_android: 0.1.0
+  yuno_sdk_foundation: 0.1.0
+  yuno_sdk_platform_interface: 0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -29,11 +23,7 @@ dev_dependencies:
   plugin_platform_interface: ^2.1.0
   dartdoc: ^8.0.13
 
-
-
-
 flutter:
-
   plugin:
     platforms:
       android:
