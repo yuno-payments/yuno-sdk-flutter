@@ -88,7 +88,7 @@ According to the documentation, Yuno must be initialized in the Application onCr
 - Create a custom `android.app.Application` class named `MyApp`.
 - Add an `onCreate()` override. The class should look like this:
 ```kotlin
-import android.app.Applicatio
+import android.app.Application
 class MyApp: Application() 
     override fun onCreate() {
         super.onCreate()
@@ -283,6 +283,13 @@ defaultConfig {
    
   buildConfigField 'String', 'YUNO_API_KEY', "\"${dartEnvironmentVariables.yunoApiKey}\""
 }
+```
+
+* Make sure that add the following code inside the build config
+```
+    buildFeatures {
+        buildConfig true
+    }
 ```
 
 * Read the build config fields
