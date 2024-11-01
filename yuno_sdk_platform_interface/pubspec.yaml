@@ -1,5 +1,5 @@
 name: yuno_sdk_platform_interface
-description: "A new Flutter plugin project."
+description: "A Yuno packages to handle the platform interface."
 version: 0.1.0
 homepage: https://www.y.uno/
 
