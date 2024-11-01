@@ -126,7 +126,7 @@ await Yuno.init(
   countryCode: 'your_country_code', // The complete list of country_codes is available on https://docs.y.uno/docs/country-coverage-yuno-sdk
   yunoConfig: YunoConfig(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
-    cardflow: CARDFLOW.twoStep, // default cardflow
+    cardflow: CardFlow.twoStep, // default cardflow
     saveCardEnable: true, // default saveCardEnable
     keepLoader: true,   // default saveCardEnable 
     isDynamicViewEnable: true, // default isDynamicViewEnable
