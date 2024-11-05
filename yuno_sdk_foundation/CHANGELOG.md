@@ -1,4 +1,4 @@
-## 1.0.0 - Foundation
+## 0.1.0 - Foundation
 - feat: Yuno initialization
 - feat: Yuno start checkout
 - feat: Yuno start payment lite

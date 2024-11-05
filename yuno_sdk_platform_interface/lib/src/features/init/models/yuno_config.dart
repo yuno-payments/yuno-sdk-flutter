@@ -1,5 +1,5 @@
 import 'package:yuno_sdk_core/lib.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 
 class YunoConfig {
   const YunoConfig({

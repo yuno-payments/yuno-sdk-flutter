@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import '../lib.dart';
+import '../yuno_sdk_platform_interface.dart';
 
 /// {@template commons_YunoPlatform}
 /// ## YunoPlatform

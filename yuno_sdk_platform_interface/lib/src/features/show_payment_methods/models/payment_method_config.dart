@@ -1,4 +1,4 @@
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 
 class PaymentMethodConf {
   const PaymentMethodConf({

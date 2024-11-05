@@ -88,7 +88,7 @@ According to the documentation, Yuno must be initialized in the Application onCr
 - Create a custom `android.app.Application` class named `MyApp`.
 - Add an `onCreate()` override. The class should look like this:
 ```kotlin
-import android.app.Applicatio
+import android.app.Application
 class MyApp: Application() 
     override fun onCreate() {
         super.onCreate()
@@ -126,7 +126,7 @@ await Yuno.init(
   countryCode: 'your_country_code', // The complete list of country_codes is available on https://docs.y.uno/docs/country-coverage-yuno-sdk
   yunoConfig: YunoConfig(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
-    cardflow: CARDFLOW.twoStep, // default cardflow
+    cardflow: CardFlow.twoStep, // default cardflow
     saveCardEnable: true, // default saveCardEnable
     keepLoader: true,   // default saveCardEnable 
     isDynamicViewEnable: true, // default isDynamicViewEnable
@@ -246,6 +246,67 @@ Yuno.receiveDeeplink(...)
 Yuno.hideLoader(...)
 ```
 
+## Using Yuno key with `--dart-define`
+
+Use `--dart-define` variables to avoid hardcoding Yuno keys. 
+
+### Pass the Yuno key with `flutter run` or `flutter build` command using `--dart-define`.
+```dart
+flutter run --dart-define="YUNO_API_KEY=apiKey"
+```
+Note: You can also use `--dart-define-from-file` which is introduced in Flutter 3.7.
+
+### Reading keys in Dart side and initialize the SDK.
+```dart
+String yunoApi = String.fromEnvironment("YUNO_API", "");
+```
+
+### Reading keys in Android native side and initialize the SDK.
+
+* Add the following code to `build.gradle`.
+```
+def dartEnvironmentVariables = []
+if (project.hasProperty('dart-defines')) {
+  dartEnvironmentVariables = project.property('dart-defines')
+      .split(',')
+      .collectEntries { entry ->
+        def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+        [(pair.first()): pair.last()]
+      }
+}
+```
+
+* Place `dartEnvironmentVariables` inside the build config
+```
+defaultConfig {
+    ...
+   
+  buildConfigField 'String', 'YUNO_API_KEY', "\"${dartEnvironmentVariables.yunoApiKey}\""
+}
+```
+
+* Make sure that add the following code inside the build config
+```
+    buildFeatures {
+        buildConfig true
+    }
+```
+
+* Read the build config fields
+```kotlin
+import android.app.Application
+import android.os.Build
+import com.yuno_flutter.yuno_sdk_android.YunoSdkAndroidPlugin
+
+class MyApp : Application() {
+  override fun onCreate() {
+    super.onCreate()
+    
+    // Add this line with your keys
+   YunoSdkAndroidPlugin.initSdk(this, BuildConfig.YUNO_API_KEY)
+  }
+}
+```
 
 ## Contributing
 
