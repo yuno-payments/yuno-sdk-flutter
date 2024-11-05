@@ -1,0 +1,20 @@
+name: yuno_sdk_platform_interface
+description: "A Yuno packages to handle the platform interface."
+version: 0.1.0
+homepage: https://www.y.uno/
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+  yuno_sdk_core: ^0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  mocktail: ^1.0.4

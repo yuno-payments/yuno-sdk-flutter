@@ -1,0 +1,10 @@
+name: yuno
+command:
+  bootstrap:
+    dependencyOverridePaths:
+      - ./yuno_sdk
+
+packages:
+  - ./
+ignore:
+  - examples

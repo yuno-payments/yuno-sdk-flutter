@@ -1,0 +1,3 @@
+class MockYunoSdkAndroidPlatform {}
+
+void main() {}

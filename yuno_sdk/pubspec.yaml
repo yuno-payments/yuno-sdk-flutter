@@ -1,0 +1,33 @@
+name: yuno
+description: "A Yuno project"
+version: 0.1.0
+homepage: https://www.y.uno/
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  yuno_sdk_core: ^0.1.0
+  yuno_sdk_android: ^0.1.0
+  yuno_sdk_foundation: ^0.1.0
+  yuno_sdk_platform_interface: ^0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  mocktail: ^1.0.2
+  plugin_platform_interface: ^2.1.0
+  dartdoc: ^8.0.13
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: yuno_sdk_android
+      ios:
+        default_package: yuno_sdk_foundation
+
