@@ -19,7 +19,7 @@ class EnrollmentHandler {
                         return result.error(
                             "4",
                             "CustomerSession is empty",
-                            "CustomerSession must be necessary for starting to use Yuno SDK"
+                            "CustomerSession must be necessary for startEnrollment Method"
                         )
                     }
                     activity.startEnrollment(
