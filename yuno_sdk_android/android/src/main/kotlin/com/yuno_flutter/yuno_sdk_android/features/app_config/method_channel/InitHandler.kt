@@ -40,7 +40,6 @@ class InitHandler {
                     "Failure: An error occurred - ${exception.message}",
                     "Invalid arguments in json cast"
                 )
-
             }
 
         } catch (e: Exception) {
