@@ -10,7 +10,7 @@ Yuno Flutter SDK empowers you to create seamless payment experiences in your nat
 
 |             | Android | iOS   | Linux | macOS  | Web | Windows     |
 |-------------|---------|-------|-------|--------|-----|-------------|
-| **Support** | SDK 16+ | 14.0+ | None   | None  | None| None        |
+| **Support** | SDK 21+ | 14.0+ | None   | None  | None| None        |
 
 
 ## Features
@@ -231,8 +231,9 @@ class Sample extends StatelessWidget {
     context.startPayment(...)
     context.enrollmentPayment(...)
     context.continuePayment(...)
-    context.receiveDeeplink(...)
     context.hideLoader(...)
+    //Avialable only for IOS devices
+    context.receiveDeeplink(...)
   }
 }
 ```
@@ -242,8 +243,9 @@ Yuno.startPaymentLite(...)
 Yuno.startPayment(...)
 Yuno.enrollmentPayment(...)
 Yuno.continuePayment(...)
-Yuno.receiveDeeplink(...)
 Yuno.hideLoader(...)
+//Avialable only for IOS devices
+Yuno.receiveDeeplink(...)
 ```
 
 ## Using Yuno key with `--dart-define`

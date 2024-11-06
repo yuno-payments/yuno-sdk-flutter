@@ -99,6 +99,12 @@ If you continue to have trouble, follow this discussion to get some support """,
                     activity = activity
                 )
             }
+            Key.enrollmentPayment -> {
+                activity.startEnrollment(
+                    countryCode = "AR",
+                    customerSession = "00b218c2-cd57-4758-9e8c-8baaf1e8d39e",
+                    callbackEnrollmentState = this::onEnrollmentStateChange)
+            }
             else -> {
                 result.notImplemented()
             }
