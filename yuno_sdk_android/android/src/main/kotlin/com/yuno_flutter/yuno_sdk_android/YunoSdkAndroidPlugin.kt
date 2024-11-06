@@ -10,7 +10,10 @@ import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
+import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.payments.features.enrollment.startEnrollment
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
+import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
@@ -33,10 +36,11 @@ class YunoSdkAndroidPlugin :
     private  lateinit var flutterPluginBindingMajor: FlutterPlugin.FlutterPluginBinding
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-           activity.startCheckout(
+        activity.startCheckout(
                callbackOTT = this::onTokenUpdated,
                callbackPaymentState = this::onPaymentStateChange
            )
+        activity.initEnrollment(callbackEnrollmentState = this::onEnrollmentStateChange)
     }
     companion object {
         @JvmStatic
@@ -102,8 +106,9 @@ If you continue to have trouble, follow this discussion to get some support """,
             Key.enrollmentPayment -> {
                 activity.startEnrollment(
                     countryCode = "AR",
+                    showEnrollmentStatus = true,
                     customerSession = "00b218c2-cd57-4758-9e8c-8baaf1e8d39e",
-                    callbackEnrollmentState = this::onEnrollmentStateChange)
+                   )
             }
             else -> {
                 result.notImplemented()
@@ -150,6 +155,9 @@ If you continue to have trouble, follow this discussion to get some support """,
         channel.invokeMethod(Key.ott, token)
     }
 
+    fun onEnrollmentStateChange(enrollmentState: String?) {
+        channel.invokeMethod(Key.enrollmentStatus, enrollmentState?.statusEnrollmentConverter())
+    }
     fun onPaymentStateChange(paymentState: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }
