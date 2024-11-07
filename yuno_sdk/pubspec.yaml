@@ -2,7 +2,6 @@ name: yuno
 description: "A Yuno project"
 version: 0.1.0
 homepage: https://www.y.uno/
-
 environment:
   sdk: '>=3.5.0 <4.0.0'
   flutter: '>=3.3.0'
@@ -20,7 +19,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
   mocktail: ^1.0.2
-  plugin_platform_interface: ^2.1.0
+  plugin_platform_interface: ^2.1.8
   dartdoc: ^8.0.13
 
 flutter:
