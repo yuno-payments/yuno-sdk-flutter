@@ -14,7 +14,7 @@ import '../internals.dart';
 ///   countryCode: 'your_country_code',
 ///   yunoConfig: YunoConfig(
 ///     lang: YunoLanguage.en,
-///     cardflow: CARDFLOW.twoStep,
+///     cardflow: CardFlow.multiStep,
 ///     saveCardEnable: true,
 ///     keepLoader: true,
 ///     isDynamicViewEnable: true,
@@ -49,7 +49,7 @@ abstract interface class Yuno {
   ///   countryCode: 'your_country_code',
   ///   yunoConfig: YunoConfig(
   ///     lang: YunoLanguage.en,
-  ///     cardflow: CardFlow.twoStep,
+  ///     cardflow: CardFlow.multiStep,
   ///     saveCardEnable: true,
   ///     keepLoader: true,
   ///   ),
