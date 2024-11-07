@@ -67,7 +67,7 @@ This plugin requires several changes to be able to work on Android devices. Plea
 1. Use iOS version 14.0 or above
 
 ## Android Configuration
-#### build.graddle - project level 
+#### build.gradle - project level 
 ```groovy
 allprojects {
     repositories {
@@ -286,12 +286,15 @@ defaultConfig {
   buildConfigField 'String', 'YUNO_API_KEY', "\"${dartEnvironmentVariables.yunoApiKey}\""
 }
 ```
+#### build.gradle - app level 
 
 * Make sure that add the following code inside the build config
-```
+```groovy
+android {
     buildFeatures {
         buildConfig true
     }
+ }
 ```
 
 * Read the build config fields

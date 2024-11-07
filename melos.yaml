@@ -1,10 +1,10 @@
 name: yuno
-command:
-  bootstrap:
-    dependencyOverridePaths:
-      - ./yuno_sdk
 
 packages:
-  - ./
+  - ./yuno_sdk
+  - ./yuno_sdk_core
+  - ./yuno_sdk_android
+  - ./yuno_sdk_foundation
+  - ./yuno_sdk_platform_interface
 ignore:
   - examples
