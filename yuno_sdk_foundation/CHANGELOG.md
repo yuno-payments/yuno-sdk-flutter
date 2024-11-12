@@ -7,3 +7,5 @@
 - feat: Yuno payment result
 - feat: Yuno start payment
 - feat: Yuno payment methods widget
+## 0.2.0 - Foundation
+- feat: code improvements
