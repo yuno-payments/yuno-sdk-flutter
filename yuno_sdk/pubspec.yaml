@@ -1,7 +1,6 @@
 name: yuno
 description: "Yuno Flutter SDK empowers you to create seamless payment experiences in your native Android and iOS apps built with Flutter. "
 version: 0.2.0
-publish_to: none
 homepage: https://www.y.uno/
 environment:
   sdk: '>=3.5.0 <4.0.0'
