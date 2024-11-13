@@ -7,3 +7,5 @@
 - feat: Yuno payment result API
 - feat: Yuno start payment API
 - feat: Yuno payment Methods PlatformView IOS & Android
+## 0.2.0 - Flutter
+- feat: enrollment support for android
