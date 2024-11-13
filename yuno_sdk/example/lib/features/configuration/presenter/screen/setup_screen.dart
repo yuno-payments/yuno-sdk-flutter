@@ -219,7 +219,6 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
                           await context.enrollmentPayment(
                             arguments: EnrollmentArguments(
                               customerSession: _enrollmentPayment.text,
-                              showPaymentStatus: false,
                             ),
                           );
                         }

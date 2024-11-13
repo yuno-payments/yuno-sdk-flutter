@@ -10,7 +10,7 @@ Yuno Flutter SDK empowers you to create seamless payment experiences in your nat
 
 |             | Android | iOS   | Linux | macOS  | Web | Windows     |
 |-------------|---------|-------|-------|--------|-----|-------------|
-| **Support** | SDK 16+ | 14.0+ | None   | None  | None| None        |
+| **Support** | SDK 21+ | 14.0+ | None   | None  | None| None        |
 
 
 ## Features
@@ -67,7 +67,7 @@ This plugin requires several changes to be able to work on Android devices. Plea
 1. Use iOS version 14.0 or above
 
 ## Android Configuration
-#### build.graddle - project level 
+#### build.gradle - project level 
 ```groovy
 allprojects {
     repositories {
@@ -126,7 +126,7 @@ await Yuno.init(
   countryCode: 'your_country_code', // The complete list of country_codes is available on https://docs.y.uno/docs/country-coverage-yuno-sdk
   yunoConfig: YunoConfig(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
-    cardflow: CardFlow.twoStep, // default cardflow
+    cardflow: CardFlow.multiStep, // default cardflow
     saveCardEnable: true, // default saveCardEnable
     keepLoader: true,   // default saveCardEnable 
     isDynamicViewEnable: true, // default isDynamicViewEnable
@@ -231,8 +231,9 @@ class Sample extends StatelessWidget {
     context.startPayment(...)
     context.enrollmentPayment(...)
     context.continuePayment(...)
-    context.receiveDeeplink(...)
     context.hideLoader(...)
+    //Avialable only for IOS devices
+    context.receiveDeeplink(...)
   }
 }
 ```
@@ -242,8 +243,9 @@ Yuno.startPaymentLite(...)
 Yuno.startPayment(...)
 Yuno.enrollmentPayment(...)
 Yuno.continuePayment(...)
-Yuno.receiveDeeplink(...)
 Yuno.hideLoader(...)
+//Avialable only for IOS devices
+Yuno.receiveDeeplink(...)
 ```
 
 ## Using Yuno key with `--dart-define`
@@ -284,12 +286,15 @@ defaultConfig {
   buildConfigField 'String', 'YUNO_API_KEY', "\"${dartEnvironmentVariables.yunoApiKey}\""
 }
 ```
+#### build.gradle - app level 
 
 * Make sure that add the following code inside the build config
-```
+```groovy
+android {
     buildFeatures {
         buildConfig true
     }
+ }
 ```
 
 * Read the build config fields

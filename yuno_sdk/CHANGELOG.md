@@ -7,3 +7,6 @@
 - feat: Yuno payment result
 - feat: Yuno start payment
 - feat: Yuno payment methods widget
+## 0.2.0
+- feat: enrollment support for android
+- fix: documentation

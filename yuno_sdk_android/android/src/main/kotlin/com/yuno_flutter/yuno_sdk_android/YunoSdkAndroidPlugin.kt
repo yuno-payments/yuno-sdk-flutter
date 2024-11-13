@@ -10,10 +10,14 @@ import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
+import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.payments.features.enrollment.startEnrollment
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
+import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
+import com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel.EnrollmentHandler
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel.StartPaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
@@ -33,10 +37,11 @@ class YunoSdkAndroidPlugin :
     private  lateinit var flutterPluginBindingMajor: FlutterPlugin.FlutterPluginBinding
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-           activity.startCheckout(
+        activity.startCheckout(
                callbackOTT = this::onTokenUpdated,
                callbackPaymentState = this::onPaymentStateChange
            )
+        activity.initEnrollment(callbackEnrollmentState = this::onEnrollmentStateChange)
     }
     companion object {
         @JvmStatic
@@ -99,6 +104,15 @@ If you continue to have trouble, follow this discussion to get some support """,
                     activity = activity
                 )
             }
+            Key.enrollmentPayment -> {
+                val enrollment = EnrollmentHandler()
+                enrollment.handler(
+                    call = call,
+                    result = result,
+                    context = context,
+                    activity = activity
+                )
+            }
             else -> {
                 result.notImplemented()
             }
@@ -144,6 +158,9 @@ If you continue to have trouble, follow this discussion to get some support """,
         channel.invokeMethod(Key.ott, token)
     }
 
+    fun onEnrollmentStateChange(enrollmentState: String?) {
+        channel.invokeMethod(Key.enrollmentStatus, enrollmentState?.statusEnrollmentConverter())
+    }
     fun onPaymentStateChange(paymentState: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }

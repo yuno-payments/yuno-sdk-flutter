@@ -98,7 +98,21 @@ extension YunoReader on BuildContext {
   /// ```
   Future<void> hideLoader() async => await Yuno.hideLoader();
 
-  Future<void> enrollmentPayment(
-          {required EnrollmentArguments arguments}) async =>
+  /// Initiates the enrollment payment process.
+  ///
+  /// The `arguments` parameter contains the required details for initiating enrollment.
+  ///
+  /// ### Parameters:
+  /// - `arguments`: An instance of `EnrollmentArguments` containing the enrollment details.
+  ///
+  /// ### Example usage:
+  /// ```dart
+  /// await Yuno.enrollmentPayment(
+  ///   arguments: EnrollmentArguments(customerSession: 'session', showPaymentStatus: true),
+  /// );
+  /// ```
+  Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  }) async =>
       await Yuno.enrollmentPayment(arguments: arguments);
 }
