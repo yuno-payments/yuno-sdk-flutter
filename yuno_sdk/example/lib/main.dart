@@ -4,7 +4,8 @@ import 'package:yuno/yuno.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Yuno.init(apiKey: Environments.apiKey, countryCode: 'AR');
+  await Yuno.init(
+      apiKey: Environments.apiKey, countryCode: 'YOUR_COUNTRY_CODE');
   runApp(const MyApp());
 }
 
@@ -63,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // FOR FULL SDK VERSION
             YunoPaymentMethods(
               config: const PaymentMethodConf(
-                  checkoutSession: 'd408cd18-6a82-4175-a8a2-97c4f47b16e0'),
+                  checkoutSession: 'YOUR_CHECKOUT_SESSION_ID'),
               listener: (context, isSelected) {},
             ),
             TextButton(
