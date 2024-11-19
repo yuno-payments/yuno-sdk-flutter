@@ -18,8 +18,7 @@ class YunoPaymentSelectState {
   final bool isSelected;
 }
 
-final class YunoPaymentSelectNotifier
-    extends ValueNotifier<YunoPaymentSelectState> {
+class YunoPaymentSelectNotifier extends ValueNotifier<YunoPaymentSelectState> {
   YunoPaymentSelectNotifier() : super(YunoPaymentSelectState._empty());
 
   void isSelectedUpdate(bool isSelected) {
