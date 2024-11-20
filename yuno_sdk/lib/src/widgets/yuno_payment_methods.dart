@@ -157,9 +157,6 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               creationParams: widget.config
                                   .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
-                              onFocus: () {
-                                params.onFocusChanged(true);
-                              },
                             )
                               ..addOnPlatformViewCreatedListener(
                                   params.onPlatformViewCreated)
@@ -173,9 +170,6 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               creationParams: widget.config
                                   .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
-                              onFocus: () {
-                                params.onFocusChanged(true);
-                              },
                             )
                               ..addOnPlatformViewCreatedListener(
                                   params.onPlatformViewCreated)
