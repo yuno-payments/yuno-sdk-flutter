@@ -17,8 +17,6 @@ void main() {
     mockEnrollmentNotifier =
         mockPlatform.enrollmentController as MockYunoEnrollmentNotifier;
     mockPaymentNotifier = mockPlatform.controller as MockYunoPaymentNotifier;
-
-    // Replace the singleton instance with our mock
     YunoPlatform.instance = mockPlatform;
   });
 
@@ -67,18 +65,12 @@ void main() {
         ),
       ),
     );
-
-    // Simulate a payment state change
     const newPaymentState = YunoPaymentState(
       token: 'test-token-123',
       paymentStatus: YunoStatus.succeded,
     );
     mockPaymentNotifier.simulateStateChange(newPaymentState);
-
-    // Allow the widget to rebuild
     await tester.pump();
-
-    // Verify the payment listener was called with correct parameters
     expect(capturedPaymentState, equals(newPaymentState));
     expect(capturedPaymentContext, isNotNull);
   });
@@ -119,15 +111,12 @@ void main() {
         ),
       ),
     );
-
-    // Simulate multiple enrollment state changes
     const enrollmentStateChanges = [
       YunoEnrollmentState(enrollmentStatus: YunoStatus.processing),
       YunoEnrollmentState(enrollmentStatus: YunoStatus.succeded),
       YunoEnrollmentState(enrollmentStatus: YunoStatus.fail),
     ];
 
-    // Simulate multiple payment state changes
     const paymentStateChanges = [
       YunoPaymentState(
         token: 'token-1',
@@ -142,8 +131,6 @@ void main() {
         paymentStatus: YunoStatus.fail,
       ),
     ];
-
-    // Simulate state changes
     for (final state in enrollmentStateChanges) {
       mockEnrollmentNotifier.simulateStateChange(state);
       await tester.pump();
@@ -154,7 +141,6 @@ void main() {
       await tester.pump();
     }
 
-    // Verify all enrollment states were captured in order
     expect(enrollmentStates, equals(enrollmentStateChanges));
     expect(
       enrollmentStates.map((s) => s.enrollmentStatus).toList(),
@@ -163,7 +149,6 @@ void main() {
       ),
     );
 
-    // Verify all payment states were captured in order
     expect(paymentStates, equals(paymentStateChanges));
     expect(paymentStates.map((s) => s.token).toList(),
         equals(['token-1', 'token-2', 'token-3']));
@@ -193,8 +178,6 @@ void main() {
         ),
       ),
     );
-
-    // Simulate error and cancel states
     const errorEnrollmentState = YunoEnrollmentState(
       enrollmentStatus: YunoStatus.internalError,
     );
@@ -208,7 +191,6 @@ void main() {
     mockPaymentNotifier.simulateStateChange(cancelPaymentState);
     await tester.pump();
 
-    // Verify error and cancel states
     expect(capturedEnrollmentState?.enrollmentStatus,
         equals(YunoStatus.internalError));
     expect(
