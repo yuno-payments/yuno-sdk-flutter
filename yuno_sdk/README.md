@@ -6,9 +6,9 @@
 
 [![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=for-the-badge)](https://github.com/invertase/melos)
 [![Maintained by Yuno](https://img.shields.io/badge/maintained_by-Yuno-4E3DD8?style=for-the-badge)](https://www.y.uno/)
+![Coverage](./coverage_badge.svg)
 
 <?code-excerpt path-base="example/lib"?>
-
 Yuno Flutter SDK empowers you to create seamless payment experiences in your native Android and iOS apps built with Flutter. It offers powerful and customizable UI components that can be used directly to gather payment details from your users efficiently and effectively.
 
 
