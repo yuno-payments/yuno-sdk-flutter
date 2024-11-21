@@ -1,8 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:yuno/src/internals.dart';
 import 'package:yuno/yuno.dart';
+
+class MockAndroidViewController extends Mock implements AndroidViewController {}
 
 void main() {
   late bool listenerCalled;
@@ -217,5 +221,35 @@ void main() {
     }
 
     debugDefaultTargetPlatformOverride = null;
+  });
+
+  testWidgets(
+      'YunoPaymentMethods creates Android PlatformViewLink with correct viewType',
+      (WidgetTester tester) async {
+    const config = PaymentMethodConf(
+      checkoutSession: 'test-session',
+      countryCode: 'US',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: YunoPaymentMethods(
+            config: config,
+            listener: (_, __) {},
+            androidPlatformViewRenderType:
+                AndroidPlatformViewRenderType.expensiveAndroidView,
+          ),
+        ),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byType(PlatformViewLink), findsOneWidget);
+
+    final platformViewLink =
+        tester.widget<PlatformViewLink>(find.byType(PlatformViewLink));
+    expect(platformViewLink.viewType, YunoPaymentMethodPlatform.viewType);
   });
 }
