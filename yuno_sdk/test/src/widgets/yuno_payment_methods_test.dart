@@ -28,8 +28,6 @@ void main() {
         checkoutSession: 'test-session-123',
         countryCode: 'CO',
       );
-
-      // Override platform to iOS
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
 
       await tester.pumpWidget(
@@ -43,7 +41,6 @@ void main() {
         ),
       );
       await tester.pump();
-      // Verify UiKitView is created
       expect(find.byType(UiKitView), findsOneWidget);
 
       debugDefaultTargetPlatformOverride = null;
@@ -52,13 +49,11 @@ void main() {
 
   testWidgets('YunoPaymentMethods creates platform view on Android',
       (WidgetTester tester) async {
-    // Create a real PaymentMethodConf with fake data
     const config = PaymentMethodConf(
       checkoutSession: 'test-session-456',
       countryCode: 'CA',
     );
 
-    // Override platform to Android
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(
@@ -80,13 +75,11 @@ void main() {
 
   testWidgets('YunoPaymentMethods handles different Android render types',
       (WidgetTester tester) async {
-    // Create a real PaymentMethodConf with fake data
     const config = PaymentMethodConf(
       checkoutSession: 'test-session-789',
       countryCode: 'UK',
     );
 
-    // Override platform to Android
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await tester.pumpWidget(
@@ -108,7 +101,6 @@ void main() {
 
   testWidgets('YunoPaymentMethods updates width when constraints change',
       (WidgetTester tester) async {
-    // Inicializar un config de prueba
     const config = PaymentMethodConf(
       checkoutSession: 'test-session-width',
       countryCode: 'US',

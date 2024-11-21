@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:yuno_sdk_core/lib.dart';
 
-// Mock class if we had a dependency using YunoStatus
 class MockYunoService extends Mock {
   YunoStatus getStatus();
 }
@@ -12,7 +11,6 @@ void main() {
     late MockYunoService mockYunoService;
 
     setUp(() {
-      // Initialize mock service before each test
       mockYunoService = MockYunoService();
     });
 
