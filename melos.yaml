@@ -17,6 +17,5 @@ scripts:
       flutter test --coverage
       lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/generated/*.dart' -o coverage/lcov_filtered.info
       genhtml coverage/lcov_filtered.info -o coverage/html
-      open coverage/html/index.html  # Opens the report on macOS
     packageFilters:
       ignore: [yuno_sdk_android, yuno_sdk_foundation]
