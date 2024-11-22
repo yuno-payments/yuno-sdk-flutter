@@ -143,7 +143,7 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                         gestureRecognizers: const <Factory<
                             OneSequenceGestureRecognizer>>{},
                         hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                      ), // coverage:ignore-line
+                      ),
                       onCreatePlatformView: (params) {
                         YunoPaymentMethodPlatform.init(params.id);
                         switch (widget.androidPlatformViewRenderType) {
