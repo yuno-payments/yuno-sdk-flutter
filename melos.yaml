@@ -8,3 +8,18 @@ packages:
   - ./yuno_sdk_platform_interface
 ignore:
   - examples
+
+scripts:
+  # Script to generate coverage and open the report
+  coverage:
+    description: Generate coverage and open in default browser
+    exec: |
+      flutter test --coverage
+      lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/generated/*.dart' -o coverage/lcov_filtered.info
+      genhtml coverage/lcov_filtered.info -o coverage/html
+      COVERAGE=$(lcov --summary coverage/lcov.info | grep "lines......" | cut -d ' ' -f 4 | cut -d '%' -f 1)
+      BADGE_URL="https://img.shields.io/badge/coverage-${COVERAGE}%25-brightgreen?style=for-the-badge"
+      curl -o coverage_badge.svg $BADGE_URL
+      # open coverage/html/index.html  Opens the report on macOS
+    packageFilters:
+      ignore: [yuno_sdk_android, yuno_sdk_foundation]

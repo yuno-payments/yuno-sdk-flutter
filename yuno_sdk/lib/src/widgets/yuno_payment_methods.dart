@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +118,7 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
               _controller.updateLastWidth(currentWidth);
             }
 
-            return Platform.isIOS
+            return TargetPlatform.iOS == defaultTargetPlatform
                 ? ConstrainedBox(
                     constraints: BoxConstraints.expand(height: value.height),
                     child: UiKitView(
@@ -159,9 +157,6 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               creationParams: widget.config
                                   .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
-                              onFocus: () {
-                                params.onFocusChanged(true);
-                              },
                             )
                               ..addOnPlatformViewCreatedListener(
                                   params.onPlatformViewCreated)
@@ -175,9 +170,6 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                               creationParams: widget.config
                                   .toMap(currentWidth: currentWidth),
                               creationParamsCodec: const StandardMessageCodec(),
-                              onFocus: () {
-                                params.onFocusChanged(true);
-                              },
                             )
                               ..addOnPlatformViewCreatedListener(
                                   params.onPlatformViewCreated)
