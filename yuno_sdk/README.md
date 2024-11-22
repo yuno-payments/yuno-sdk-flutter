@@ -339,7 +339,7 @@ This project uses [melos](https://github.com/invertase/melos) to manage all the 
 
 - Format `melos run format`
 - Analyze `melos run analyze`
-- Test `melos run unittest`
+- Test `melos run coverage`
 - Pub get `melos run get`
 
 ##### Publishing
