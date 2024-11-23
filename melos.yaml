@@ -17,12 +17,6 @@ scripts:
       # Generate Flutter test coverage
       flutter test --coverage
       
-      # Filter out generated files from the coverage report
-      lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/generated/*.dart' -o coverage/lcov_filtered.info
-      
-      # Generate an HTML report
-      genhtml coverage/lcov_filtered.info -o coverage/html
-
   local_test:
     description: Generate test, badge, and open the report
     exec: |
