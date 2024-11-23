@@ -10,15 +10,8 @@ ignore:
   - examples
 
 scripts:
-  # Script to generate coverage and open the report
+  # Script to generate coverage and open the report 
   test:
-    description: Generate test, badge, and open the report
-    exec: |
-      # Generate Flutter test coverage
-      flutter test --coverage
-    packageFilters:
-      ignore: [yuno_sdk_android, yuno_sdk_foundation]   
-  local_test:
     description: Generate test, badge, and open the report
     exec: |
       # Generate Flutter test coverage
