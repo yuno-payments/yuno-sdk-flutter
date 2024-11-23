@@ -17,7 +17,6 @@ void main() {
     mockListener = (context, isSelected) {
       listenerCalled = true;
     };
-    Yuno.init(apiKey: '', countryCode: 'CO');
   });
 
   tearDown(() {
