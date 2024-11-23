@@ -11,6 +11,11 @@ ignore:
 
 scripts:
   # Script to generate coverage and open the report 
+  bitrise_test:
+    description: Generate test, badge, and open the report
+    exec: |
+      # Generate Flutter test coverage
+      flutter test --coverage
   test:
     description: Generate test, badge, and open the report
     exec: |
