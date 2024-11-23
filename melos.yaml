@@ -16,7 +16,8 @@ scripts:
     exec: |
       # Generate Flutter test coverage
       flutter test --coverage
-      
+    packageFilters:
+      ignore: [yuno_sdk_android, yuno_sdk_foundation]   
   local_test:
     description: Generate test, badge, and open the report
     exec: |
