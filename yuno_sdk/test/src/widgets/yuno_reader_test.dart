@@ -123,7 +123,7 @@ void main() {
       );
     });
 
-    testWidgets('receiveDeeplink is called with correct arguments',
+    testWidgets('ReceiveDeeplink is called with correct arguments',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         Builder(
