@@ -219,7 +219,7 @@ void main() {
     });
   });
 
-  group('YunoReader Extension Tests', () {
+  group('YunoReader extension tests', () {
     test('startPaymentLite is called with correct arguments', () async {
       const startPaymentArgs = StartPayment(
         checkoutSession: '',
