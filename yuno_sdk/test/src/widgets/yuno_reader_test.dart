@@ -74,7 +74,7 @@ void main() {
       );
     });
 
-    testWidgets('startPayment is called with correct arguments',
+    testWidgets('StartPayment is called with correct arguments',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         Builder(
