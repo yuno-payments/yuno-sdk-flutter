@@ -74,7 +74,7 @@ void main() {
       );
     });
 
-    testWidgets('StartPayment is called with correct arguments',
+    testWidgets('startPayment is called with correct arguments',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         Builder(
@@ -98,7 +98,7 @@ void main() {
       );
     });
 
-    testWidgets('Continue payment is called with correct arguments',
+    testWidgets('continue payment is called with correct arguments',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         Builder(
@@ -123,7 +123,7 @@ void main() {
       );
     });
 
-    testWidgets('ReceiveDeeplink is called with correct arguments',
+    testWidgets('receiveDeeplink is called with correct arguments',
         (WidgetTester tester) async {
       await tester.pumpWidget(
         Builder(
