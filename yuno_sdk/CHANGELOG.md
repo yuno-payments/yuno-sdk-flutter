@@ -15,4 +15,4 @@
 - feat: Code improvements
 - feat: Coverage 98.7%
 - feat: Native Android and IOS SDK's Upgraded to 1.19.0 version
-- fix: On Android, the ProGuard rules were updated to resolve issues encountered when generating APKs or AABs in release mode.
+- fix: On Android, the ProGuard rules were updated to resolve issues encountered when generating APK's or AAB's in release mode.
