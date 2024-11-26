@@ -108,7 +108,7 @@ extension YunoReader on BuildContext {
   /// ### Example usage:
   /// ```dart
   /// await Yuno.enrollmentPayment(
-  ///   arguments: EnrollmentArguments(customerSession: 'session', showPaymentStatus: true),
+  ///   arguments: EnrollmentArguments(customerSession: 'session', showPaymentStatus: false),
   /// );
   /// ```
   Future<void> enrollmentPayment({
