@@ -1,10 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="Yuno Flutter Application"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:allowBackup="true"
-        android:supportsRtl="true"
+        android:label="example"
         android:name=".MyApp"
         android:icon="@mipmap/ic_launcher">
         <activity

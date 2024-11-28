@@ -13,7 +13,7 @@ class YunoEnrollmentState {
   final YunoStatus? enrollmentStatus;
 }
 
-final class YunoEnrollmentNotifier extends ValueNotifier<YunoEnrollmentState> {
+class YunoEnrollmentNotifier extends ValueNotifier<YunoEnrollmentState> {
   YunoEnrollmentNotifier() : super(YunoEnrollmentState._empty());
 
   void addEnrollmentStatus(YunoStatus status) {

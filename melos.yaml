@@ -1,10 +1,55 @@
 name: yuno
 
+command:
+   bootstrap:
+     dependencyOverrides:
+           yuno_sdk_core:
+            path: ../yuno_sdk_core
+            yuno_sdk_android:
+             path: ../yuno_sdk_android
+            yuno_sdk_foundation:
+             path: ../yuno_sdk_foundation
+            yuno_sdk_platform_interface:
+             path: ../yuno_sdk_platform_interface
+     dependencyOverridePaths: 
+        - ../yuno_sdk_core
+        - ../yuno_sdk_android
+        - ../yuno_sdk_foundation
+        - ../yuno_sdk_platform_interface
+       
+
+          
+       
 packages:
-  - ./yuno_sdk
-  - ./yuno_sdk_core
-  - ./yuno_sdk_android
-  - ./yuno_sdk_foundation
-  - ./yuno_sdk_platform_interface
+  - ./yuno_sdk*
 ignore:
   - examples
+
+scripts:
+  # Script to generate coverage and open the report 
+  bitrise_test:
+    description: Generate test, badge, and open the report
+    exec: |
+      # Generate Flutter test coverage
+      flutter test --coverage
+    packageFilters:
+      ignore: [yuno_sdk_android, yuno_sdk_foundation]
+  test:
+    description: Generate test, badge, and open the report
+    exec: |
+      # Generate Flutter test coverage
+      flutter test --coverage
+      
+      # Filter out generated files from the coverage report
+      lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/generated/*.dart' -o coverage/lcov_filtered.info
+      
+      # Generate an HTML report
+      genhtml coverage/lcov_filtered.info -o coverage/html
+
+      # Open the HTML report (macOS specific)
+      if [ "$(uname)" == "Darwin" ]; then
+        open coverage/html/index.html
+      fi
+    
+    packageFilters:
+      ignore: [yuno_sdk_android, yuno_sdk_foundation]

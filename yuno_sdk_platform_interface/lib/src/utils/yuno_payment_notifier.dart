@@ -16,7 +16,7 @@ class YunoPaymentState {
   final YunoStatus? paymentStatus;
 }
 
-final class YunoPaymentNotifier extends ValueNotifier<YunoPaymentState> {
+class YunoPaymentNotifier extends ValueNotifier<YunoPaymentState> {
   YunoPaymentNotifier() : super(YunoPaymentState._empty());
 
   void add(String token) {

@@ -191,6 +191,7 @@ final class _YunoChannels implements Yuno {
     _countryCode = code;
   }
 
+  // coverage:ignore-start
   static String _getCountryCode() {
     if (_countryCode == null) {
       throw StateError(
@@ -198,6 +199,7 @@ final class _YunoChannels implements Yuno {
     }
     return _countryCode!;
   }
+  // coverage:ignore-end
 
   static YunoPlatform? __platform;
   static YunoPlatform get _platform {
