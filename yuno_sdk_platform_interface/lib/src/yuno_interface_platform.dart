@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import '../lib.dart';
+import '../yuno_sdk_platform_interface.dart';
 
 /// {@template commons_YunoPlatform}
 /// ## YunoPlatform
@@ -52,10 +52,17 @@ abstract interface class YunoPlatform extends PlatformInterface {
   Future<void> startPayment({
     bool showPaymentStatus = true,
   });
+
   Future<void> continuePayment({
     bool showPaymentStatus = true,
   });
 
   Future<void> init();
-  YunoNotifier get controller;
+
+  Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  });
+
+  YunoPaymentNotifier get controller;
+  YunoEnrollmentNotifier get enrollmentController;
 }

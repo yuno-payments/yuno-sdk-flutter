@@ -75,7 +75,6 @@ struct YunoConfiguration: Codable, Sendable {
     let cardFlow: String?
     let saveCardEnable: Bool?
     let keepLoader: Bool?
-    let isDynamicViewEnable: Bool?
     let cardFormDeployed: Bool?
 }
 

@@ -37,6 +37,9 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
         instance.handleReceiveDeeplink(call: call, result: result)
     case Keys.startPayment.rawValue:
         instance.handleStartPayment(call: call, result: result)
+    case Keys.enrollmentPayment.rawValue:
+        instance.startEnrollment(call: call, result: result)
+    break
     default:
       result(FlutterMethodNotImplemented)
     }

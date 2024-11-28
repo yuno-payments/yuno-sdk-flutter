@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 import 'features/start_payment/models/parsers.dart';
 import 'utils/utils.dart';
 
@@ -14,9 +14,11 @@ final class YunoMethodChannel implements YunoPlatform {
     required MethodChannel methodChannel,
     required bool platformIsIos,
     required bool platformIsAndroid,
-    required YunoNotifier yunoNotifier,
+    required YunoPaymentNotifier yunoNotifier,
+    required YunoEnrollmentNotifier yunoEnrollmentNotifier,
   })  : _methodChannel = methodChannel,
         _yunoNotifier = yunoNotifier,
+        _yunoEnrollmentNotifier = yunoEnrollmentNotifier,
         _platformIsAndroid = platformIsAndroid,
         _platformIsIos = platformIsIos;
 
@@ -25,7 +27,8 @@ final class YunoMethodChannel implements YunoPlatform {
   @visibleForTesting
   bool get isAndroid => _platformIsAndroid;
 
-  final YunoNotifier _yunoNotifier;
+  final YunoPaymentNotifier _yunoNotifier;
+  final YunoEnrollmentNotifier _yunoEnrollmentNotifier;
   final MethodChannel _methodChannel;
   final bool _platformIsIos;
   final bool _platformIsAndroid;
@@ -43,7 +46,12 @@ final class YunoMethodChannel implements YunoPlatform {
         case 'status':
           if (call.arguments is! int) return;
           final index = call.arguments as int;
-          _yunoNotifier.addStatus(PaymentStatus.values[index]);
+          _yunoNotifier.addStatus(YunoStatus.values[index]);
+          break;
+        case 'enrollmentStatus':
+          if (call.arguments is! int) return;
+          final index = call.arguments as int;
+          _yunoEnrollmentNotifier.addEnrollmentStatus(YunoStatus.values[index]);
           break;
         default:
           throw MissingPluginException(
@@ -87,9 +95,6 @@ final class YunoMethodChannel implements YunoPlatform {
   }
 
   @override
-  YunoNotifier get controller => _yunoNotifier;
-
-  @override
   Future<void> hideLoader() async {
     await _methodChannel.invokeMethod('hideLoader');
   }
@@ -114,6 +119,21 @@ final class YunoMethodChannel implements YunoPlatform {
           showPaymentStatus: showPaymentStatus,
         ),
       );
+
+  @override
+  Future<void> enrollmentPayment({
+    required EnrollmentArguments arguments,
+  }) async =>
+      await _methodChannel.invokeMethod(
+        'enrollmentPayment',
+        arguments.toMap(),
+      );
+
+  @override
+  YunoPaymentNotifier get controller => _yunoNotifier;
+
+  @override
+  YunoEnrollmentNotifier get enrollmentController => _yunoEnrollmentNotifier;
 }
 
 /// {@template commons_YunoMethodChannelFactory}
@@ -129,7 +149,8 @@ final class YunoMethodChannelFactory {
         methodChannel: const MethodChannel(
           'yuno/payments',
         ),
-        yunoNotifier: YunoNotifier(),
+        yunoNotifier: YunoPaymentNotifier(),
+        yunoEnrollmentNotifier: YunoEnrollmentNotifier(),
         platformIsIos: Platform.isIOS,
         platformIsAndroid: Platform.isAndroid,
       );

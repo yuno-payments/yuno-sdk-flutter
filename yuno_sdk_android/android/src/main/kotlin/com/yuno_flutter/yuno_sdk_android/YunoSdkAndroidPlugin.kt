@@ -10,10 +10,14 @@ import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
+import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.payments.features.enrollment.startEnrollment
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
+import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
+import com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel.EnrollmentHandler
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel.StartPaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
@@ -26,16 +30,18 @@ class YunoSdkAndroidPlugin :
     MethodCallHandler,
     ActivityAware,
     DefaultLifecycleObserver {
+    private var initializationError: String? = null
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
     private lateinit var activity: FlutterFragmentActivity
     private  lateinit var flutterPluginBindingMajor: FlutterPlugin.FlutterPluginBinding
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-           activity.startCheckout(
+        activity.startCheckout(
                callbackOTT = this::onTokenUpdated,
                callbackPaymentState = this::onPaymentStateChange
            )
+        activity.initEnrollment(callbackEnrollmentState = this::onEnrollmentStateChange)
     }
     companion object {
         @JvmStatic
@@ -52,6 +58,17 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
+        if (initializationError != null ) {
+            result.error(
+                "yuno initialization failed",
+                """The plugin failed to initialize:
+${initializationError ?: "Yuno SDK did not initialize."}
+Please make sure you follow all the steps detailed inside the README: ""
+If you continue to have trouble, follow this discussion to get some support """,
+                null
+            )
+            return
+        }
         when (call.method) {
             Key.init -> {
                 val init = InitHandler()
@@ -87,6 +104,15 @@ class YunoSdkAndroidPlugin :
                     activity = activity
                 )
             }
+            Key.enrollmentPayment -> {
+                val enrollment = EnrollmentHandler()
+                enrollment.handler(
+                    call = call,
+                    result = result,
+                    context = context,
+                    activity = activity
+                )
+            }
             else -> {
                 result.notImplemented()
             }
@@ -94,11 +120,21 @@ class YunoSdkAndroidPlugin :
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-            activity = binding.activity as FlutterFragmentActivity
-            activity.lifecycle.addObserver(this)
-        flutterPluginBindingMajor
-            .platformViewRegistry
-            .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
+        when {
+            binding.activity !is FlutterFragmentActivity -> {
+                initializationError =
+                    "Your Main Activity ${binding.activity.javaClass} is not a subclass FlutterFragmentActivity."
+            }
+
+            else -> {
+                activity = binding.activity as FlutterFragmentActivity
+                activity.lifecycle.addObserver(this)
+                flutterPluginBindingMajor
+                    .platformViewRegistry
+                    .registerViewFactory("yuno/payment_methods_view", PaymentMethodFactory(flutterPluginBindingMajor, activity))
+            }
+        }
+
     }
 
     override fun onDetachedFromActivity() {
@@ -122,6 +158,9 @@ class YunoSdkAndroidPlugin :
         channel.invokeMethod(Key.ott, token)
     }
 
+    fun onEnrollmentStateChange(enrollmentState: String?) {
+        channel.invokeMethod(Key.enrollmentStatus, enrollmentState?.statusEnrollmentConverter())
+    }
     fun onPaymentStateChange(paymentState: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }

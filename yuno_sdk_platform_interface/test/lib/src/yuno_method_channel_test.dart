@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:yuno_sdk_core/commons/src/enums/yuno_language.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 
 class MockMethodChannel extends Mock implements MethodChannel {}
 
@@ -12,11 +12,13 @@ void main() {
   group('YunoMethodChannel Tests', () {
     late MethodChannel methodChannel;
     late YunoMethodChannel yunoMethodChannel;
-    late YunoNotifier yunoController;
+    late YunoPaymentNotifier yunoController;
+    late YunoEnrollmentNotifier yunoEnrollmentNotifier;
 
     setUp(() {
       methodChannel = const MethodChannel('test_channel');
-      yunoController = YunoNotifier();
+      yunoController = YunoPaymentNotifier();
+      yunoEnrollmentNotifier = YunoEnrollmentNotifier();
     });
 
     test('isIos getter should return true when platformIsIos is true', () {
@@ -25,6 +27,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       expect(yunoMethodChannel.isIos, isTrue);
@@ -36,6 +39,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       expect(yunoMethodChannel.isIos, isFalse);
@@ -48,6 +52,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       expect(yunoMethodChannel.isAndroid, isTrue);
@@ -60,6 +65,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       expect(yunoMethodChannel.isAndroid, isFalse);
@@ -73,6 +79,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: false,
         platformIsAndroid: true,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       const apiKey = 'test_api_key';
@@ -126,6 +133,7 @@ void main() {
         methodChannel: methodChannel,
         platformIsIos: true,
         platformIsAndroid: false,
+        yunoEnrollmentNotifier: yunoEnrollmentNotifier,
       );
 
       const apiKey = 'test_api_key';

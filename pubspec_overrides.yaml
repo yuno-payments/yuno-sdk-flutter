@@ -1,0 +1,12 @@
+# melos_managed_dependency_overrides: yuno
+dependency_overrides:
+  yuno:
+    path: yuno_sdk
+  yuno_sdk_core:
+    path: ./yuno_sdk_core
+  yuno_sdk_android:
+    path: ./yuno_sdk_android
+  yuno_sdk_foundation:
+    path: ./yuno_sdk_foundation
+  yuno_sdk_platform_interface:
+    path: ./yuno_sdk_platform_interface

@@ -1,5 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:yuno_sdk_platform_interface/lib.dart';
+import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 
 abstract interface class YunoPaymentMethodPlatform extends PlatformInterface {
   /// Constructs a YunoPaymentMethodPlatform.
@@ -18,8 +18,8 @@ abstract interface class YunoPaymentMethodPlatform extends PlatformInterface {
   static const _viewType = 'yuno/payment_methods_view';
   static String get viewType => _viewType;
   void setMethodCallHandler();
-  static YunoPaymentNotifier get controller => _controller;
-  static final _controller = YunoPaymentNotifier();
+  static YunoPaymentMethodSelectNotifier get controller => _controller;
+  static final _controller = YunoPaymentMethodSelectNotifier();
   static YunoPaymentSelectNotifier get selectController => _selectController;
   static final _selectController = YunoPaymentSelectNotifier();
 }

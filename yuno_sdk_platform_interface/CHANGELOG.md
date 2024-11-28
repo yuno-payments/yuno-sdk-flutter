@@ -1,3 +1,11 @@
-## 0.0.1
-
-* TODO: Describe initial release.
+## 0.1.0 - Flutter
+- feat: Yuno initialization API
+- feat: Yuno start checkout API
+- feat: Yuno start payment lite API
+- feat: Yuno continue payment API
+- feat: Yuno create payment API
+- feat: Yuno payment result API
+- feat: Yuno start payment API
+- feat: Yuno payment Methods PlatformView IOS & Android
+## 0.2.0 - Flutter
+- feat: enrollment support for android

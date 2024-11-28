@@ -30,7 +30,7 @@ class YunoPaymentMethodView(
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         }
-        val paymentMethodListView = PaymentMethodListView(context).apply {
+        val paymentMethodListView = PaymentMethodListView(context, lifecycleOwner = activity).apply {
             setOnSelectedEvent { it ->
                 channel.invokeMethod(Key.onSelected,it)
             }
