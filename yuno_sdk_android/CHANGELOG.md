@@ -9,3 +9,7 @@
 - feat: Yuno payment methods widget
 ## 0.2.0 - Android
 - feat: enrollment support for android
+## 0.3.0 - Android
+- fix: ProGuard Rules updated
+- fix: PaymentMethod now recieves lifecycle owner as parameter
+- feat: sdk version updated 

@@ -9,3 +9,5 @@
 - feat: Yuno payment methods widget
 ## 0.2.0 - Foundation
 - feat: code improvements
+## 0.2.0 - Foundation
+- feat: Native sdk version updated 
