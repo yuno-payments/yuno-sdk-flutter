@@ -11,6 +11,7 @@
   <a href="https://www.y.uno/">
     <img alt="Maintained by Yuno" src="https://img.shields.io/badge/maintained_by-Yuno-4E3DD8?style=for-the-badge">
   </a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg?style=for-the-badge" alt="License: MIT"></a>
 </div>
 
 <?code-excerpt path-base="example/lib"?>
