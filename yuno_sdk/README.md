@@ -11,7 +11,6 @@
   <a href="https://www.y.uno/">
     <img alt="Maintained by Yuno" src="https://img.shields.io/badge/maintained_by-Yuno-4E3DD8?style=for-the-badge">
   </a>
-
 </div>
 
 <?code-excerpt path-base="example/lib"?>
