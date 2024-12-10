@@ -11,7 +11,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.features.enrollment.initEnrollment
-import com.yuno.payments.features.enrollment.startEnrollment
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key

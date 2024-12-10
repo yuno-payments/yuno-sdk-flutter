@@ -32,7 +32,7 @@ class YunoPaymentMethodState {
   int get hashCode => height.hashCode ^ width.hashCode;
 }
 
-final class YunoPaymentMethodSelectNotifier
+class YunoPaymentMethodSelectNotifier
     extends ValueNotifier<YunoPaymentMethodState> {
   YunoPaymentMethodSelectNotifier() : super(YunoPaymentMethodState._empty());
 
