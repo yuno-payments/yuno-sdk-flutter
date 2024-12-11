@@ -1,3 +1,7 @@
+## 0.4.0
+- feat: README improvements
+- feat: Native SDKs upgraded
+- feat: Yuno platform interface testing
 ## 0.3.0
 - feat: Readme updated
 - feat: Code improvements
