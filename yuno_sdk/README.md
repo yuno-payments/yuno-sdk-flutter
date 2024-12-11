@@ -11,11 +11,14 @@
   <a href="https://www.y.uno/">
     <img alt="Maintained by Yuno" src="https://img.shields.io/badge/maintained_by-Yuno-4E3DD8?style=for-the-badge">
   </a>
-  <img alt="Coverage" src="./coverage_badge.svg" style="display: inline-block;">
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg?style=for-the-badge" alt="License: MIT"></a>
 </div>
 
 <?code-excerpt path-base="example/lib"?>
+<div style="text-align: center;">
 Yuno Flutter SDK empowers you to create seamless payment experiences in your native Android and iOS apps built with Flutter. It offers powerful and customizable UI components that can be used directly to gather payment details from your users efficiently and effectively.
+ <a href="https://github.com/yuno-payments/yuno-flutter-example/tree/develop" target="_blank">Full Example Integration</a>.
+</div>
 
 
 
@@ -276,7 +279,8 @@ String yunoApi = String.fromEnvironment("YUNO_API", "");
 
 ### Reading keys in Android native side and initialize the SDK.
 
-* Add the following code to `build.gradle`.
+* Add the following code to `build.gradle` **- app level**.
+* You can also see the build config in the [example Integration](https://github.com/yuno-payments/yuno-flutter-example/blob/develop/android/app/build.gradle).
 ```
 def dartEnvironmentVariables = []
 if (project.hasProperty('dart-defines')) {
@@ -309,6 +313,8 @@ android {
 ```
 
 * Read the build config fields
+* You can also see the MyApp.kt in the [example Integration](https://github.com/yuno-payments/yuno-flutter-example/blob/develop/android/app/src/main/kotlin/com/example/example/MyApp.kt).
+
 ```kotlin
 import android.app.Application
 import android.os.Build
@@ -345,4 +351,4 @@ This project uses [melos](https://github.com/invertase/melos) to manage all the 
 
 ##### Publishing
 
-- Use `melos version` and `melos publish` to keep all the repositories in sync
+- Use `melos version` and `melos publish` to keep all the repositories in sync!

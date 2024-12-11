@@ -1,13 +1,9 @@
-## 0.1.0 - Foundation
-- feat: Yuno initialization
-- feat: Yuno start checkout
-- feat: Yuno start payment lite
-- feat: Yuno continue payment
-- feat: Yuno create payment
-- feat: Yuno payment result
-- feat: Yuno start payment
-- feat: Yuno payment methods widget
+## 0.4.0 - Foundation
+- feat: Native sdk version updated 
+- feat: code improvements
+## 0.3.0 - Foundation
+- feat: Native sdk version updated 
 ## 0.2.0 - Foundation
 - feat: code improvements
-## 0.2.0 - Foundation
+## 0.3.0 - Foundation
 - feat: Native sdk version updated 
