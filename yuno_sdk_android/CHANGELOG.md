@@ -1,3 +1,5 @@
+## 0.4.0 - Android
+- feat: sdk version updated 
 ## 0.3.0 - Android
 - fix: ProGuard Rules updated
 - fix: PaymentMethod now recieves lifecycle owner as parameter
