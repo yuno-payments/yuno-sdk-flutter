@@ -3,14 +3,11 @@ import 'package:yuno_sdk_core/lib.dart';
 
 class YunoPaymentState {
   const YunoPaymentState({
-    required this.token,
+    this.token = '',
     this.paymentStatus,
   });
 
-  factory YunoPaymentState._empty() => const YunoPaymentState(
-        token: '',
-        paymentStatus: null,
-      );
+  factory YunoPaymentState._empty() => const YunoPaymentState(token: '');
 
   final String token;
   final YunoStatus? paymentStatus;
@@ -22,13 +19,12 @@ class YunoPaymentNotifier extends ValueNotifier<YunoPaymentState> {
   void add(String token) {
     value = YunoPaymentState(
       token: token,
-      paymentStatus: value.paymentStatus,
     );
   }
 
   void addStatus(YunoStatus status) {
     value = YunoPaymentState(
-      token: value.token,
+      token: '',
       paymentStatus: status,
     );
   }
