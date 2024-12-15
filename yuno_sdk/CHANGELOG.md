@@ -1,3 +1,5 @@
+## 0.4.1
+- bugFix: Valuenotifier did not update OTT in IOS
 ## 0.4.0
 - feat: README improvements
 - feat: Native SDKs upgraded
