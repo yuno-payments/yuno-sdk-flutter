@@ -62,9 +62,9 @@ abstract interface class Yuno {
     YunoConfig yunoConfig = const YunoConfig(),
     IosConfig iosConfig = const IosConfig(),
   }) async {
-    _YunoChannels.setCountryCode(countryCode);
+    _YunoChannels.setValues(countryCode, yunoConfig.lang);
     const yuno = _YunoChannels();
-    await yuno.initInvoke();
+    await yuno.setup();
     await yuno.init(
       apiKey: apiKey,
       countryCode: countryCode,
@@ -180,15 +180,22 @@ abstract interface class Yuno {
       _YunoChannels.receiveDeeplink(
         url: url,
       );
+
+  static Future<void> startPaymentSeamlessLite({
+    required SeamlessArguments arguments,
+  }) async =>
+      await _YunoChannels.startPaymentSeamlessLite(arguments: arguments);
 }
 
 final class _YunoChannels implements Yuno {
   const _YunoChannels();
 
   static String? _countryCode;
+  static YunoLanguage? _lang;
 
-  static void setCountryCode(String code) {
+  static void setValues(String code, YunoLanguage lang) {
     _countryCode = code;
+    _lang = lang;
   }
 
   // coverage:ignore-start
@@ -198,6 +205,14 @@ final class _YunoChannels implements Yuno {
           'Country code has not been initialized. Call Yuno.init() first.');
     }
     return _countryCode!;
+  }
+
+  static YunoLanguage _getLang() {
+    if (_lang == null) {
+      throw StateError(
+          'Language code has not been initialized. Call Yuno.init() first.');
+    }
+    return _lang!;
   }
   // coverage:ignore-end
 
@@ -238,7 +253,7 @@ final class _YunoChannels implements Yuno {
   }) async =>
       await _platform.receiveDeeplink(url: url);
 
-  Future<void> initInvoke() async => await _platform.init();
+  Future<void> setup() async => await _platform.setup();
 
   static Future<void> startPaymentLite({
     required StartPayment arguments,
@@ -262,6 +277,16 @@ final class _YunoChannels implements Yuno {
       await _platform.continuePayment(
         showPaymentStatus: showPaymentStatus,
       );
+
+  static Future<void> startPaymentSeamlessLite({
+    required SeamlessArguments arguments,
+  }) async {
+    arguments.countryCode ??= _YunoChannels._getCountryCode();
+    arguments.language ??= _YunoChannels._getLang();
+    await _platform.startPaymentSeamlessLite(
+      arguments: arguments,
+    );
+  }
 
   static Future<void> hideLoader() async => await _platform.hideLoader();
 }

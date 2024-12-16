@@ -9,6 +9,7 @@ import Foundation
 
 class SeamlessModel: Codable {
     var countryCode: String
+    var language: String?
     var checkoutSession: String
     var showPaymentStatus: Bool
     var paymentMethodSelected: PaymentMethod
@@ -16,8 +17,10 @@ class SeamlessModel: Codable {
         countryCode: String,
         paymentMethodSelected: PaymentMethod,
         showPaymentStatus: Bool,
-        checkoutSession: String
+        checkoutSession: String,
+        language: String?
     ) {
+        self.language = language
         self.countryCode = countryCode
         self.paymentMethodSelected = paymentMethodSelected
         self.showPaymentStatus = showPaymentStatus
