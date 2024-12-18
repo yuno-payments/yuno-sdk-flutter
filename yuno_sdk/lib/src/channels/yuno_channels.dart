@@ -181,7 +181,7 @@ abstract interface class Yuno {
         url: url,
       );
 
-  static Future<void> startPaymentSeamlessLite({
+  static Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
   }) async =>
       await _YunoChannels.startPaymentSeamlessLite(arguments: arguments);
@@ -278,12 +278,12 @@ final class _YunoChannels implements Yuno {
         showPaymentStatus: showPaymentStatus,
       );
 
-  static Future<void> startPaymentSeamlessLite({
+  static Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
   }) async {
     arguments.countryCode ??= _YunoChannels._getCountryCode();
     arguments.language ??= _YunoChannels._getLang();
-    await _platform.startPaymentSeamlessLite(
+    return await _platform.startPaymentSeamlessLite(
       arguments: arguments,
     );
   }

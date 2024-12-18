@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:yuno_sdk_core/lib.dart';
 import '../yuno_sdk_platform_interface.dart';
 
 /// {@template commons_YunoPlatform}
@@ -227,7 +228,7 @@ abstract interface class YunoPlatform extends PlatformInterface {
     required EnrollmentArguments arguments,
   });
 
-  Future<void> startPaymentSeamlessLite({
+  Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
   });
 

@@ -217,10 +217,13 @@ final class YunoMethodChannel implements YunoPlatform {
   }
 
   @override
-  Future<void> startPaymentSeamlessLite(
-      {required SeamlessArguments arguments}) async {
-    await _methodChannel.invokeMethod(
+  Future<YunoStatus> startPaymentSeamlessLite({
+    required SeamlessArguments arguments,
+  }) async {
+    final result = await _methodChannel.invokeMethod(
         'startPaymentSeamless', arguments.toMap());
+    if (result is! int) return YunoStatus.internalError;
+    return YunoStatus.values[result];
   }
 
   @override
