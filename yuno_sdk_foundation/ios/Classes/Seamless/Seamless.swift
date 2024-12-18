@@ -20,11 +20,9 @@ class Seamless {
             .flatMap { $0.windows }
             .first { $0.isKeyWindow }
     }
-    
     var rootViewController: UIViewController? {
         keyWindow?.rootViewController
     }
-    
     @MainActor
     func startSeamless(call: FlutterMethodCall, result: @escaping FlutterResult) async {
                 guard let viewController = self.rootViewController,
@@ -32,7 +30,6 @@ class Seamless {
                     result(YunoError.invalidArguments())
                     return
                 }
-                
                 do {
                     let decoder = JSONDecoder()
                     let model = try decoder.decode(SeamlessModel.self, from: args)
@@ -46,25 +43,19 @@ class Seamless {
                             )
                         )
                     }
-                    
-                let state =  await  Yuno.startPaymentSeamlessLite(
+                let state = await Yuno.startPaymentSeamlessLite(
                         with: SeamlessParams(
                             checkoutSession: model.checkoutSession,
                             countryCode: model.countryCode,
-                            language:model.language,
+                            language: model.language,
                             viewController: viewController
                         ),
                         paymentSelected: model.paymentMethodSelected,
                         showPaymentStatus: model.showPaymentStatus
                     )
-                    
                     result(state.rawValue)
-            
-         
                 } catch {
                     result(YunoError.somethingWentWrong())
                 }
             }
-       
-    
 }
