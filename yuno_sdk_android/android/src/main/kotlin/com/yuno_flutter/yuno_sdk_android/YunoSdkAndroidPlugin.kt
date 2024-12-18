@@ -11,6 +11,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.yuno.payments.core.Yuno
 import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.payments.features.payment.startPaymentSeamlessLite
+import com.yuno.payments.features.payment.ui.views.PaymentSelected
+import com.yuno.payments.features.payment.updateCheckoutSession
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
@@ -112,6 +115,24 @@ If you continue to have trouble, follow this discussion to get some support """,
                     activity = activity
                 )
             }
+            Key.startPaymentSeamless -> {
+                activity.updateCheckoutSession(
+                    checkoutSession = "eb6f5990-91a3-4c74-99f0-39a4ac6b3f1f",
+                    countryCode = "AR",
+                )
+                activity.startPaymentSeamlessLite(
+                    paymentSelected = PaymentSelected(
+                        paymentMethodType = "CARD",
+                        vaultedToken = null,
+
+                        ),
+                    showPaymentStatus = true,
+                    callbackPaymentState = this::onPaymentStateChange,
+
+                    )
+
+
+            }
             else -> {
                 result.notImplemented()
             }
@@ -163,4 +184,5 @@ If you continue to have trouble, follow this discussion to get some support """,
     fun onPaymentStateChange(paymentState: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }
+
 }

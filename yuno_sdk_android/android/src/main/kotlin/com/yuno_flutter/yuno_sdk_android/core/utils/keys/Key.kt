@@ -11,4 +11,5 @@ object Key {
     const val onSelected = "onSelected"
     const val onHeightChange = "onHeightChange"
     const val enrollmentPayment = "enrollmentPayment"
+    const val startPaymentSeamless = "startPaymentSeamless"
 }
