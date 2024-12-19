@@ -4,6 +4,7 @@ import YunoSDK
 
 public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     fileprivate var instance: YunoMethods?
+    fileprivate var instanceSeamless: Seamless?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(
@@ -11,6 +12,8 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     let instanceSDK = YunoSdkFoundationPlugin()
     // Method Channel
     instanceSDK.instance = YunoMethods(methodChannel: channel)
+    // init seamless
+      instanceSDK.instanceSeamless = Seamless(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
     // Payment Method View
     let paymentFactory = PaymentMetthodFactory(
@@ -19,7 +22,7 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     registrar.register(paymentFactory, withId: "yuno/payment_methods_view")
   }
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    guard let instance = self.instance else {
+      guard let instance = self.instance, let seamless = self.instanceSeamless else {
       return
     }
     switch call.method {
@@ -37,7 +40,11 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
         instance.handleStartPayment(call: call, result: result)
     case Keys.enrollmentPayment.rawValue:
         instance.startEnrollment(call: call, result: result)
-    break
+    case Keys.startPaymentSeamless.rawValue:
+        Task {
+            await seamless.startSeamless(call: call, result: result)
+        }
+
     default:
       result(FlutterMethodNotImplemented)
     }

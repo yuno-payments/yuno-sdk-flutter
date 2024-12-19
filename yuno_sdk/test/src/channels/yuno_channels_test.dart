@@ -20,7 +20,7 @@ void main() {
 
   group('Yuno', () {
     test('init should call platform initialize', () async {
-      when(() => mockPlatform.init()).thenAnswer((_) async {});
+      when(() => mockPlatform.setup()).thenAnswer((_) async {});
       when(() => mockPlatform.initialize(
             apiKey: any(named: 'apiKey'),
             countryCode: any(named: 'countryCode'),
