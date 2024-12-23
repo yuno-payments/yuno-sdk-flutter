@@ -1,9 +1,73 @@
+ # RxJava 2
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-dontwarn io.reactivex.internal.util.unsafe.**
+-keep class io.reactivex.** { *; }
+-keep interface io.reactivex.** { *; }
+-keep class io.reactivex.Single { *; }
+-keepclassmembers class io.reactivex.Single { *; }
+
+# Retrofit 2
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-keepclassmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# Your API models
+-keep class com.yuno.payments.** { *; }
+-keep class * implements com.yuno.payments.network.api.PaymentServices { *; }
+-keepclassmembers class * implements com.yuno.payments.network.api.PaymentServices { *; }
+
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+# Gson
+-keep class com.google.gson.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+ 
  # Keep AdvertisingIdClient classes
 -keep class com.google.android.gms.ads.identifier.** { *; }
 -dontwarn com.google.android.gms.ads.identifier.**
+-keepattributes Signature
 
 # Keep Kotlin Parcelize annotations
 -keep class kotlinx.android.parcel.** { *; }
+-keep class com.yuno.payments.network.api.CoreApi.** { *; }
+# Retrofit
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+
+# RxJava
+-dontwarn io.reactivex.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+
 -dontwarn kotlinx.android.parcel.**
 
 # Keep classes using @Parcelize

@@ -20,4 +20,5 @@ enum Keys: String {
     case showPaymentMethods
     case startPayment
     case enrollmentPayment
+    case startPaymentSeamless
 }

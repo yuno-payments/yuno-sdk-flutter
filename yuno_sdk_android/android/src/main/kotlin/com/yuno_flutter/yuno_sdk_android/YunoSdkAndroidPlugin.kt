@@ -18,6 +18,7 @@ import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.Init
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel.EnrollmentHandler
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
+import com.yuno_flutter.yuno_sdk_android.features.seamless.method_channel.SeamlessHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel.StartPaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -112,6 +113,15 @@ If you continue to have trouble, follow this discussion to get some support """,
                     activity = activity
                 )
             }
+            Key.startPaymentSeamless -> {
+              val seamlessHandler = SeamlessHandler()
+                seamlessHandler.handler(
+                    call = call,
+                    result = result,
+                    context = context,
+                    activity = activity
+                )
+            }
             else -> {
                 result.notImplemented()
             }
@@ -163,4 +173,5 @@ If you continue to have trouble, follow this discussion to get some support """,
     fun onPaymentStateChange(paymentState: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }
+
 }
