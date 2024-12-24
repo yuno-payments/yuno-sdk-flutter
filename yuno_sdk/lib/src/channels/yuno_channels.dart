@@ -192,7 +192,6 @@ final class _YunoChannels implements Yuno {
 
   static String? _countryCode;
   static YunoLanguage? _lang;
-
   static void setValues(String code, YunoLanguage lang) {
     _countryCode = code;
     _lang = lang;
@@ -282,9 +281,9 @@ final class _YunoChannels implements Yuno {
     required SeamlessArguments arguments,
   }) async {
     arguments.countryCode ??= _YunoChannels._getCountryCode();
-    arguments.language ??= _YunoChannels._getLang();
     return await _platform.startPaymentSeamlessLite(
       arguments: arguments,
+      language: _YunoChannels._getLang(),
     );
   }
 

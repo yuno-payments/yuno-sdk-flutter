@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:yuno_sdk_core/lib.dart';
-import 'package:yuno_sdk_platform_interface/src/features/seamless/model/parser.dart';
 import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
 import 'features/start_payment/models/parsers.dart';
 import 'utils/utils.dart';
@@ -220,9 +219,10 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
+    required YunoLanguage language,
   }) async {
     final result = await _methodChannel.invokeMethod(
-        'startPaymentSeamless', arguments.toMap());
+        'startPaymentSeamless', arguments.toMap(language: language));
     if (result is! int) return YunoStatus.internalError;
     return YunoStatus.values[result];
   }
