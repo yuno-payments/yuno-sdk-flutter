@@ -229,9 +229,10 @@ Future<void> startPayment(...);
 Future<void> startPaymentLite(...);
 Future<void> enrollmentPayment(...)
 Future<void> continuePayment(...);
-Future<void> hideLoader(...);
+Future<YunoStatus> startPaymentSeamlessLite(...)
 //Avialable only for IOS devices
 Future<void> receiveDeeplink(...);
+Future<void> hideLoader(...);
 ```
 
 ## Sugar Syntax
@@ -245,9 +246,9 @@ class Sample extends StatelessWidget {
     context.startPayment(...)
     context.enrollmentPayment(...)
     context.continuePayment(...)
-    context.hideLoader(...)
     //Avialable only for IOS devices
     context.receiveDeeplink(...)
+    context.hideLoader(...)
   }
 }
 ```
@@ -257,9 +258,10 @@ Yuno.startPaymentLite(...)
 Yuno.startPayment(...)
 Yuno.enrollmentPayment(...)
 Yuno.continuePayment(...)
-Yuno.hideLoader(...)
+Yuno.startPaymentSeamlessLite(...)
 //Avialable only for IOS devices
 Yuno.receiveDeeplink(...)
+Yuno.hideLoader(...)
 ```
 
 ## Using Yuno key with `--dart-define`
