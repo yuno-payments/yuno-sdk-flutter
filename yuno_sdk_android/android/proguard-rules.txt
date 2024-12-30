@@ -24,6 +24,8 @@
 -keep class com.yuno.payments.** { *; }
 -keep class * implements com.yuno.payments.network.api.PaymentServices { *; }
 -keepclassmembers class * implements com.yuno.payments.network.api.PaymentServices { *; }
+-keep class br.com.koin.android_sdk.** { *; }
+-dontwarn br.com.koin.android_sdk.**
 
 # OkHttp
 -keepattributes Signature
