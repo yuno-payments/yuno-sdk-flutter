@@ -20,7 +20,7 @@
     @retrofit2.http.* <methods>;
 }
 
-# Your API models
+# API models
 -keep class com.yuno.payments.** { *; }
 -keep class * implements com.yuno.payments.network.api.PaymentServices { *; }
 -keepclassmembers class * implements com.yuno.payments.network.api.PaymentServices { *; }
