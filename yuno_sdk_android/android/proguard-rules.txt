@@ -34,6 +34,10 @@
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
+# Ignore apache class
+-dontwarn org.apache.http.**
+-dontwarn android.net.http.AndroidHttpClient
+
 
 # Gson
 -keep class com.google.gson.** { *; }

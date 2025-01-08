@@ -3,7 +3,7 @@ description: "Yuno Flutter SDK empowers you to create seamless payment experienc
 version: 0.4.1
 homepage: https://www.y.uno/
 environment:
-  sdk: '>=3.5.0 <4.0.0'
+  sdk: '>=3.6.0 <4.0.0'
   flutter: '>=3.3.0'
 
 dependencies:
