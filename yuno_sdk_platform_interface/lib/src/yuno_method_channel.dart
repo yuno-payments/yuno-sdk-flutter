@@ -219,9 +219,10 @@ final class YunoMethodChannel implements YunoPlatform {
   @override
   Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
+    required YunoLanguage language,
   }) async {
     final result = await _methodChannel.invokeMethod(
-        'startPaymentSeamless', arguments.toMap());
+        'startPaymentSeamless', arguments.toMap(language: language));
     if (result is! int) return YunoStatus.internalError;
     return YunoStatus.values[result];
   }

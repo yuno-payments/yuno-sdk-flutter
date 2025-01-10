@@ -230,6 +230,7 @@ abstract interface class YunoPlatform extends PlatformInterface {
 
   Future<YunoStatus> startPaymentSeamlessLite({
     required SeamlessArguments arguments,
+    required YunoLanguage language,
   });
 
   /// A [YunoPaymentNotifier] used to listen for changes and updates to the payment process.

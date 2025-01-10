@@ -115,4 +115,36 @@ extension YunoReader on BuildContext {
     required EnrollmentArguments arguments,
   }) async =>
       await Yuno.enrollmentPayment(arguments: arguments);
+
+  /// Starts a seamless payment process using the provided [SeamlessArguments].
+  ///
+  /// This method initiates a seamless payment process by calling the
+  /// [Yuno.startPaymentSeamlessLite] method with the given [arguments].
+  ///
+  /// The [arguments] parameter is required and must be an instance of
+  /// [SeamlessArguments].
+  ///
+  /// Example:
+  /// ```dart
+  /// SeamlessArguments args =  SeamlessArguments(
+  ///      showPaymentStatus: true, //by default is true
+  ///      checkoutSession: 'YOUR_CHECKOUT_SESSION',
+  ///      methodSelected: MethodSelected(
+  ///        vaultedToken: 'YOUR_VAULTED_TOKEN',
+  ///        paymentMethodType: 'YOUR_PAYMENT_METHOD_TYPE',
+  ///      ),
+  ///    ),
+  /// );
+  ///
+  /// final yunoStatus = await startPaymentSeamlessLite(arguments: args);
+  /// print(yunoStatus);
+  /// ```
+  ///
+  /// Throws:
+  /// - [SomeSpecificException] if the payment process fails.
+  /// - [AnotherException] if the arguments are invalid.
+  Future<void> startPaymentSeamlessLite({
+    required SeamlessArguments arguments,
+  }) async =>
+      await Yuno.startPaymentSeamlessLite(arguments: arguments);
 }
