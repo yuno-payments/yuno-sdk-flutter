@@ -1,3 +1,6 @@
+## 0.5.0
+- feat: Yuno SDK Seamless Supported for Android
+- fix: Upgrade pro-guard rules
 ## 0.4.0 - Android
 - feat: sdk version updated 
 ## 0.3.0 - Android
