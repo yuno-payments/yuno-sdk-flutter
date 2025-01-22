@@ -1,3 +1,10 @@
+## 0.5.1
+- fix: Upgrade yuno_sdk_foundation_package
+## 0.5.0
+- feat: Yuno SDK Seamless Supported for Android & iOS
+- feat: Code improvements
+- feat: Upgrade Dart SDK
+- fix: Upgrade pro-guard rules for Android
 ## 0.4.1
 - bugFix: Valuenotifier did not update OTT in IOS
 ## 0.4.0

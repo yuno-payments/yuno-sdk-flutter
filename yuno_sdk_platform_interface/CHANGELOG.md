@@ -1,3 +1,5 @@
+## 0.4.0
+- feat: Yuno SDK Seamless Supported
 ## 0.3.0 - Interface
 - feat: testing
 ## 0.2.0 - Interface
