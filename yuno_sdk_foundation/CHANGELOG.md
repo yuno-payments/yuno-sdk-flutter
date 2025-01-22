@@ -1,3 +1,5 @@
+## 0.6.0
+- feat: Yuno SDK upgrade
 ## 0.5.0
 - feat: Yuno SDK Seamless Supported for IOS
 ## 0.4.0 - Foundation

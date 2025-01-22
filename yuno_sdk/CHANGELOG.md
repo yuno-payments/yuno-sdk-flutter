@@ -1,3 +1,5 @@
+## 0.6.0
+- feat: Yuno SDK upgrade
 ## 0.5.1
 - fix: Upgrade yuno_sdk_foundation_package
 ## 0.5.0
