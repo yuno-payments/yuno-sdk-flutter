@@ -39,7 +39,7 @@ void main() {
     );
 
     const newEnrollmentState = YunoEnrollmentState(
-      enrollmentStatus: YunoStatus.succeded,
+      enrollmentStatus: YunoStatus.succeeded,
     );
     mockEnrollmentNotifier.simulateStateChange(newEnrollmentState);
 
@@ -67,7 +67,7 @@ void main() {
     );
     const newPaymentState = YunoPaymentState(
       token: 'test-token-123',
-      paymentStatus: YunoStatus.succeded,
+      paymentStatus: YunoStatus.succeeded,
     );
     mockPaymentNotifier.simulateStateChange(newPaymentState);
     await tester.pump();
@@ -113,7 +113,7 @@ void main() {
     );
     const enrollmentStateChanges = [
       YunoEnrollmentState(enrollmentStatus: YunoStatus.processing),
-      YunoEnrollmentState(enrollmentStatus: YunoStatus.succeded),
+      YunoEnrollmentState(enrollmentStatus: YunoStatus.succeeded),
       YunoEnrollmentState(enrollmentStatus: YunoStatus.fail),
     ];
 
@@ -124,7 +124,7 @@ void main() {
       ),
       YunoPaymentState(
         token: 'token-2',
-        paymentStatus: YunoStatus.succeded,
+        paymentStatus: YunoStatus.succeeded,
       ),
       YunoPaymentState(
         token: 'token-3',
@@ -145,7 +145,7 @@ void main() {
     expect(
       enrollmentStates.map((s) => s.enrollmentStatus).toList(),
       equals(
-        [YunoStatus.processing, YunoStatus.succeded, YunoStatus.fail],
+        [YunoStatus.processing, YunoStatus.succeeded, YunoStatus.fail],
       ),
     );
 
@@ -155,7 +155,7 @@ void main() {
     expect(
       paymentStates.map((s) => s.paymentStatus).toList(),
       equals(
-        [YunoStatus.processing, YunoStatus.succeded, YunoStatus.fail],
+        [YunoStatus.processing, YunoStatus.succeeded, YunoStatus.fail],
       ),
     );
   });

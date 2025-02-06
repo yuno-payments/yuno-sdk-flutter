@@ -59,7 +59,7 @@ void main() {
       ),
     );
     const newState = YunoEnrollmentState(
-      enrollmentStatus: YunoStatus.succeded,
+      enrollmentStatus: YunoStatus.succeeded,
     );
     mockNotifier.simulateStateChange(newState);
     await tester.pump();
@@ -100,7 +100,7 @@ void main() {
     );
     const stateChanges = [
       YunoEnrollmentState(enrollmentStatus: YunoStatus.processing),
-      YunoEnrollmentState(enrollmentStatus: YunoStatus.succeded),
+      YunoEnrollmentState(enrollmentStatus: YunoStatus.succeeded),
       YunoEnrollmentState(enrollmentStatus: YunoStatus.fail),
     ];
 
