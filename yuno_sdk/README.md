@@ -142,7 +142,7 @@ await Yuno.init(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
     cardflow: CardFlow.multiStep, // default cardflow
     saveCardEnable: true, // default saveCardEnable
-    keepLoader: true,   // default saveCardEnable 
+    keepLoader: true,   // default keepLoader 
     isDynamicViewEnable: true, // default isDynamicViewEnable
   ),
   iosConfig: IosConfig(), // Optional, can use default value
@@ -165,7 +165,7 @@ YunoPaymentListener(
   listener: (state) {
     // Handle [state] it is YunoState [String token] && [PaymentStatus status]
     // - [token]: One Time Token
-    // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+    // - [paymentStatus]: [reject,succeeded,fail,processing,internalError,cancelByUser]
   },
   child: SomeWidget(),
 )
@@ -176,7 +176,7 @@ YunoPaymentListener(
 YunoEnrollmentListener(
   listener: (state) {
     // Handle [state] it is YunoEnrollmentState
-    // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+    // - [enrollmentStatus]: [reject,succeeded,fail,processing,internalError,cancelByUser]
   },
   child: SomeWidget(),
 )
@@ -186,12 +186,12 @@ YunoEnrollmentListener(
 YunoMultiListener(
   enrollmentListener: (state) {
     // Handle [state] it is YunoEnrollmentState
-    // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+    // - [enrollmentStatus]: [reject,succeeded,fail,processing,internalError,cancelByUser]
   },
   paymentListener: (state) {
     // Handle [state] it is YunoPaymentState [String token] && [PaymentStatus status]
     // - [token]: One Time Token
-    // - [paymentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+    // - [paymentStatus]: [reject,succeeded,fail,processing,internalError,cancelByUser]
   }
   child: SomeWidget(),
 )

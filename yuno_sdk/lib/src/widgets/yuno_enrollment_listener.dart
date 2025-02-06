@@ -22,7 +22,7 @@ typedef YunoEnrollmentWidgetListener = void Function(
 /// YunoEnrollmentListener(
 ///   listener: (state) {
 ///     // Handle [state] it is YunoEnrollmentState
-///     // - [enrollmentStatus]: [reject,succeded,fail,processing,internalError,cancelByUser]
+///     // - [enrollmentStatus]: [reject,succeeded,fail,processing,internalError,cancelByUser]
 ///   },
 ///   child: SomeWidget(),
 /// )
