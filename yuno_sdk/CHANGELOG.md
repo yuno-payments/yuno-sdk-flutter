@@ -1,3 +1,19 @@
+## 0.7.0
+- fix: grammar error
+
+    Instead of:
+
+  ```dart
+    var status = YunoStatus.succeded
+  ```
+
+  Do:
+
+  ```dart
+   var status = YunoStatus.succeeded
+  ```
+- feat: Yuno SDK upgraded
+- feat: Readme Updated
 ## 0.6.0
 - feat: Yuno SDK upgrade
 ## 0.5.1
