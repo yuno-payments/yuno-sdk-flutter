@@ -1,6 +1,6 @@
 enum YunoStatus {
   reject,
-  succeded,
+  succeeded,
   fail,
   processing,
   internalError,

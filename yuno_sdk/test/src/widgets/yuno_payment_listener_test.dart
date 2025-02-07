@@ -60,7 +60,7 @@ void main() {
 
     const newState = YunoPaymentState(
       token: 'test-token-123',
-      paymentStatus: YunoStatus.succeded,
+      paymentStatus: YunoStatus.succeeded,
     );
     mockNotifier.simulateStateChange(newState);
     await tester.pump();
@@ -68,7 +68,7 @@ void main() {
     expect(capturedState, equals(newState));
     expect(capturedContext, isNotNull);
     expect(capturedState?.token, equals('test-token-123'));
-    expect(capturedState?.paymentStatus, equals(YunoStatus.succeded));
+    expect(capturedState?.paymentStatus, equals(YunoStatus.succeeded));
   });
 
   testWidgets('YunoPaymentListener renders child correctly',
@@ -111,7 +111,7 @@ void main() {
         ),
         YunoPaymentState(
           token: 'token-2',
-          paymentStatus: YunoStatus.succeded,
+          paymentStatus: YunoStatus.succeeded,
         ),
         YunoPaymentState(
           token: 'token-3',
@@ -130,7 +130,7 @@ void main() {
       expect(
         states.map((s) => s.paymentStatus).toList(),
         equals(
-          [YunoStatus.processing, YunoStatus.succeded, YunoStatus.fail],
+          [YunoStatus.processing, YunoStatus.succeeded, YunoStatus.fail],
         ),
       );
     },

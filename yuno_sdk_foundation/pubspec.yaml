@@ -1,6 +1,6 @@
 name: yuno_sdk_foundation
 description: "A Yuno Project for IOS"
-version: 0.6.0
+version: 0.7.0
 homepage: https://www.y.uno/
 
 environment:
