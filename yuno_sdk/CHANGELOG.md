@@ -1,3 +1,8 @@
+## 0.8.0
+ - feat: upgrade native sdks
+
+## 0.7.1
+  - fix: upgrade yuno_sdk_platform_interfaces
 ## 0.7.0
 - fix: grammar error
 
