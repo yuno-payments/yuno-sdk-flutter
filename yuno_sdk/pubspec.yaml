@@ -9,19 +9,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-#  yuno_sdk_core: ^0.3.0
-#  yuno_sdk_android: ^0.9.0
-#  yuno_sdk_foundation: ^0.9.0
-#  yuno_sdk_platform_interface: ^0.4.0
+  yuno_sdk_core: ^0.3.0
+  yuno_sdk_android: ^0.9.0
+  yuno_sdk_foundation: ^0.9.0
+  yuno_sdk_platform_interface: ^0.4.0
 
-  yuno_sdk_core:
-    path: ../yuno_sdk_core
-  yuno_sdk_android:
-    path: ../yuno_sdk_android
-  yuno_sdk_foundation:
-    path: ../yuno_sdk_foundation
-  yuno_sdk_platform_interface:
-    path: ../yuno_sdk_platform_interface
+#  yuno_sdk_core:
+#    path: ../yuno_sdk_core
+#  yuno_sdk_android:
+#    path: ../yuno_sdk_android
+#  yuno_sdk_foundation:
+#    path: ../yuno_sdk_foundation
+#  yuno_sdk_platform_interface:
+#    path: ../yuno_sdk_platform_interface
 
 dev_dependencies:
   flutter_test:
