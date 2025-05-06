@@ -1,6 +1,6 @@
 name: yuno_sdk_android
 description: "A Yuno Project for Android"
-version: 0.9.0
+version: 0.9.1
 homepage: https://www.y.uno/
 
 environment:
