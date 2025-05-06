@@ -12,7 +12,7 @@ dependencies:
   yuno_sdk_core: ^0.3.0
   yuno_sdk_android: ^0.9.1
   yuno_sdk_foundation: ^0.9.1
-  yuno_sdk_platform_interface: ^0.6.0
+  yuno_sdk_platform_interface: ^0.5.0
 
 #  yuno_sdk_core:
 #    path: ../yuno_sdk_core
