@@ -124,11 +124,11 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
                     child: UiKitView(
                       key: ValueKey(currentWidth),
                       onPlatformViewCreated: YunoPaymentMethodPlatform.init,
-                      viewType: YunoPaymentMethodPlatform.viewType,
                       creationParamsCodec: const StandardMessageCodec(),
                       creationParams: widget.config.toMap(
                         currentWidth: currentWidth,
                       ),
+                      viewType: YunoPaymentMethodPlatform.viewType,
                     ),
                   )
                 : AnimatedContainer(

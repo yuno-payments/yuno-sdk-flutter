@@ -9,7 +9,7 @@ import Flutter
 import Foundation
 import YunoSDK
 
-class YunoMethods: YunoPaymentDelegate {
+class YunoMethods: YunoPaymentFullDelegate {
     var customerSession: String = ""
     var countryCode: String = ""
     var checkoutSession: String = ""
@@ -58,6 +58,17 @@ class YunoMethods: YunoPaymentDelegate {
                 showUnfoldedCardForm: yunoConfig.cardFormDeployed ?? false
             )
         )
+    }
+    
+    func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
+        methodChannel.invokeMethod("onSelected", arguments: !paymentMethod.paymentMethodType.isEmpty)
+    }
+    
+    func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
+        methodChannel.invokeMethod("onHeightChange", arguments: 0.0)
+    }
+    func yunoDidUnenrollSuccessfully(_ success: Bool) {
+        
     }
 }
 

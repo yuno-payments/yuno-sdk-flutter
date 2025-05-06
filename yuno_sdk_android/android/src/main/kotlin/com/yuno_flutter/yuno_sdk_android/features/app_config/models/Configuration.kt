@@ -1,5 +1,5 @@
 package com.yuno_flutter.yuno_sdk_android.features.app_config.models
-import com.yuno.payments.features.base.ui.screens.CardFormType
+import com.yuno.presentation.core.card.CardFormType
 
 
 enum class CardFlow {

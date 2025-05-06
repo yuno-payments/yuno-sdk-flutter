@@ -27,7 +27,6 @@ class InitHandler {
                     config = YunoConfig(
                         language = appConfig.yunoConfiguration.lang,
                         saveCardEnabled = appConfig.yunoConfiguration.saveCardEnable,
-                        cardFormDeployed = appConfig.yunoConfiguration.cardFormDeployed,
                         isDynamicViewEnabled = appConfig.yunoConfiguration.isDynamicViewEnable,
                         keepLoader = appConfig.yunoConfiguration.keepLoader,
                         cardFlow = appConfig.yunoConfiguration.cardFlow.toCardFLowSDK()

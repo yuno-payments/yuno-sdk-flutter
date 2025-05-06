@@ -36,10 +36,10 @@ public class PaymentMetthodFactory: NSObject, FlutterPlatformViewFactory {
     }
 }
 
-class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate {
+class PaymentMethodView: NSObject, FlutterPlatformView {
+
     private var yunoMethod: YunoMethods
     private let channel: FlutterMethodChannel
-    private lazy var generator: MethodsView? = nil
     var localView: UIView = UIView()
     init(
         frame: CGRect,
@@ -62,18 +62,16 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
             let decoder = JSONDecoder()
             let arguments = try decoder.decode(ViewArguments.self, from: arg)
             self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode, cs: arguments.checkoutSession)
-            generator = nil
-            generator = Yuno.methodsView(delegate: self)
-            self.generator?.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
-                                                  viewType: arguments.viewType) { [weak self] (view: UIView) in
-                view.translatesAutoresizingMaskIntoConstraints = false
-                guard let self = self else {
-                    return
-                }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                let methodsList: UIView = Yuno.getPaymentMethodView(delegate: self.yunoMethod)
+                methodsList.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
-                    view.widthAnchor.constraint(equalToConstant: arguments.width)
+                    methodsList.widthAnchor.constraint(equalToConstant: arguments.width),
+                    
                 ])
-                self.localView.addSubview(view)
+                self.localView.addSubview(methodsList)
             }
         } catch {
             handleError(error)
@@ -87,17 +85,7 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
         errorLabel.frame = localView.bounds
         localView.addSubview(errorLabel)
     }
-    func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
-        channel.invokeMethod("onSelected", arguments: !paymentMethod.paymentMethodType.isEmpty)
-    }
 
-    func yunoDidSelect(enrollmentMethod: any YunoSDK.EnrollmentMethodSelected) {
-    }
-    func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
-        channel.invokeMethod("onHeightChange", arguments: height)
-    }
-    func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
-    }
 
     func view() -> UIView {
         return localView

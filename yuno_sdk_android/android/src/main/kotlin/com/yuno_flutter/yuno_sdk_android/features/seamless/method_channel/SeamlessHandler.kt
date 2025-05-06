@@ -1,10 +1,9 @@
 package com.yuno_flutter.yuno_sdk_android.features.seamless.method_channel
 
 import android.content.Context
-import com.yuno.payments.features.payment.startPaymentLite
 import com.yuno.payments.features.payment.startPaymentSeamlessLite
-import com.yuno.payments.features.payment.ui.views.PaymentSelected
 import com.yuno.payments.features.payment.updateCheckoutSession
+import com.yuno.presentation.core.components.PaymentSelected
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.models.toStartPaymentLite
 import io.flutter.embedding.android.FlutterFragmentActivity
