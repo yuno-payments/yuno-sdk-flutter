@@ -1,7 +1,7 @@
 package com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel
 
 import android.content.Context
-import com.yuno.payments.features.payment.startPayment
+import com.yuno.sdk.payments.startPayment
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.models.toStartPayment
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall

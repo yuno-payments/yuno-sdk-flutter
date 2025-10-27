@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
 import androidx.compose.ui.platform.ComposeView
-import com.yuno.payments.features.payment.updateCheckoutSession
+import com.yuno.sdk.payments.updateCheckoutSession
 import com.yuno.presentation.core.components.PaymentMethodListViewComponent
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.models.PaymentMethodsViewModel
@@ -35,7 +35,7 @@ class YunoPaymentMethodView(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             setContent {
-                PaymentMethodListViewComponent(onPaymentSelected = {
+                PaymentMethodListViewComponent(activity = activity, onPaymentSelected = {
                     channel.invokeMethod(Key.onSelected, it)
                 }, onUnEnrollSuccess = { })
             }

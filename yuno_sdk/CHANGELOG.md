@@ -1,3 +1,6 @@
+## 1.0.0
+- feat: upgrade native sdks
+
 ## 0.9.1
 - feat: upgrade native sdks
 

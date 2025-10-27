@@ -54,8 +54,7 @@ class YunoMethods: YunoPaymentFullDelegate {
                     disableButtonTitleColor: appearance?.disableButtonTitleBackgroundColor,
                     checkboxColor: appearance?.checkboxColor),
                 saveCardEnabled: yunoConfig.saveCardEnable ?? false,
-                keepLoader: yunoConfig.keepLoader ?? false,
-                showUnfoldedCardForm: yunoConfig.cardFormDeployed ?? false
+                keepLoader: yunoConfig.keepLoader ?? false
             )
         )
     }
@@ -76,7 +75,6 @@ extension YunoMethods {
     func startCheckoutUpdate(cc: String, cs: String) {
         countryCode = cc
         checkoutSession = cs
-        Yuno.startCheckout(with: self)
     }
 
     func handleStatus(status: Int) {
@@ -102,7 +100,7 @@ extension YunoMethods {
             result(YunoError.invalidArguments())
             return
         }
-        Yuno.continuePayment(showPaymentStatus: args)
+        Yuno.continuePayment()
     }
     func handleStartPayment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
@@ -139,8 +137,7 @@ extension YunoMethods {
             }
             self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
-            Yuno.startCheckout(with: self)
-            Yuno.startPaymentLite(
+            Yuno.startPaymentLite(with: self,
                 paymentSelected: startPayment.paymentMethodSelected,
                 showPaymentStatus: startPayment.showPaymentStatus
             )

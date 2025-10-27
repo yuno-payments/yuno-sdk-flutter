@@ -1,3 +1,5 @@
+## 1.0.0
+- feat: Yuno SDK upgrade
 ## 0.9.1
 - feat: Yuno SDK upgrade
 ## 0.8.0

@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: yuno_sdk_core
-dependency_overrides:
-  yuno_sdk_core:
-    path: ../yuno_sdk_core
+# # melos_managed_dependency_overrides: yuno_sdk_core
+# dependency_overrides:
+#   yuno_sdk_core:
+#     path: ../yuno_sdk_core

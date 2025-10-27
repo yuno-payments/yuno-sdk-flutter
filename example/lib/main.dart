@@ -5,7 +5,9 @@ import 'package:yuno/yuno.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Yuno.init(
-      apiKey: Environments.apiKey, countryCode: 'CO');
+    apiKey: Environments.apiKey, 
+    countryCode: Environments.countryCode,
+  );
   runApp(const MyApp());
 }
 
@@ -38,10 +40,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   void _startPaymentLite() {
     Yuno.startPaymentLite(
-      arguments: const StartPayment(
-        checkoutSession: 'YOUR_CHECKOUT_SESSION_HERE',
-        methodSelected:
-            MethodSelected(paymentMethodType: 'PAYMENT_METHOD_TYPE'),
+      arguments: StartPayment(
+        checkoutSession: Environments.checkoutSession,
+        methodSelected: const MethodSelected(
+          paymentMethodType: 'PAYMENT_METHOD_TYPE',
+        ),
       ),
     );
   }
@@ -67,8 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 height: 300, // Altura fija para la lista de métodos de pago
                 child: YunoPaymentMethods(
-                  config: const PaymentMethodConf(
-                    checkoutSession: 'YOUR_CHECKOUT_SESSION_HERE',
+                  config: PaymentMethodConf(
+                    checkoutSession: Environments.checkoutSession,
                   ),
                   listener: (context, isSelected) {},
                 ),

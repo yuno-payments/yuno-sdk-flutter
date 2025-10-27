@@ -1,6 +1,6 @@
 name: yuno
 description: "Yuno Flutter SDK empowers you to create seamless payment experiences in your native Android and iOS apps built with Flutter. "
-version: 0.9.1
+version: 1.0.0
 homepage: https://www.y.uno/
 environment:
   sdk: '>=3.6.0 <4.0.0'
@@ -10,18 +10,18 @@ dependencies:
   flutter:
     sdk: flutter
   yuno_sdk_core: ^0.3.0
-  yuno_sdk_android: ^0.9.1
-  yuno_sdk_foundation: ^0.9.1
+  yuno_sdk_android: ^1.0.0
+  yuno_sdk_foundation: ^1.0.0
   yuno_sdk_platform_interface: ^0.6.0
 
-#  yuno_sdk_core:
-#    path: ../yuno_sdk_core
-#  yuno_sdk_android:
-#    path: ../yuno_sdk_android
-#  yuno_sdk_foundation:
-#    path: ../yuno_sdk_foundation
-#  yuno_sdk_platform_interface:
-#    path: ../yuno_sdk_platform_interface
+  # yuno_sdk_core:
+  #   path: ../yuno_sdk_core
+  # yuno_sdk_android:
+  #   path: ../yuno_sdk_android
+  # yuno_sdk_foundation:
+  #   path: ../yuno_sdk_foundation
+  # yuno_sdk_platform_interface:
+  #   path: ../yuno_sdk_platform_interface
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 package com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel
 
 import android.content.Context
-import com.yuno.payments.features.payment.continuePayment
+import com.yuno.sdk.payments.continuePayment
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
