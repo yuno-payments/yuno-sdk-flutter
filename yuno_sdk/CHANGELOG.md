@@ -1,3 +1,6 @@
+## 1.0.1
+- fix: Update Android native SDK to 2.6.5 (corrects version from 1.0.0)
+
 ## 1.0.0
 - feat: upgrade native sdks
 

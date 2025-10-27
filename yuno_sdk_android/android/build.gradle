@@ -77,7 +77,7 @@ dependencies {
     implementation 'androidx.compose.material:material:1.8.0'
     implementation 'androidx.compose.runtime:runtime:1.8.0'
     implementation "androidx.activity:activity-compose:1.10.1"
-    implementation "com.yuno.payments:android-sdk:2.6.3"
+    implementation "com.yuno.payments:android-sdk:2.6.5"
     implementation "androidx.appcompat:appcompat:1.6.1"
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.2.0")
