@@ -332,6 +332,53 @@ class MyApp : Application() {
 }
 ```
 
+## Updating Native SDK Versions
+
+The Yuno Flutter SDK wraps native Android and iOS SDKs. If you need to update the underlying native SDK versions, follow these steps:
+
+### Android Native SDK
+
+To update the Android native SDK version:
+
+1. Navigate to `yuno_sdk_android/android/build.gradle`
+2. Update the Yuno Android SDK version in the dependencies section:
+```gradle
+dependencies {
+    implementation 'com.yuno.payments:yuno-sdk-android:x.x.x'
+}
+```
+3. Sync the project and verify the integration works correctly
+4. Update the `CHANGELOG.md` to reflect the native SDK version change
+
+### iOS Native SDK
+
+To update the iOS native SDK version:
+
+1. Navigate to `yuno_sdk_foundation/ios/yuno_sdk_foundation.podspec`
+2. Update the Yuno iOS SDK version in the dependencies section:
+```ruby
+s.dependency 'YunoSDK', 'x.x.x'
+```
+3. Run `pod install` in the example project to verify the integration
+4. Update the `CHANGELOG.md` to reflect the native SDK version change
+
+### Publishing a New Flutter SDK Version
+
+After updating the native SDK versions or making any changes to the Flutter SDK:
+
+1. **Create a Pull Request**: Submit a PR with your changes to the repository
+2. **Include Documentation**: Make sure to update:
+   - The relevant `CHANGELOG.md` file(s)
+   - Any documentation affected by your changes
+   - Version numbers if applicable
+
+3. **Contact the Yuno Team**: Once your PR is ready:
+   - Request a review from the Yuno team
+   - The Yuno team will review, approve, and merge your changes
+   - The Yuno team will handle the publication of the new SDK version to pub.dev
+
+> **Note**: Only the Yuno team has permissions to publish new versions of the SDK to pub.dev. Contributors should not attempt to publish versions independently.
+
 ## Contributing
 
 You can help us make this project better, feel free to open an new issue or a pull request.
