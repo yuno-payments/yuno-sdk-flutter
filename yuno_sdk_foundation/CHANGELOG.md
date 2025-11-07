@@ -1,3 +1,8 @@
+## 1.0.1
+- chore: Bump version to match Android release
+
+## 1.0.0
+- feat: Yuno SDK upgrade
 ## 0.9.1
 - feat: Yuno SDK upgrade
 ## 0.8.0

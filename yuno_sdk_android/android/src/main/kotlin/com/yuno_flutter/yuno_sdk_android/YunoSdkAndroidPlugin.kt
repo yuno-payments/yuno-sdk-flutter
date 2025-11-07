@@ -1,7 +1,7 @@
 package com.yuno_flutter.yuno_sdk_android
 import android.app.Application
 import android.content.Context
-import com.yuno.payments.features.payment.startCheckout
+import com.yuno.sdk.payments.startCheckout
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -9,8 +9,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.yuno.payments.core.Yuno
-import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.sdk.Yuno
+import com.yuno.sdk.enrollment.initEnrollment
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key

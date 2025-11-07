@@ -1,6 +1,6 @@
 package com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel
 import android.content.Context
-import com.yuno.payments.features.enrollment.startEnrollment
+import com.yuno.sdk.enrollment.startEnrollment
 import com.yuno_flutter.yuno_sdk_android.features.enrollment.models.toEnrollment
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall

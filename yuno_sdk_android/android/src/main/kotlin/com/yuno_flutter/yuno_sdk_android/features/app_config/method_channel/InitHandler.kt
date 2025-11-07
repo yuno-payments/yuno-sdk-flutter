@@ -2,8 +2,8 @@ package com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel
 import android.content.Context
 import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toApiConfig
 import com.yuno_flutter.yuno_sdk_android.features.app_config.models.toCardFLowSDK
-import com.yuno.payments.core.Yuno
-import com.yuno.payments.core.YunoConfig
+import com.yuno.sdk.Yuno
+import com.yuno.sdk.YunoConfig
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
