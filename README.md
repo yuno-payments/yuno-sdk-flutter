@@ -18,6 +18,10 @@
 
 <br>
 
+> **⚠️ Open Source Project Notice**
+> 
+> This is an open source project related to YUNO. Support is provided by the community, not by YUNO directly. For community support, please open an issue in this repository.
+
 This repository contains the Yuno Flutter SDK, which enables seamless payment integration in Flutter applications for both Android and iOS platforms.
 
 ## 📦 Packages
