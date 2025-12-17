@@ -1,3 +1,6 @@
+## 1.0.2
+- feat: update native iOS SDK to 2.9.0
+
 ## 1.0.1
 - chore: Bump version to match Android release
 

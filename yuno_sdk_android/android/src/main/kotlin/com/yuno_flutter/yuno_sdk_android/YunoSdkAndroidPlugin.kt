@@ -170,7 +170,7 @@ If you continue to have trouble, follow this discussion to get some support """,
     fun onEnrollmentStateChange(enrollmentState: String?) {
         channel.invokeMethod(Key.enrollmentStatus, enrollmentState?.statusEnrollmentConverter())
     }
-    fun onPaymentStateChange(paymentState: String?) {
+    fun onPaymentStateChange(paymentState: String?, data: String?) {
        channel.invokeMethod(Key.status, paymentState?.statusConverter())
     }
 

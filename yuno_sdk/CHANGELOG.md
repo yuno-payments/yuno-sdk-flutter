@@ -1,3 +1,8 @@
+## 1.0.2
+- feat: update native Android SDK to 2.8.1
+- feat: update native iOS SDK to 2.9.0
+- fix: support Kotlin 2.x and Compose Compiler plugin compatibility on Android
+
 ## 1.0.1
 - fix: Update Android native SDK to 2.6.5 (corrects version from 1.0.0)
 
@@ -60,4 +65,3 @@
 - feat: Yuno create payment
 - feat: Yuno payment result
 - feat: Yuno start payment
-- feat: Yuno payment methods widget
