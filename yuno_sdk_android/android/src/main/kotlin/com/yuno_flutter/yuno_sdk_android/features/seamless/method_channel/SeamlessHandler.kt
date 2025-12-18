@@ -27,7 +27,7 @@ class SeamlessHandler {
                         vaultedToken = model.paymentMethodSelected.vaultedToken,
                     ),
                     showPaymentStatus = model.showPaymentStatus,
-                    callbackPaymentState = { paymentState ->
+                    callbackPaymentState = { paymentState, _ ->
                         result.success(paymentState?.statusConverter())
                     },
                 )

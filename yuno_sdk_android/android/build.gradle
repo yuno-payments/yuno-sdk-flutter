@@ -25,6 +25,19 @@ allprojects {
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
+// Detect Kotlin version to apply Compose Compiler plugin if Kotlin >= 2.0
+def getKotlinVersion() {
+    def rootKotlinVersion = rootProject.ext.has("kotlin_version") ? rootProject.ext.get("kotlin_version") : "1.9.25"
+    return rootKotlinVersion
+}
+
+def kotlinVersion = getKotlinVersion()
+def isKotlin2 = kotlinVersion.startsWith("2.")
+
+if (isKotlin2) {
+    apply plugin: "org.jetbrains.kotlin.plugin.compose"
+}
+
 android {
     if (project.android.hasProperty("namespace")) {
         namespace = "com.yuno_flutter.yuno_sdk_android"
@@ -68,8 +81,10 @@ android {
         compose true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = '1.5.15'
+    if (!isKotlin2) {
+        composeOptions {
+            kotlinCompilerExtensionVersion = '1.5.15'
+        }
     }
 }
 dependencies {
@@ -77,7 +92,7 @@ dependencies {
     implementation 'androidx.compose.material:material:1.8.0'
     implementation 'androidx.compose.runtime:runtime:1.8.0'
     implementation "androidx.activity:activity-compose:1.10.1"
-    implementation "com.yuno.payments:android-sdk:2.6.5"
+    implementation "com.yuno.payments:android-sdk:2.8.1"
     implementation "androidx.appcompat:appcompat:1.6.1"
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.2.0")

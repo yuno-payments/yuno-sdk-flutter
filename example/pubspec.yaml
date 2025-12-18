@@ -12,8 +12,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  yuno:
-    path: ../yuno_sdk
+  yuno: ^1.0.2
+  # Local development
+  # yuno:
+  #   path: ../yuno_sdk
 
 dev_dependencies:
   flutter_test:
