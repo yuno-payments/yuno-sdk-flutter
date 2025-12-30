@@ -10,10 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  yuno_sdk_core: ^0.3.0
+  # yuno_sdk_core: ^0.3.0
   # Local development (do not commit enabled for publishing)
-  # yuno_sdk_core:
-  #   path: ../yuno_sdk_core
+  yuno_sdk_core:
+    path: ../yuno_sdk_core
 
 dev_dependencies:
   flutter_test:

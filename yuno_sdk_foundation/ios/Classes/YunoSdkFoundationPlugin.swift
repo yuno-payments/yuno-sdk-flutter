@@ -13,7 +13,7 @@ public class YunoSdkFoundationPlugin: NSObject, FlutterPlugin {
     // Method Channel
     instanceSDK.instance = YunoMethods(methodChannel: channel)
     // init seamless
-      instanceSDK.instanceSeamless = Seamless(methodChannel: channel)
+    instanceSDK.instanceSeamless = Seamless(methodChannel: channel)
     registrar.addMethodCallDelegate(instanceSDK, channel: channel)
     // Payment Method View
     let paymentFactory = PaymentMetthodFactory(

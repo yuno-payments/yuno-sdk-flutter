@@ -51,31 +51,35 @@ class PaymentMethodView: NSObject, FlutterPlatformView {
         self.yunoMethod = yunoMethod
         channel = FlutterMethodChannel(
             name: "yuno/payment_methods_view/\(viewId)", binaryMessenger: messenger)
+        self.yunoMethod.setPaymentMethodsViewChannel(channel)
         super.init()
         generatorView(args: args)
     }
     func generatorView(args: Any?) {
-        guard let arg = args as? [String: Any] else {
-             return
-        }
-        do {
-            let decoder = JSONDecoder()
-            let arguments = try decoder.decode(ViewArguments.self, from: arg)
-            self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode, cs: arguments.checkoutSession)
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                let methodsList: UIView = Yuno.getPaymentMethodView(delegate: self.yunoMethod)
-                methodsList.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    methodsList.widthAnchor.constraint(equalToConstant: arguments.width),
-                    
-                ])
-                self.localView.addSubview(methodsList)
-            }
-        } catch {
-            handleError(error)
-        }
+       guard let arg = args as? [String: Any] else {
+            return
+       }
+       do {
+           let decoder = JSONDecoder()
+           let arguments = try decoder.decode(ViewArguments.self, from: arg)
+           self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode, cs: arguments.checkoutSession)
+           
+           Task { @MainActor [weak self] in
+               guard let self = self else { return }
+               let methodsList: UIView = await Yuno.getPaymentMethodViewAsync(delegate: self.yunoMethod)
+               methodsList.translatesAutoresizingMaskIntoConstraints = false
+               localView.addSubview(methodsList)
+               NSLayoutConstraint.activate([
+                 methodsList.topAnchor.constraint(equalTo: localView.topAnchor),
+                 methodsList.leadingAnchor.constraint(equalTo: localView.leadingAnchor),
+                 methodsList.trailingAnchor.constraint(equalTo: localView.trailingAnchor),
+                 methodsList.bottomAnchor.constraint(equalTo: localView.bottomAnchor),
+               ])
+              
+           }
+       } catch {
+           handleError(error)
+       }
     }
     func handleError(_ error: Error) {
         let errorLabel = UILabel()

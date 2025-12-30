@@ -15,6 +15,7 @@ class YunoMethods: YunoPaymentFullDelegate {
     var checkoutSession: String = ""
     var language: String?
     let methodChannel: FlutterMethodChannel
+    private var paymentMethodsViewChannel: FlutterMethodChannel?
     private lazy var window: UIWindow? = {
         return UIApplication.shared.windows.first { $0.isKeyWindow }
     }()
@@ -26,10 +27,18 @@ class YunoMethods: YunoPaymentFullDelegate {
         self.methodChannel = methodChannel
     }
 
+    func setPaymentMethodsViewChannel(_ channel: FlutterMethodChannel) {
+        paymentMethodsViewChannel = channel
+    }
+
     func yunoCreatePayment(with token: String) {
+        NSLog("YUNO iOS OTT ")
         handleOTT(token: token)
     }
+    
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
+        NSLog("YUNO iOS Result -> selected=%@", "\(result.rawValue)")
+        
         handleStatus(status: result.rawValue)
     }
     private func initialize(app: AppConfiguration) {
@@ -60,11 +69,24 @@ class YunoMethods: YunoPaymentFullDelegate {
     }
     
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
-        methodChannel.invokeMethod("onSelected", arguments: !paymentMethod.paymentMethodType.isEmpty)
+        let selected = !paymentMethod.paymentMethodType.isEmpty
+        if let paymentMethodsViewChannel = paymentMethodsViewChannel {
+            paymentMethodsViewChannel.invokeMethod("onSelected", arguments: selected)
+            return
+        }
+        methodChannel.invokeMethod("onSelected", arguments: selected)
     }
     
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
-        methodChannel.invokeMethod("onHeightChange", arguments: 0.0)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let heightValue = Double(height)
+            if let paymentMethodsViewChannel = self.paymentMethodsViewChannel {
+                paymentMethodsViewChannel.invokeMethod("onHeightChange", arguments: heightValue)
+                return
+            }
+            self.methodChannel.invokeMethod("onHeightChange", arguments: heightValue)
+        }
     }
     func yunoDidUnenrollSuccessfully(_ success: Bool) {
         
@@ -108,12 +130,13 @@ extension YunoMethods {
             return
         }
         do {
-        let decoder = JSONDecoder()
-        let startPayment = try decoder.decode(StartPayment.self, from: args)
-        Yuno.startPayment(
-            showPaymentStatus: startPayment.showPaymentStatus
-        )
+            let decoder = JSONDecoder()
+            let startPayment = try decoder.decode(StartPayment.self, from: args)
+            Yuno.startPayment(
+                showPaymentStatus: startPayment.showPaymentStatus
+            )
         } catch {
+           // NSLog("YUNO iOS <- fallo full called")
             result(YunoError.somethingWentWrong())
         }
     }
@@ -134,13 +157,23 @@ extension YunoMethods {
                         details: "param:\(startPayment.paymentMethodSelected.paymentMethodType) is empty"
                     )
                 )
+                return
             }
             self.countryCode = startPayment.countryCode
             self.checkoutSession = startPayment.checkoutSession
-            Yuno.startPaymentLite(with: self,
-                paymentSelected: startPayment.paymentMethodSelected,
-                showPaymentStatus: startPayment.showPaymentStatus
-            )
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                 NSLog("YUNO iOS -> Starting Payment FULL with language: %@", self.language ?? "nil")
+                Yuno.startPaymentLite(
+                    with: self,
+                    paymentSelected: startPayment.paymentMethodSelected,
+                    showPaymentStatus: startPayment.showPaymentStatus
+                )
+                result(true)
+             //   NSLog("YUNO iOS startPaymentLite returned")
+            }
         } catch {
             result(YunoError.somethingWentWrong())
         }

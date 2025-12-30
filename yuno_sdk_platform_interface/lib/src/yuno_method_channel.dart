@@ -197,6 +197,11 @@ final class YunoMethodChannel implements YunoPlatform {
     /// Starts a full payment process.
     ///
     /// [showPaymentStatus]: Determines if the payment status should be displayed to the user.
+    if (kDebugMode) {
+      debugPrint(
+        'YUNO Dart -> startPayment() showPaymentStatus=$showPaymentStatus',
+      );
+    }
     await _methodChannel.invokeMethod(
       'startPayment',
       ParserStartPayment.toMap(showPaymentStatus: showPaymentStatus),

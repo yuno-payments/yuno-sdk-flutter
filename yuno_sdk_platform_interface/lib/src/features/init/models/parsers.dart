@@ -11,7 +11,7 @@ extension ParserIosConfig on IosConfig {
 extension ParserYunoConfig on YunoConfig {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'lang': lang.rawValue,
+      'lang': lang.rawValue.toLowerCase(),
       'cardFlow': cardFlow.name,
       'saveCardEnable': saveCardEnable,
       'keepLoader': keepLoader,
