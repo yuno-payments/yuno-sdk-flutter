@@ -52,7 +52,7 @@ class YunoPaymentMethodView(
             if (currentHeightPx <= 0) return@OnGlobalLayoutListener
 
             val density = context.resources.displayMetrics.density
-            val currentHeightDp = currentHeightPx / density
+            val currentHeightDp = (currentHeightPx / density).toDouble()
 
             // Avoid spamming the channel for tiny diffs during animation/layout passes.
             if (abs(currentHeightDp - lastHeightDp) > 0.5) {

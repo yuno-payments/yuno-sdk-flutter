@@ -91,7 +91,6 @@ platform :ios do
   lane :upload_to_testflight_version do
     sign_sdk_testflight
     fetch_and_increment_build_number
-    # prepare_ios
 
     build_ios_app(
       workspace: ENV["APP_WORKSPACE"],
@@ -113,7 +112,6 @@ platform :ios do
   desc "Build an IPA for device farms and upload it"
   lane :build_farm_version do
     sign_sdk_farm
-    # prepare_ios
 
     output_name = "SDK-iOS-Flutter.ipa"
 
@@ -132,17 +130,19 @@ platform :ios do
 
   desc "Upload IPA to the device farm (LambdaTest)"
   lane :upload_farm_version do
+    require_env!("LAMBDATEST_API_TOKEN")
+    
     version_data = get_version_and_build_number
     ipa_path = lane_context[SharedValues::IPA_OUTPUT_PATH]
     sh <<-EOF
-    curl -u "yuno_ios:N1SJKpMcukk80JLrbnanJHixmBez49m0DUaNilujOgcIxj2LzO" \
+    curl -u "yuno_ios:#{ENV['LAMBDATEST_API_TOKEN']}" \
     -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" \
     -F "appFile=@#{ipa_path}" \
     -F "name=#{version_data[:version]} (#{version_data[:build_number]})" \
     -F "visibility=team"
     EOF
 
-    upload_to_slack
+    #upload_to_slack
   end
   
   desc "Load ASC API Key information to use in subsequent lanes"
