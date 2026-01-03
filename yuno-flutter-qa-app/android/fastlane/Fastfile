@@ -1,0 +1,56 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+
+default_platform(:android)
+
+platform :android do
+  desc "Build APK and upload to Firebase App Tester and LambdaTest"
+  lane :build_and_upload do
+    version = get_version_from_pubspec
+    fastlane_dir = File.dirname(__FILE__)
+    project_root = File.expand_path('../..', fastlane_dir)
+    Dir.chdir(project_root) do    
+      sh("flutter build apk --release --no-pub") 
+    end
+    apk_path = File.join(project_root, 'build/app/outputs/flutter-apk/app-release.apk')
+    
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID"],
+      apk_path: apk_path,
+      groups: "qa-testers",
+      release_notes: "QA Build - #{version[:version_name]} (#{version[:version_code]})",
+      firebase_cli_token: ENV["FIREBASE_TOKEN"]
+    )
+    
+    upload_to_lambdatest(apk_path, version)
+  end
+  
+  def upload_to_lambdatest(apk_path, version_data)
+    require_env!("LAMBDATEST_API_TOKEN")
+    
+    sh <<-EOF
+    curl -u "yuno_android:#{ENV['LAMBDATEST_API_TOKEN']}" \
+    -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" \
+    -F "appFile=@#{apk_path}" \
+    -F "name=#{version_data[:version]} (#{version_data[:build_number]})" \
+    -F "visibility=team"
+    EOF
+  end
+  
+  def require_env!(key)
+    value = ENV[key]
+    UI.user_error!("Missing #{key} environment variable") if value.to_s.strip.empty?
+    value
+  end
+
+  def get_version_from_pubspec
+    require 'yaml'
+    pubspec = YAML.load_file('../../pubspec.yaml')
+    version_full = pubspec['version'] # Ejemplo: "1.0.0+1"
+    
+    version_name = version_full.split('+')[0] # "1.0.0"
+    version_code = version_full.split('+')[1] # "1"
+    
+    { version_name: version_name, version_code: version_code }
+  end
+end

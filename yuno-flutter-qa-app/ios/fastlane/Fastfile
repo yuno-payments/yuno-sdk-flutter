@@ -88,7 +88,7 @@ platform :ios do
   end
 
   desc "Upload a new build to TestFlight"
-  lane :upload_to_testflight_version do
+  lane :build_and_upload do
     sign_sdk_testflight
     fetch_and_increment_build_number
 
@@ -107,6 +107,8 @@ platform :ios do
       skip_submission: true,
       skip_waiting_for_build_processing: true
     )
+
+    build_farm_version
   end
 
   desc "Build an IPA for device farms and upload it"
