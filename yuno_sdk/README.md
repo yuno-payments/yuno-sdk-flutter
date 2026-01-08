@@ -211,12 +211,13 @@ YunoPaymentMethods(
     checkoutSession: 'your_checkout_session_id',
     // Add other configuration options as needed
   ),
-  listener: (context, isSelected) {
-    if (isSelected) {
-      print('A payment method has been selected');
+  listener: (context, methodSelected, height) {
+    if (methodSelected != null) {
+      print('A payment method has been selected: ${methodSelected.paymentMethodType}');
     } else {
       print('No payment method is currently selected');
     }
+    print('Payment methods height: $height');
   },
 )
 ```

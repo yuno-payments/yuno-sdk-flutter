@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   config: PaymentMethodConf(
                     checkoutSession: Environments.checkoutSession,
                   ),
-                  listener: (context, isSelected) {},
+                  listener: (context, methodSelected, height) {},
                 ),
               ),
             ),

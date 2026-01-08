@@ -7,6 +7,7 @@
 
 import Flutter
 import Foundation
+import UIKit
 import YunoSDK
 
 class YunoMethods: YunoPaymentFullDelegate {
@@ -70,11 +71,15 @@ class YunoMethods: YunoPaymentFullDelegate {
     
     func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
         let selected = !paymentMethod.paymentMethodType.isEmpty
+        let paymentMethodData: [String: Any?] = [
+            "vaultedToken": paymentMethod.vaultedToken,
+            "paymentMethodType": paymentMethod.paymentMethodType
+        ]
         if let paymentMethodsViewChannel = paymentMethodsViewChannel {
-            paymentMethodsViewChannel.invokeMethod("onSelected", arguments: selected)
+            paymentMethodsViewChannel.invokeMethod("onSelected", arguments: paymentMethodData)
             return
         }
-        methodChannel.invokeMethod("onSelected", arguments: selected)
+        methodChannel.invokeMethod("onSelected", arguments: paymentMethodData)
     }
     
     func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {

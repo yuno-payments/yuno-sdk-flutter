@@ -44,7 +44,10 @@ enum YunoLanguage {
   id('ID'),
 
   /// Thai language.
-  th('TH');
+  th('TH'),
+
+  /// Arabic language.
+  ar('AR');
 
   /// The raw value of the language code.
   final String rawValue;

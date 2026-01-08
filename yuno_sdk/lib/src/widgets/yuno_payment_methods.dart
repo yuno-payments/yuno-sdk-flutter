@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 import 'package:yuno/src/internals.dart';
 
 /// Signature for the `listener` function which takes the `BuildContext` along
-/// with the `isSelected` state and is responsible for executing in response to
+/// with the `methodSelected` state and `height` and is responsible for executing in response to
 /// state changes.
 typedef YunoPaymentMethodSelectedWidgetListener = void Function(
-    BuildContext context, bool isSelected);
+    BuildContext context, MethodSelected? methodSelected, double height);
 
 /// A Flutter widget that displays payment methods using a native iOS and Android views.
 ///
@@ -27,12 +27,14 @@ typedef YunoPaymentMethodSelectedWidgetListener = void Function(
 ///     checkoutSession: 'your_checkout_session_id',
 ///     // Add other configuration options as needed
 ///   ),
-///   listener: (context, isSelected) {
-///     if (isSelected) {
-///       print('A payment method has been selected');
+///   listener: (context, methodSelected, height) {
+///     if (methodSelected != null) {
+///       print('Payment method selected: ${methodSelected.paymentMethodType}');
+///       print('Vaulted token: ${methodSelected.vaultedToken}');
 ///     } else {
 ///       print('No payment method is currently selected');
 ///     }
+///     print('Payment methods height: $height');
 ///   },
 /// )
 /// ```
@@ -64,19 +66,22 @@ class YunoPaymentMethods extends StatefulWidget {
 
   /// A function that is called when the payment method selection changes.
   ///
-  /// The function is passed the current [BuildContext] and a boolean indicating
-  /// whether a payment method is selected. This can be used to update the UI
-  /// or perform actions based on the selection state.
+  /// The function is passed the current [BuildContext] and a [MethodSelected] object
+  /// containing the selected payment method information (vaultedToken and paymentMethodType).
+  /// This can be used to update the UI or perform actions based on the selection state.
   ///
   /// Example:
   /// ```dart
-  /// (context, isSelected) {
-  ///   if (isSelected) {
-  ///     ScaffoldMessenger.of(context).showSnackBar(
-  ///       SnackBar(content: Text('Payment method selected')),
-  ///     );
-  ///   }
-  /// }
+/// (context, methodSelected, height) {
+///   if (methodSelected != null) {
+///     ScaffoldMessenger.of(context).showSnackBar(
+///       SnackBar(
+///         content: Text('Payment method selected: ${methodSelected.paymentMethodType}'),
+///       ),
+///     );
+///   }
+///   // Use height to adjust UI layout
+/// }
   /// ```
   final YunoPaymentMethodSelectedWidgetListener listener;
 
@@ -95,15 +100,20 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
   void initState() {
     super.initState();
     _selectController.addListener(_listener);
+    _controller.addListener(_listener);
   }
 
   /// Listener method called when the payment method state changes.
   ///
   /// This method invokes the [YunoPaymentMethodSelectedWidgetListener] provided in the widget
-  /// constructor, passing the current context and selection state.
-  /// It allows the parent widget to react to changes in the payment method selection.
+  /// constructor, passing the current context, the selected payment method information, and the height.
+  /// It allows the parent widget to react to changes in the payment method selection and height.
   void _listener() {
-    widget.listener(context, _selectController.value.isSelected);
+    widget.listener(
+      context,
+      _selectController.value.methodSelected,
+      _controller.value.height,
+    );
   }
 
 @override
@@ -210,6 +220,7 @@ Widget build(BuildContext context) {
   @override
   void dispose() {
     _selectController.removeListener(_listener);
+    _controller.removeListener(_listener);
     super.dispose();
   }
 }

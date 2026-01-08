@@ -1,12 +1,14 @@
 package com.yuno_flutter.yuno_sdk_android.features.payment_methods.views
 
 import android.content.Context
+import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.Dp
 import com.yuno.sdk.payments.updateCheckoutSession
 import com.yuno.presentation.core.components.PaymentMethodListViewComponent
+import com.yuno.presentation.core.components.PaymentSelected
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.models.PaymentMethodsViewModel
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -23,8 +25,8 @@ class YunoPaymentMethodView(
     creationParams: PaymentMethodsViewModel,
 ) : PlatformView, MethodChannel.MethodCallHandler {
     private var methodView: View?
-    private var heightListener: ViewTreeObserver.OnGlobalLayoutListener? = null
     private var lastHeightDp: Double = -1.0
+    private var paymentMethodIsSelected: Boolean = false
 
     init {
         channel.setMethodCallHandler(this)
@@ -39,28 +41,39 @@ class YunoPaymentMethodView(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             setContent {
-                PaymentMethodListViewComponent(activity = activity, onPaymentSelected = {
-                    channel.invokeMethod(Key.onSelected, it)
-                }, onUnEnrollSuccess = { })
+                PaymentMethodListViewComponent(
+                    activity = activity,
+                    onPaymentSelected = { isSelected: Boolean, paymentMethodInfo: PaymentSelected? ->
+                        paymentMethodIsSelected = isSelected
+                        Log.i("PaymentMethodView", "Payment Method Selected: ${paymentMethodInfo?.toString().orEmpty()}")
+                        val paymentMethodData = if (paymentMethodInfo != null) {
+                            mapOf(
+                                "vaultedToken" to paymentMethodInfo.vaultedToken,
+                                "paymentMethodType" to paymentMethodInfo.paymentMethodType
+                            )
+                        } else {
+                            mapOf(
+                                "vaultedToken" to null,
+                                "paymentMethodType" to ""
+                            )
+                        }
+                        channel.invokeMethod(Key.onSelected, paymentMethodData)
+                    },
+                    onUnEnrollSuccess = { success: Boolean ->
+                        Log.i("PaymentMethodView", "UnEnroll Success: $success")
+                    },
+                    onSizeChanged = { width: Dp, height: Dp ->
+                        val heightDp = height.value.toDouble()
+                        Log.i("PaymentMethodView", "Size Changed: ${width.value}dp x ${height.value}dp")
+                        // Avoid spamming the channel for tiny diffs during animation/layout passes.
+                        if (abs(heightDp - lastHeightDp) > 0.5) {
+                            lastHeightDp = heightDp
+                            channel.invokeMethod(Key.onHeightChange, heightDp)
+                        }
+                    },
+                )
             }
         }
-
-        // Report the native view height back to Flutter so the Dart widget can size itself correctly.
-        // The height is sent in logical pixels (dp) to match Flutter's coordinate system.
-        heightListener = ViewTreeObserver.OnGlobalLayoutListener {
-            val currentHeightPx = composeView.height
-            if (currentHeightPx <= 0) return@OnGlobalLayoutListener
-
-            val density = context.resources.displayMetrics.density
-            val currentHeightDp = (currentHeightPx / density).toDouble()
-
-            // Avoid spamming the channel for tiny diffs during animation/layout passes.
-            if (abs(currentHeightDp - lastHeightDp) > 0.5) {
-                lastHeightDp = currentHeightDp
-                channel.invokeMethod(Key.onHeightChange, currentHeightDp)
-            }
-        }
-        composeView.viewTreeObserver.addOnGlobalLayoutListener(heightListener)
 
         methodView = composeView
     }
@@ -70,10 +83,6 @@ class YunoPaymentMethodView(
     }
 
     override fun dispose() {
-        heightListener?.let { listener ->
-            methodView?.viewTreeObserver?.removeOnGlobalLayoutListener(listener)
-        }
-        heightListener = null
         methodView = null
         channel.setMethodCallHandler(null)
     }

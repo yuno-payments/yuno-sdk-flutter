@@ -14,7 +14,7 @@ void main() {
 
   setUp(() {
     listenerCalled = false;
-    mockListener = (context, isSelected) {
+    mockListener = (context, methodSelected, height) {
       listenerCalled = true;
     };
   });
@@ -171,8 +171,9 @@ void main() {
     );
 
     await tester.pump();
-    YunoPaymentMethodPlatform.selectController.value =
-        const YunoPaymentSelectState(isSelected: true);
+    YunoPaymentMethodPlatform.selectController.methodSelectedUpdate(
+      const MethodSelected(paymentMethodType: 'CARD'),
+    );
 
     await tester.pump();
     expect(listenerCalled, isTrue);
@@ -186,8 +187,7 @@ void main() {
     );
 
     await tester.pump();
-    YunoPaymentMethodPlatform.selectController.value =
-        const YunoPaymentSelectState(isSelected: false);
+    YunoPaymentMethodPlatform.selectController.methodSelectedUpdate(null);
 
     await tester.pump();
     expect(listenerCalled, isFalse);
@@ -235,7 +235,7 @@ void main() {
         home: Scaffold(
           body: YunoPaymentMethods(
             config: config,
-            listener: (_, __) {},
+            listener: (_, __, ___) {},
             androidPlatformViewRenderType:
                 AndroidPlatformViewRenderType.expensiveAndroidView,
           ),
