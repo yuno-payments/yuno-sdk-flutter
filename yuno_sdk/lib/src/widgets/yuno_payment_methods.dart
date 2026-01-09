@@ -128,6 +128,49 @@ Widget build(BuildContext context) {
             _controller.updateLastWidth(currentWidth);
           }
 
+          // Helper function to create the platform view
+          Widget createPlatformView() {
+            return PlatformViewLink(
+              viewType: YunoPaymentMethodPlatform.viewType,
+              surfaceFactory: (context, controller) => AndroidViewSurface(
+                controller: controller as AndroidViewController,
+                gestureRecognizers: const <Factory<
+                    OneSequenceGestureRecognizer>>{},
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+              ),
+              onCreatePlatformView: (params) {
+                YunoPaymentMethodPlatform.init(params.id);
+                final Map<String, dynamic> creationParams =
+                    widget.config.toMap(currentWidth: currentWidth);
+                switch (widget.androidPlatformViewRenderType) {
+                  case AndroidPlatformViewRenderType.expensiveAndroidView:
+                    return PlatformViewsService.initExpensiveAndroidView(
+                      id: params.id,
+                      viewType: YunoPaymentMethodPlatform.viewType,
+                      layoutDirection: Directionality.of(context),
+                      creationParams: creationParams,
+                      creationParamsCodec: const StandardMessageCodec(),
+                    )
+                      ..addOnPlatformViewCreatedListener(
+                          params.onPlatformViewCreated)
+                      ..create();
+
+                  case AndroidPlatformViewRenderType.androidView:
+                    return PlatformViewsService.initAndroidView(
+                      id: params.id,
+                      viewType: YunoPaymentMethodPlatform.viewType,
+                      layoutDirection: Directionality.of(context),
+                      creationParams: creationParams,
+                      creationParamsCodec: const StandardMessageCodec(),
+                    )
+                      ..addOnPlatformViewCreatedListener(
+                          params.onPlatformViewCreated)
+                      ..create();
+                }
+              },
+            );
+          }
+
           final Widget paymentMethodsView =
               TargetPlatform.iOS == defaultTargetPlatform
                   ? SizedBox(
@@ -146,55 +189,23 @@ Widget build(BuildContext context) {
                         ),
                       ),
                     )
-                  : AnimatedContainer(
-                      curve: Curves.slowMiddle,
-                      duration: const Duration(milliseconds: 10),
-                      height: value.height,
-                      child: PlatformViewLink(
-                        viewType: YunoPaymentMethodPlatform.viewType,
-                        surfaceFactory: (context, controller) =>
-                            AndroidViewSurface(
-                          controller: controller as AndroidViewController,
-                          gestureRecognizers: const <Factory<
-                              OneSequenceGestureRecognizer>>{},
-                          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                        ),
-                        onCreatePlatformView: (params) {
-                          YunoPaymentMethodPlatform.init(params.id);
-                          switch (widget.androidPlatformViewRenderType) {
-                            case AndroidPlatformViewRenderType
-                                  .expensiveAndroidView:
-                              return PlatformViewsService
-                                  .initExpensiveAndroidView(
-                                id: params.id,
-                                viewType: YunoPaymentMethodPlatform.viewType,
-                                layoutDirection: Directionality.of(context),
-                                creationParams: widget.config
-                                    .toMap(currentWidth: currentWidth),
-                                creationParamsCodec:
-                                    const StandardMessageCodec(),
-                              )
-                                ..addOnPlatformViewCreatedListener(
-                                    params.onPlatformViewCreated)
-                                ..create();
-
-                            case AndroidPlatformViewRenderType.androidView:
-                              return PlatformViewsService.initAndroidView(
-                                id: params.id,
-                                viewType: YunoPaymentMethodPlatform.viewType,
-                                layoutDirection: Directionality.of(context),
-                                creationParams: widget.config
-                                    .toMap(currentWidth: currentWidth),
-                                creationParamsCodec:
-                                    const StandardMessageCodec(),
-                              )
-                                ..addOnPlatformViewCreatedListener(
-                                    params.onPlatformViewCreated)
-                                ..create();
-                          }
-                        },
-                      ),
-                    );
+                  : value.height > 50
+                      ? AnimatedContainer(
+                          curve: Curves.easeInOut,
+                          duration: const Duration(milliseconds: 250),
+                          height: value.height,
+                          child: ClipRect(
+                            child: createPlatformView(),
+                          ),
+                        )
+                      : SizedBox(
+                          // Cuando la altura es muy pequeña, usamos un espacio grande para permitir
+                          // que el componente nativo mida su contenido real
+                          height: 2000.0,
+                          child: ClipRect(
+                            child: createPlatformView(),
+                          ),
+                        );
 
           return paymentMethodsView;
         },

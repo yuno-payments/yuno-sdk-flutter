@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.Dp
 import com.yuno.sdk.payments.updateCheckoutSession
@@ -41,37 +44,42 @@ class YunoPaymentMethodView(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             setContent {
-                PaymentMethodListViewComponent(
-                    activity = activity,
-                    onPaymentSelected = { isSelected: Boolean, paymentMethodInfo: PaymentSelected? ->
-                        paymentMethodIsSelected = isSelected
-                        Log.i("PaymentMethodView", "Payment Method Selected: ${paymentMethodInfo?.toString().orEmpty()}")
-                        val paymentMethodData = if (paymentMethodInfo != null) {
-                            mapOf(
-                                "vaultedToken" to paymentMethodInfo.vaultedToken,
-                                "paymentMethodType" to paymentMethodInfo.paymentMethodType
-                            )
-                        } else {
-                            mapOf(
-                                "vaultedToken" to null,
-                                "paymentMethodType" to ""
-                            )
-                        }
-                        channel.invokeMethod(Key.onSelected, paymentMethodData)
-                    },
-                    onUnEnrollSuccess = { success: Boolean ->
-                        Log.i("PaymentMethodView", "UnEnroll Success: $success")
-                    },
-                    onSizeChanged = { width: Dp, height: Dp ->
-                        val heightDp = height.value.toDouble()
-                        Log.i("PaymentMethodView", "Size Changed: ${width.value}dp x ${height.value}dp")
-                        // Avoid spamming the channel for tiny diffs during animation/layout passes.
-                        if (abs(heightDp - lastHeightDp) > 0.5) {
-                            lastHeightDp = heightDp
-                            channel.invokeMethod(Key.onHeightChange, heightDp)
-                        }
-                    },
-                )
+                Box(modifier = Modifier.wrapContentHeight()) {
+                    PaymentMethodListViewComponent(
+                        activity = activity,
+                        onPaymentSelected = { isSelected: Boolean, paymentMethodInfo: PaymentSelected? ->
+                            paymentMethodIsSelected = isSelected
+                            Log.i("PaymentMethodView", "Payment Method Selected: ${paymentMethodInfo?.toString().orEmpty()}")
+                            val paymentMethodData = if (paymentMethodInfo != null) {
+                                mapOf(
+                                    "vaultedToken" to paymentMethodInfo.vaultedToken,
+                                    "paymentMethodType" to paymentMethodInfo.paymentMethodType
+                                )
+                            } else {
+                                mapOf(
+                                    "vaultedToken" to null,
+                                    "paymentMethodType" to ""
+                                )
+                            }
+                            channel.invokeMethod(Key.onSelected, paymentMethodData)
+                        },
+                        onUnEnrollSuccess = { success: Boolean ->
+                            Log.i("PaymentMethodView", "UnEnroll Success: $success")
+                        },
+                        onSizeChanged = { width: Dp, height: Dp ->
+                            val heightDp = height.value.toDouble()
+                            Log.i("PaymentMethodView", "Size Changed: ${width.value}dp x ${height.value}dp")
+                            // Si el valor es > 0 y cambió, notificamos a Flutter
+                            if (heightDp > 0 && abs(heightDp - lastHeightDp) > 0.5) {
+                                lastHeightDp = heightDp
+                                // Aseguramos que el envío ocurra en el thread de UI
+                                activity.runOnUiThread {
+                                    channel.invokeMethod(Key.onHeightChange, heightDp)
+                                }
+                            }
+                        },
+                    )
+                }
             }
         }
 

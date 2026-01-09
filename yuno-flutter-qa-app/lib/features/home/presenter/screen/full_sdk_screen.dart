@@ -37,55 +37,8 @@ class _SDKLayout extends StatefulWidget {
   State<_SDKLayout> createState() => _SDKLayoutState();
 }
 
-class _SDKLayoutState extends State<_SDKLayout> with SingleTickerProviderStateMixin {
+class _SDKLayoutState extends State<_SDKLayout> {
   MethodSelected? methodSelected;
-
-  late final AnimationController _controller;
-  late Animation<double> _h;
-
-  double _viewportH = 1.0;
-  double _targetH = 1.0;  
-  double _maxSeenH = 1.0;  
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 280));
-    _h = AlwaysStoppedAnimation(_viewportH);
-
-    _controller.addListener(() {
-      setState(() => _viewportH = _h.value);
-    });
-  }
-
-  void _animateRevealTo(double newH) {
-    newH = newH <= 0 ? 1.0 : newH;
-
-    if (newH > _maxSeenH) _maxSeenH = newH;
-
-    _targetH = newH;
-
-    _controller.stop();
-
-    final begin = _viewportH;
-    final end = _targetH;
-
-    final delta = (end - begin).abs();
-    final ms = (140 + (delta * 0.7)).clamp(180, 520).toInt();
-    _controller.duration = Duration(milliseconds: ms);
-
-    _h = Tween<double>(begin: begin, end: end).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
-
-    _controller.forward(from: 0);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,25 +53,13 @@ class _SDKLayoutState extends State<_SDKLayout> with SingleTickerProviderStateMi
           child: Column(
             children: [
               const SizedBox(height: 6),
-              ClipRect(
-                child: SizedBox(
-                  height: _viewportH,
-                  child: OverflowBox(
-                    alignment: Alignment.topCenter,
-                    minHeight: 0,
-                    maxHeight: _maxSeenH, 
-                    child: SizedBox(
-                      height: _maxSeenH,
-                      child: YunoPaymentMethods(
-                        config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
-                        listener: (context, m, height) {
-                          setState(() => methodSelected = m);
-                          _animateRevealTo(height);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+              YunoPaymentMethods(
+                config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
+                listener: (context, m, height) {
+                  setState(() {
+                    methodSelected = m;
+                  });
+                },
               ),
 
               const SizedBox(height: 20),
