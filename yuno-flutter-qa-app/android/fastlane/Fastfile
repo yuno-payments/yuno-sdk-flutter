@@ -10,7 +10,7 @@ platform :android do
     fastlane_dir = File.dirname(__FILE__)
     project_root = File.expand_path('../..', fastlane_dir)
     Dir.chdir(project_root) do    
-      sh("flutter build apk --release --no-pub") 
+      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons")
     end
     apk_path = File.join(project_root, 'build/app/outputs/flutter-apk/app-release.apk')
     
@@ -22,7 +22,7 @@ platform :android do
       firebase_cli_token: ENV["FIREBASE_TOKEN"]
     )
     
-    upload_to_lambdatest(apk_path, version)
+    # upload_to_lambdatest(apk_path, version)
   end
   
   def upload_to_lambdatest(apk_path, version_data)

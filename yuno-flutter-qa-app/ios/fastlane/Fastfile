@@ -128,7 +128,7 @@ platform :ios do
     )
 
     upload_farm_version()
-    upload_to_slack
+    # upload_to_slack
   end
 
   desc "Upload IPA to the device farm (LambdaTest)"
