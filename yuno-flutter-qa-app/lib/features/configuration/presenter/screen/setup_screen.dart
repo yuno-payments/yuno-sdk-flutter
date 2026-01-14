@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/core/feature/utils/yuno_snackbar.dart';
+import 'package:example/core/feature/utils/ott_modal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
@@ -36,6 +37,8 @@ class _HomeLayout extends StatefulWidget {
 }
 
 class __HomeLayoutState extends State<_HomeLayout> {
+  String? _lastProcessedToken;
+
   @override
   Widget build(BuildContext context) {
     final canPop = ModalRoute.of(context)?.canPop ?? false;
@@ -81,6 +84,28 @@ class __HomeLayoutState extends State<_HomeLayout> {
               ref
                   .read(checkoutSessionNotifier.notifier)
                   .recoverySession(state.token);
+              
+              // Show OTT modal instead of displaying it in the screen
+              // Only show if token is not empty and token is different from last processed
+              if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
+                _lastProcessedToken = state.token;
+                OttModal.show(
+                  context: context,
+                  ott: state.token,
+                  onContinue: () async {
+                    await context.continuePayment();
+                  },
+                  onDismissed: () {
+                    // Reset token to allow showing new OTT
+                    if (mounted) {
+                      setState(() {
+                        _lastProcessedToken = null;
+                      });
+                    }
+                  },
+                );
+              }
+              
               YunoSnackBar.showSnackBar(
                 context,
                 YunoSnackbarOptions.payment,

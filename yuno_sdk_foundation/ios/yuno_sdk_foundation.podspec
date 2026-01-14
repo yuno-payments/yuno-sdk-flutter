@@ -15,7 +15,7 @@ A new Flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'YunoSDK', '2.9.0-r'
+  s.dependency 'YunoSDK', '2.11.0-RC'
   s.platform = :ios, '14.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES'}
   s.swift_version = '5.0'

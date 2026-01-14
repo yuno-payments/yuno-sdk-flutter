@@ -1,8 +1,8 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/feature/utils/ott_modal.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
@@ -19,10 +19,36 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
   final _vaultedToken = TextEditingController();
   final _paymentType = TextEditingController(text: 'CARD');
   final _formKey = GlobalKey<FormState>();
+  String? _lastProcessedToken;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return YunoMultiListener(
+      enrollmentListener: (context, state) {
+        // Handle enrollment if needed
+      },
+      paymentListener: (context, state) {
+        // Show OTT modal for payment lite (full payment navigates to another screen)
+        if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
+          _lastProcessedToken = state.token;
+          OttModal.show(
+            context: context,
+            ott: state.token,
+            onContinue: () async {
+              await context.continuePayment();
+            },
+            onDismissed: () {
+              // Reset token to allow showing new OTT
+              if (mounted) {
+                setState(() {
+                  _lastProcessedToken = null;
+                });
+              }
+            },
+          );
+        }
+      },
+      child: Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,107 +195,6 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                       ),
                     ),
                     const Divider(),
-                    ListTile(
-                      minVerticalPadding: 3,
-                      minTileHeight: 2,
-                      title: const Text('Execute payment SEAMLESS'),
-                      onTap: () async {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          ref.invalidate(yunoProvider);
-                          // Wait for SDK reinitialization to complete before starting payment
-                          await ref.read(yunoProvider.future);
-                          await context.startPaymentSeamlessLite(
-                            arguments: SeamlessArguments(
-                              showPaymentStatus: true,
-                              checkoutSession: _checkoutSession.text,
-                              methodSelected: MethodSelected(
-                                vaultedToken: _vaultedToken.text.isEmpty
-                                    ? null
-                                    : _vaultedToken.text,
-                                paymentMethodType: _paymentType.text,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios_outlined,
-                      ),
-                    ),
-                    const Divider(),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        final controller = ref.watch(checkoutSessionNotifier);
-
-                        return controller.isEmpty
-                            ? const SizedBox.shrink()
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'OTT:',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: Text(
-                                          controller,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () async =>
-                                              await Clipboard.setData(
-                                                  ClipboardData(
-                                                      text: controller)),
-                                          icon: const Icon(
-                                            Icons.copy,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async =>
-                                        context.continuePayment(),
-                                    style: ButtonStyle(
-                                      elevation:
-                                          const WidgetStatePropertyAll(0),
-                                      shape: WidgetStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          const WidgetStatePropertyAll(
-                                        Colors.green,
-                                      ),
-                                    ),
-                                    child: const SizedBox(
-                                      width: double.infinity,
-                                      child: Center(
-                                        child: Text(
-                                          'Continue Payment',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                      },
-                    ),
                   ],
                 ),
               ),
@@ -277,6 +202,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
           ),
         ),
       ],
+    ),
     );
   }
 }

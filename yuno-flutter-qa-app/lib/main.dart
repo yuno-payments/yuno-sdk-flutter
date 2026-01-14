@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +24,67 @@ Future<void> main() async {
   );
 }
 
-class MainApp extends ConsumerWidget {
+class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends ConsumerState<MainApp> {
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+  }
+
+  /// Initializes deep link handling.
+  ///
+  /// Sets up listeners for incoming deep links and processes them
+  /// by calling Yuno.receiveDeeplink() to handle payment-related deeplinks.
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Handle initial link if app was opened via deeplink
+    final initialLink = await _appLinks.getInitialLink();
+    if (initialLink != null) {
+      _handleDeepLink(initialLink);
+    }
+
+    // Listen for deeplinks while app is running
+    _linkSubscription = _appLinks.uriLinkStream.listen(
+      _handleDeepLink,
+      onError: (error) {
+        // Handle deeplink errors silently
+      },
+    );
+  }
+
+  /// Handles incoming deep links.
+  ///
+  /// Processes the deeplink URI and forwards it to Yuno SDK
+  /// if it matches the payment deeplink scheme.
+  ///
+  /// Parameters:
+  /// - [uri]: The deep link URI received
+  void _handleDeepLink(Uri uri) {
+    // Only process deeplinks with the yuno scheme
+    if (uri.scheme == 'yuno') {
+      Yuno.receiveDeeplink(url: uri);
+    }
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final langAsync = ref.watch(langNotifier);
     
     return langAsync.when(

@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/feature/utils/ott_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
@@ -39,6 +40,7 @@ class _SDKLayout extends StatefulWidget {
 
 class _SDKLayoutState extends State<_SDKLayout> {
   MethodSelected? methodSelected;
+  String? _lastProcessedToken;
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +49,59 @@ class _SDKLayoutState extends State<_SDKLayout> {
         title: const Text('Merchant App'),
         backgroundColor: const Color(0xFFF2F2F7),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 6),
-              YunoPaymentMethods(
-                config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
-                listener: (context, m, height) {
+      body: YunoMultiListener(
+        enrollmentListener: (context, state) {
+          // Handle enrollment if needed
+        },
+        paymentListener: (context, state) {
+          // Show OTT modal when received
+          // Only show if token is not empty and token is different from last processed
+          if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
+            _lastProcessedToken = state.token;
+            OttModal.show(
+              context: context,
+              ott: state.token,
+              onContinue: () async {
+                await context.continuePayment();
+              },
+              onDismissed: () {
+                // Reset token to allow showing new OTT
+                if (mounted) {
                   setState(() {
-                    methodSelected = m;
+                    _lastProcessedToken = null;
                   });
-                },
-              ),
-
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: methodSelected != null ? () => context.startPayment() : null,
-                child: Text(
-                  methodSelected != null
-                      ? 'Pay with ${methodSelected!.paymentMethodType}'
-                      : 'Pay',
+                }
+              },
+            );
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 6),
+                YunoPaymentMethods(
+                  config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
+                  listener: (context, m, height) {
+                    setState(() {
+                      methodSelected = m;
+                    });
+                  },
                 ),
-              ),
-              const SizedBox(height: 20),
-            ],
+
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: methodSelected != null ? () => context.startPayment() : null,
+                  child: Text(
+                    methodSelected != null
+                        ? 'Pay with ${methodSelected!.paymentMethodType}'
+                        : 'Pay',
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
