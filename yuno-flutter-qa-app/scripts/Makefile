@@ -1,4 +1,4 @@
-.PHONY: help setup-firebase install-deps ios android all clean notify-completion notify-ios notify-android
+.PHONY: help setup-firebase install-deps install-deps-ios install-deps-android ios android all clean notify-completion notify-ios notify-android
 
 # Default target
 .DEFAULT_GOAL := help
@@ -28,25 +28,33 @@ setup-firebase: ## Generate google-services.json from Bitrise secret
 	fi
 	@echo "$(GREEN)✅ google-services.json generado correctamente$(NC)"
 
-install-deps: ## Install all dependencies (Flutter, iOS pods, Fastlane gems)
-	@echo "$(GREEN)📦 Installing dependencies...$(NC)"
+install-deps-ios: ## Install iOS dependencies (Flutter, iOS pods, Fastlane gems)
+	@echo "$(GREEN)📦 Installing iOS dependencies...$(NC)"
 	@echo "$(YELLOW)Installing Flutter dependencies...$(NC)"
 	@cd .. && flutter pub get
 	@cd .. && flutter precache --ios
-	@cd .. && flutter precache --android
 	@echo "$(YELLOW)Installing iOS pods...$(NC)"
-	@echo "Current directory: $$(pwd)"
 	@cd ../ios && pod install && cd ../scripts
-	@echo "$(YELLOW)Installing Android Fastlane dependencies...$(NC)"
-	@cd ../android && \
-	if [ -f "Gemfile" ]; then \
-		bundle install; \
-	fi && cd ../scripts
 	@echo "$(YELLOW)Installing iOS Fastlane dependencies...$(NC)"
 	@cd ../ios && \
 	if [ -f "Gemfile" ]; then \
 		bundle install; \
 	fi && cd ../scripts
+	@echo "$(GREEN)✅ iOS dependencies installed!$(NC)"
+
+install-deps-android: ## Install Android dependencies (Flutter, Fastlane gems)
+	@echo "$(GREEN)📦 Installing Android dependencies...$(NC)"
+	@echo "$(YELLOW)Installing Flutter dependencies...$(NC)"
+	@cd .. && flutter pub get
+	@cd .. && flutter precache --android
+	@echo "$(YELLOW)Installing Android Fastlane dependencies...$(NC)"
+	@cd ../android && \
+	if [ -f "Gemfile" ]; then \
+		bundle install; \
+	fi && cd ../scripts
+	@echo "$(GREEN)✅ Android dependencies installed!$(NC)"
+
+install-deps: install-deps-ios install-deps-android ## Install all dependencies (iOS and Android)
 	@echo "$(GREEN)✅ All dependencies installed!$(NC)"
 
 ios: ## Build iOS app, upload to TestFlight and LambdaTest
