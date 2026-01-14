@@ -1,4 +1,4 @@
-.PHONY: help setup-firebase install-deps ios android all clean
+.PHONY: help setup-firebase install-deps ios android all clean notify-completion
 
 # Default target
 .DEFAULT_GOAL := help
@@ -59,8 +59,47 @@ android: ## Build Android app, upload to Firebase App Tester and LambdaTest
 	@cd ../android && fastlane android build_and_upload; 
 	@echo "$(GREEN)✅ Android deployment completed!$(NC)"
 
-all: setup-firebase install-deps android ## Build and deploy both iOS and Android apps
+all: setup-firebase install-deps android ios notify-completion ## Build and deploy both iOS and Android apps
 	@echo "$(GREEN)🎉 All deployments completed!$(NC)"
+
+notify-completion: ## Notify Slack channels that both builds completed
+	@echo "$(GREEN)📢 Notifying Slack channels...$(NC)"
+	@if [ -z "$$SLACK_WEBHOOK_URL" ]; then \
+		echo "$(YELLOW)⚠️  WARNING: SLACK_WEBHOOK_URL not set, skipping notification$(NC)"; \
+	else \
+		VERSION_NAME=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *\([^+]*\).*/\1/p'); \
+		VERSION_CODE=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *[^+]*+\(.*\)/\1/p'); \
+		GIT_BRANCH=$$(git -C .. rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown"); \
+		curl -X POST "$$SLACK_WEBHOOK_URL" \
+			-H 'Content-type: application/json' \
+			--data '{ \
+				"text": "✅ All builds completed successfully!", \
+				"attachments": [ \
+					{ \
+						"title": "Build Summary", \
+						"fields": [ \
+							{ \
+								"title": "Version", \
+								"value": "'"$$VERSION_NAME"' ('"$$VERSION_CODE"')", \
+								"short": true \
+							}, \
+							{ \
+								"title": "Git Branch", \
+								"value": "'"$$GIT_BRANCH"'", \
+								"short": true \
+							}, \
+							{ \
+								"title": "Platforms", \
+								"value": "iOS ✅\nAndroid ✅", \
+								"short": false \
+							} \
+						], \
+						"color": "#36a64f" \
+					} \
+				] \
+			}' || echo "$(YELLOW)⚠️  Failed to send notification$(NC)"; \
+	fi
+	@echo "$(GREEN)✅ Notification sent!$(NC)"
 
 clean: ## Clean Flutter build artifacts
 	@echo "$(YELLOW)🧹 Cleaning Flutter build artifacts...$(NC)"

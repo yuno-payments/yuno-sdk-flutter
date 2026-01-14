@@ -32,7 +32,7 @@ platform :android do
     curl -u "yuno_android:#{ENV['LAMBDATEST_API_TOKEN']}" \
     -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" \
     -F "appFile=@#{apk_path}" \
-    -F "name=#{version_data[:version]} (#{version_data[:build_number]})" \
+    -F "name=#{version_data[:version_name]} (#{version_data[:version_code]})" \
     -F "visibility=team"
     EOF
   end
