@@ -46,7 +46,7 @@ platform :android do
     upload_to_lambdatest(apk_path, {version_name: version_name, version_code: new_build_number})
     
     # Send Slack notification
-    slack_message(version_name: version_name, build_number: new_build_number)
+   #slack_message slack_message(version_name: version_name, build_number: new_build_number)
   end
 
   desc "Slack message for Firebase App Distribution upload"

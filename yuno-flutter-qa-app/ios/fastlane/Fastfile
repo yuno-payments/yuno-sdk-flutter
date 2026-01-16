@@ -111,7 +111,7 @@ platform :ios do
     #build_farm_version
     
     # Send Slack notification
-    slack_message
+   # slack_message
   end
 
   desc "Build an IPA for device farms and upload it"

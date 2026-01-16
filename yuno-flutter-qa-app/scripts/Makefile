@@ -1,4 +1,4 @@
-.PHONY: help setup-firebase install-deps install-deps-ios install-deps-android ios android all clean 
+.PHONY: help setup-firebase install-deps install-deps-ios install-deps-android ios android all clean notify-version 
 
 # Default target
 .DEFAULT_GOAL := help
@@ -84,3 +84,38 @@ version:
 	echo "Version Name: $$VERSION_NAME"; \
 	echo "Version Code: $$VERSION_CODE"
 
+notify-version: ## Send version notification to Slack (version only, no build number)
+	@echo "$(GREEN)📢 Sending version notification to Slack...$(NC)"
+	@if [ -z "$$SLACK_BOTH_API_TOKEN" ]; then \
+		echo "$(YELLOW)⚠️  WARNING: SLACK_BOTH_API_TOKEN not set, skipping notification$(NC)"; \
+	else \
+		VERSION_NAME=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *\([^+]*\).*/\1/p'); \
+		GIT_BRANCH=$$(git -C .. rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown"); \
+		MESSAGE="Example App version $$VERSION_NAME"; \
+		curl -s -X POST https://slack.com/api/chat.postMessage \
+			-H 'Authorization: Bearer '"$$SLACK_BOTH_API_TOKEN" \
+			-H 'Content-type: application/json' \
+			--data '{ \
+				"channel": "core-mobile-versions", \
+				"text": "'"$$MESSAGE"'", \
+				"attachments": [ \
+					{ \
+						"title": "Version Details", \
+						"fields": [ \
+							{ \
+								"title": "Version Number", \
+								"value": "'"$$VERSION_NAME"'", \
+								"short": true \
+							}, \
+							{ \
+								"title": "Git Branch", \
+								"value": "'"$$GIT_BRANCH"'", \
+								"short": true \
+							} \
+						], \
+						"color": "#36a64f" \
+					} \
+				] \
+			}' || echo "$(YELLOW)⚠️  Failed to send notification$(NC)"; \
+	fi
+	@echo "$(GREEN)✅ Notification sent!$(NC)"
