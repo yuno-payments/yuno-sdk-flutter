@@ -6,23 +6,44 @@ default_platform(:android)
 platform :android do
   desc "Build APK and upload to Firebase App Tester and LambdaTest"
   lane :build_and_upload do
-    version = get_version_from_pubspec
+    version_data = get_version_from_pubspec
+    version_name = version_data[:version_name]
+    app_id = ENV["FIREBASE_APP_ID"]
+    token = ENV["FIREBASE_TOKEN"]
+
+    begin
+      latest_release = firebase_app_distribution_get_latest_release(
+        app: app_id,
+        firebase_cli_token: token
+      )
+      
+      if latest_release && latest_release[:display_version] == version_name
+        new_build_number = latest_release[:build_version].to_i + 1
+      else
+        new_build_number = 1
+      end
+    rescue
+      new_build_number = version_data[:version_code].to_i
+    end
+
     fastlane_dir = File.dirname(__FILE__)
     project_root = File.expand_path('../..', fastlane_dir)
+    
     Dir.chdir(project_root) do    
-      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons")
+      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons --build-name=#{version_name} --build-number=#{new_build_number}")
     end
+
     apk_path = File.join(project_root, 'build/app/outputs/flutter-apk/app-release.apk')
     
     firebase_app_distribution(
-      app: ENV["FIREBASE_APP_ID"],
+      app: app_id,
       apk_path: apk_path,
       groups: "qa-testers",
-      release_notes: "QA Build - #{version[:version_name]} (#{version[:version_code]})",
-      firebase_cli_token: ENV["FIREBASE_TOKEN"]
+      release_notes: "QA Build - #{version_name} (#{new_build_number})",
+      firebase_cli_token: token
     )
     
-    # upload_to_lambdatest(apk_path, version)
+    upload_to_lambdatest(apk_path, {version_name: version_name, version_code: new_build_number})
   end
   
   def upload_to_lambdatest(apk_path, version_data)
@@ -46,10 +67,10 @@ platform :android do
   def get_version_from_pubspec
     require 'yaml'
     pubspec = YAML.load_file('../../pubspec.yaml')
-    version_full = pubspec['version'] # Ejemplo: "1.0.0+1"
+    version_full = pubspec['version']
     
-    version_name = version_full.split('+')[0] # "1.0.0"
-    version_code = version_full.split('+')[1] # "1"
+    version_name = version_full.split('+')[0]
+    version_code = version_full.split('+')[1] || "1"
     
     { version_name: version_name, version_code: version_code }
   end
