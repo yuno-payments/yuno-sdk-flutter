@@ -108,7 +108,10 @@ platform :ios do
       skip_waiting_for_build_processing: true
     )
 
-    build_farm_version
+    #build_farm_version
+    
+    # Send Slack notification
+    slack_message
   end
 
   desc "Build an IPA for device farms and upload it"
@@ -161,7 +164,7 @@ platform :ios do
 
   desc "Slack message for TestFlight upload"
   lane :slack_message do
-    require_env!("IOS_BUILDS_SLACK_TOKEN")
+    require_env!("SLACK_BOTH_API_TOKEN")
 
     version_data = get_version_and_build_number
     slack_channel = "core-mobile-versions"
@@ -171,7 +174,7 @@ platform :ios do
 
     sh("
     curl -X POST https://slack.com/api/chat.postMessage \
-         -H 'Authorization: Bearer #{ENV["IOS_BUILDS_SLACK_TOKEN"]}' \
+         -H 'Authorization: Bearer #{ENV["SLACK_BOTH_API_TOKEN"]}' \
          -H 'Content-type: application/json' \
          --data '{
            \"channel\": \"#{slack_channel}\",

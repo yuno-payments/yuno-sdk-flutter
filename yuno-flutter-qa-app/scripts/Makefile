@@ -1,4 +1,4 @@
-.PHONY: help setup-firebase install-deps install-deps-ios install-deps-android ios android all clean notify-completion notify-ios notify-android
+.PHONY: help setup-firebase install-deps install-deps-ios install-deps-android ios android all clean 
 
 # Default target
 .DEFAULT_GOAL := help
@@ -61,107 +61,15 @@ ios: ## Build iOS app, upload to TestFlight and LambdaTest
 	@echo "$(GREEN)🚀 Starting iOS build and deployment...$(NC)"
 	@cd ../ios && fastlane ios build_and_upload
 	@echo "$(GREEN)✅ iOS deployment completed!$(NC)"
-	@$(MAKE) notify-ios
 
 android: ## Build Android app, upload to Firebase App Tester and LambdaTest
 	@echo "$(GREEN)🤖 Starting Android build and deployment...$(NC)"
-	@cd ../android && fastlane android build_and_upload; 
+	@cd ../android && fastlane android build_and_upload
 	@echo "$(GREEN)✅ Android deployment completed!$(NC)"
-	@$(MAKE) notify-android
 
-all: setup-firebase install-deps android ios notify-completion ## Build and deploy both iOS and Android apps
+all: setup-firebase install-deps android ios ## Build and deploy both iOS and Android apps
 	@echo "$(GREEN)🎉 All deployments completed!$(NC)"
 
-
-# Internal target for Slack notifications (uses PLATFORM_NAME and PLATFORM_EMOJI variables)
-_notify-slack:
-	@if [ -z "$$SLACK_WEBHOOK_CORE_MOBILE_VERSIONS" ]; then \
-		echo "$(YELLOW)⚠️  WARNING: SLACK_WEBHOOK_URL not set, skipping notification$(NC)"; \
-	else \
-		VERSION_NAME=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *\([^+]*\).*/\1/p'); \
-		VERSION_CODE=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *[^+]*+\(.*\)/\1/p'); \
-		GIT_BRANCH=$$(git -C .. rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown"); \
-		GIT_TAG=$$(git -C .. describe --tags --exact-match 2>/dev/null || echo ""); \
-		GIT_REF=$$(if [ -n "$$GIT_TAG" ]; then echo "$$GIT_TAG"; else echo "$$GIT_BRANCH"; fi); \
-		PLATFORM_NAME_VAL="$(PLATFORM_NAME)"; \
-		curl -X POST "$$SLACK_WEBHOOK_CORE_MOBILE_VERSIONS" \
-			-H 'Content-type: application/json' \
-			--data '{ \
-				"text": " '"$$PLATFORM_NAME_VAL"' build completed successfully!", \
-				"attachments": [ \
-					{ \
-						"title": "'"$$PLATFORM_NAME_VAL"' Build Summary", \
-						"fields": [ \
-							{ \
-								"title": "Version", \
-								"value": "'"$$VERSION_NAME"' ('"$$VERSION_CODE"')", \
-								"short": true \
-							}, \
-							{ \
-								"title": "Git Branch/Tag", \
-								"value": "'"$$GIT_REF"'", \
-								"short": true \
-							}, \
-							{ \
-								"title": "Platform", \
-								"value": "$$PLATFORM_NAME_VAL", \
-								"short": false \
-							} \
-						], \
-						"color": "#36a64f" \
-					} \
-				] \
-			}' || echo "$(YELLOW)⚠️  Failed to send notification$(NC)"; \
-	fi
-
-notify-ios: ## Notify Slack channel that iOS build completed
-	@echo "$(GREEN)📢 Notifying Slack channels (iOS)...$(NC)"
-	@$(MAKE) _notify-slack PLATFORM_NAME="iOS"
-	@echo "$(GREEN)✅ Notification sent!$(NC)"
-
-notify-android: ## Notify Slack channel that Android build completed
-	@echo "$(GREEN)📢 Notifying Slack channels (Android)...$(NC)"
-	@$(MAKE) _notify-slack PLATFORM_NAME="Android"
-	@echo "$(GREEN)✅ Notification sent!$(NC)"
-
-notify-completion: ## Notify Slack channels that both builds completed
-	@echo "$(GREEN)📢 Notifying Slack channels...$(NC)"
-	@if [ -z "$$SLACK_WEBHOOK_URL" ]; then \
-		echo "$(YELLOW)⚠️  WARNING: SLACK_WEBHOOK_URL not set, skipping notification$(NC)"; \
-	else \
-		VERSION_NAME=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *\([^+]*\).*/\1/p'); \
-		VERSION_CODE=$$(grep "^version:" ../pubspec.yaml | head -1 | sed -n 's/.*version: *[^+]*+\(.*\)/\1/p'); \
-		GIT_BRANCH=$$(git -C .. rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown"); \
-		curl -X POST "$$SLACK_WEBHOOK_URL" \
-			-H 'Content-type: application/json' \
-			--data '{ \
-				"text": "✅ All builds completed successfully!", \
-				"attachments": [ \
-					{ \
-						"title": "Build Summary", \
-						"fields": [ \
-							{ \
-								"title": "Version", \
-								"value": "'"$$VERSION_NAME"' ('"$$VERSION_CODE"')", \
-								"short": true \
-							}, \
-							{ \
-								"title": "Git Branch", \
-								"value": "'"$$GIT_BRANCH"'", \
-								"short": true \
-							}, \
-							{ \
-								"title": "Platforms", \
-								"value": "iOS ✅\nAndroid ✅", \
-								"short": false \
-							} \
-						], \
-						"color": "#36a64f" \
-					} \
-				] \
-			}' || echo "$(YELLOW)⚠️  Failed to send notification$(NC)"; \
-	fi
-	@echo "$(GREEN)✅ Notification sent!$(NC)"
 
 clean: ## Clean Flutter build artifacts
 	@echo "$(YELLOW)🧹 Cleaning Flutter build artifacts...$(NC)"
