@@ -1,11 +1,13 @@
 import 'package:example/core/feature/utils/yuno_bottom_sheets.dart';
 import 'package:example/core/feature/credential/domain/entity/credential/credential.dart';
+import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:flutter/material.dart';
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
 import 'package:example/features/configuration/presenter/screen/setup_screen.dart';
 import 'package:example/features/home/presenter/screen/automation_screen.dart';
+import 'package:example/features/configuration/presenter/widgets/version_footer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -31,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    const VersionFooter(),
                     const SizedBox(height: 20),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -75,6 +78,7 @@ class HomeScreen extends StatelessWidget {
               }
               return Column(
                 children: [
+                  const VersionFooter(),
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -136,7 +140,8 @@ class HomeScreen extends StatelessWidget {
                                   await ref
                                       .read(providerStorage)
                                       .setCurrentCredential(credential);
-                                  ref.refresh(credentialNotifier.future);
+                                  ref.invalidate(credentialNotifier);
+                                  ref.invalidate(yunoProvider);
                                   if (context.mounted) {
                                     Navigator.push(
                                       context,

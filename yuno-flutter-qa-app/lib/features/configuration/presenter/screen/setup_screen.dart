@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/features/configuration/presenter/widgets/execute_payment_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:example/features/configuration/presenter/configuration_screen.dart';
@@ -89,11 +90,12 @@ class __HomeLayoutState extends State<_HomeLayout> {
               // Only show if token is not empty and token is different from last processed
               if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
                 _lastProcessedToken = state.token;
-                OttModal.show(
+                  OttModal.show(
                   context: context,
                   ott: state.token,
                   onContinue: () async {
-                    await context.continuePayment();
+                    final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                    await context.continuePayment(showPaymentStatus: showPaymentStatus);
                   },
                   onDismissed: () {
                     // Reset token to allow showing new OTT
@@ -234,9 +236,11 @@ class _ExecuteEnrollmentsState extends ConsumerState<ExecuteEnrollments> {
                           ref.invalidate(yunoProvider);
                           // Wait for SDK reinitialization to complete before starting enrollment
                           await ref.read(yunoProvider.future);
+                          final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
                           await context.enrollmentPayment(
                             arguments: EnrollmentArguments(
                               customerSession: _enrollmentPayment.text,
+                              showPaymentStatus: showPaymentStatus,
                             ),
                           );
                         }

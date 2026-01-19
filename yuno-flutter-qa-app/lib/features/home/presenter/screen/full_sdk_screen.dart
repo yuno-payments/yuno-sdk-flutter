@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/core/feature/utils/ott_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,14 +32,14 @@ class FullSdkScreen extends StatelessWidget {
   }
 }
 
-class _SDKLayout extends StatefulWidget {
+class _SDKLayout extends ConsumerStatefulWidget {
   const _SDKLayout({required this.checkoutSession});
   final String checkoutSession;
   @override
-  State<_SDKLayout> createState() => _SDKLayoutState();
+  ConsumerState<_SDKLayout> createState() => _SDKLayoutState();
 }
 
-class _SDKLayoutState extends State<_SDKLayout> {
+class _SDKLayoutState extends ConsumerState<_SDKLayout> {
   MethodSelected? methodSelected;
   String? _lastProcessedToken;
 
@@ -62,7 +63,8 @@ class _SDKLayoutState extends State<_SDKLayout> {
               context: context,
               ott: state.token,
               onContinue: () async {
-                await context.continuePayment();
+                final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                await context.continuePayment(showPaymentStatus: showPaymentStatus);
               },
               onDismissed: () {
                 // Reset token to allow showing new OTT
@@ -92,7 +94,12 @@ class _SDKLayoutState extends State<_SDKLayout> {
 
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: methodSelected != null ? () => context.startPayment() : null,
+                  onPressed: methodSelected != null 
+                      ? () async {
+                          final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                          await context.startPayment(showPaymentStatus: showPaymentStatus);
+                        }
+                      : null,
                   child: Text(
                     methodSelected != null
                         ? 'Pay with ${methodSelected!.paymentMethodType}'

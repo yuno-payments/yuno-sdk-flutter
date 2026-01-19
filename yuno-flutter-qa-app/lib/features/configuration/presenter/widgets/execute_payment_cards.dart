@@ -1,4 +1,5 @@
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
+import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/core/feature/utils/ott_modal.dart';
 import 'package:example/features/home/presenter/screen/full_sdk_screen.dart';
 import 'package:example/features/home/presenter/widget/register_form.dart';
@@ -35,7 +36,8 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
             context: context,
             ott: state.token,
             onContinue: () async {
-              await context.continuePayment();
+              final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+              await context.continuePayment(showPaymentStatus: showPaymentStatus);
             },
             onDismissed: () {
               // Reset token to allow showing new OTT
@@ -155,9 +157,10 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                           ref.invalidate(yunoProvider);
                           // Wait for SDK reinitialization to complete before starting payment
                           await ref.read(yunoProvider.future);
+                          final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
                           await context.startPaymentLite(
                             arguments: StartPayment(
-                              showPaymentStatus: true,
+                              showPaymentStatus: showPaymentStatus,
                               checkoutSession: _checkoutSession.text,
                               methodSelected: MethodSelected(
                                 vaultedToken: _vaultedToken.text.isEmpty
@@ -178,16 +181,14 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                       minVerticalPadding: 3,
                       minTileHeight: 2,
                       onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FullSdkScreen(
-                                checkoutSession: _checkoutSession.text,
-                              ),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullSdkScreen(
+                              checkoutSession: _checkoutSession.text,
                             ),
-                          );
-                        }
+                          ),
+                        );
                       },
                       title: const Text('Execute payment FULL'),
                       trailing: const Icon(

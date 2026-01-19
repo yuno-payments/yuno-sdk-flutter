@@ -1,5 +1,6 @@
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yuno/yuno.dart';
 
@@ -14,6 +15,9 @@ final yunoProvider = FutureProvider<void>((ref) async {
   final cardForm = await ref.watch(cardFormDeployedNotifier.future);
 
   try {
+    if (kDebugMode) {
+      debugPrint('QA App -> Initializing Yuno SDK with apiKey: $apiKey, countryCode: $countryCode');
+    }
     return await Yuno.init(
       apiKey: apiKey,
       countryCode: countryCode,
