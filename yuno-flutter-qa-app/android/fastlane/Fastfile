@@ -8,45 +8,33 @@ platform :android do
   lane :build_and_upload do
     version_data = get_version_from_pubspec
     version_name = version_data[:version_name]
+    build_number = version_data[:version_code].to_i
     app_id = ENV["FIREBASE_APP_ID"]
     token = ENV["FIREBASE_TOKEN"]
 
-    begin
-      latest_release = firebase_app_distribution_get_latest_release(
-        app: app_id,
-        firebase_cli_token: token
-      )
-      
-      if latest_release && latest_release[:display_version] == version_name
-        new_build_number = latest_release[:build_version].to_i + 1
-      else
-        new_build_number = 1
-      end
-    rescue
-      new_build_number = version_data[:version_code].to_i
-    end
+    UI.message("📦 Building version #{version_name} (#{build_number}) from pubspec.yaml")
 
     fastlane_dir = File.dirname(__FILE__)
     project_root = File.expand_path('../..', fastlane_dir)
-    
-    Dir.chdir(project_root) do    
-      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons --build-name=#{version_name} --build-number=#{new_build_number}")
+
+    Dir.chdir(project_root) do
+      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons --build-name=#{version_name} --build-number=#{build_number}")
     end
 
     apk_path = File.join(project_root, 'build/app/outputs/flutter-apk/app-release.apk')
-    
+
     firebase_app_distribution(
       app: app_id,
       apk_path: apk_path,
       groups: "qa-testers",
-      release_notes: "QA Build - #{version_name} (#{new_build_number})",
+      release_notes: "QA Build - #{version_name} (#{build_number})",
       firebase_cli_token: token
     )
-    
-    upload_to_lambdatest(apk_path, {version_name: version_name, version_code: new_build_number})
-    
+
+    upload_to_lambdatest(apk_path, {version_name: version_name, version_code: build_number})
+
     # Send Slack notification
-   #slack_message slack_message(version_name: version_name, build_number: new_build_number)
+   #slack_message slack_message(version_name: version_name, build_number: build_number)
   end
 
   desc "Slack message for Firebase App Distribution upload"
