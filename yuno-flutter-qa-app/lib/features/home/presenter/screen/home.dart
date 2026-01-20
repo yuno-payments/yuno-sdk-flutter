@@ -228,7 +228,12 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: 16.0 + MediaQuery.of(context).padding.bottom,
+                    ),
                     child: Column(
                       children: [
                         SizedBox(

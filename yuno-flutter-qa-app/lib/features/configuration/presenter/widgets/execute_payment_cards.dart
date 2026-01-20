@@ -75,6 +75,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                   ref.read(formNotifier.notifier).changeValue(value: false);
                   _checkoutSession.clear();
                   _vaultedToken.clear();
+                  _paymentType.clear();
                 },
               ),
             ),
@@ -129,12 +130,6 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                           .changeValue(
                               value:
                                   _formKey.currentState?.validate() ?? false),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an payment type';
-                        }
-                        return null;
-                      },
                       controller: _paymentType,
                     ),
                     const SizedBox(
