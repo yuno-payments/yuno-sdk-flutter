@@ -131,6 +131,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                               value:
                                   _formKey.currentState?.validate() ?? false),
                       controller: _paymentType,
+                      validator: (value) => null,
                     ),
                     const SizedBox(
                       height: 10,
