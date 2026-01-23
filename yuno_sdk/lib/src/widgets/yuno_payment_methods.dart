@@ -99,6 +99,10 @@ class _YunoPaymentMethodsState extends State<YunoPaymentMethods> {
   @override
   void initState() {
     super.initState();
+    // Reset height to initial value when widget is initialized
+    // This ensures each new widget instance starts with the correct initial height
+    // instead of keeping the previous value from a previous widget instance
+    _controller.resetHeight();
     _selectController.addListener(_listener);
     _controller.addListener(_listener);
   }

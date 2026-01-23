@@ -35,6 +35,7 @@ class FullSdkScreen extends StatelessWidget {
 class _SDKLayout extends ConsumerStatefulWidget {
   const _SDKLayout({required this.checkoutSession});
   final String checkoutSession;
+  
   @override
   ConsumerState<_SDKLayout> createState() => _SDKLayoutState();
 }
@@ -42,6 +43,17 @@ class _SDKLayout extends ConsumerStatefulWidget {
 class _SDKLayoutState extends ConsumerState<_SDKLayout> {
   MethodSelected? methodSelected;
   String? _lastProcessedToken;
+  late final String _uniqueKey;
+
+  @override
+  void initState() {
+    super.initState();
+    // Reset state when widget is initialized
+    methodSelected = null;
+    _lastProcessedToken = null;
+    // Generate unique key for YunoPaymentMethods to force recreation
+    _uniqueKey = '${widget.checkoutSession}_${DateTime.now().millisecondsSinceEpoch}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +95,9 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
             child: Column(
               children: [
                 const SizedBox(height: 6),
+                // TODO: Temporal - Reemplazar YunoPaymentMethods con cuadro amarillo
                 YunoPaymentMethods(
+                  key: ValueKey(_uniqueKey),
                   config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
                   listener: (context, m, height) {
                     setState(() {
@@ -91,6 +105,11 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
                     });
                   },
                 ),
+                // Container(
+                //   height: 300,
+                //   width: double.infinity,
+                //   color: Colors.yellow,
+                // ),
 
                 const SizedBox(height: 20),
                 ElevatedButton(
