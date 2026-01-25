@@ -96,14 +96,22 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
               children: [
                 const SizedBox(height: 6),
                 // TODO: Temporal - Reemplazar YunoPaymentMethods con cuadro amarillo
-                YunoPaymentMethods(
-                  key: ValueKey(_uniqueKey),
-                  config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
-                  listener: (context, m, height) {
-                    setState(() {
-                      methodSelected = m;
-                    });
-                  },
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.yellow,
+                      width: 2.0,
+                    ),
+                  ),
+                  child: YunoPaymentMethods(
+                    key: ValueKey(_uniqueKey),
+                    config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
+                    listener: (context, m, height) {
+                      setState(() {
+                        methodSelected = m;
+                      });
+                    },
+                  ),
                 ),
                 // Container(
                 //   height: 300,
