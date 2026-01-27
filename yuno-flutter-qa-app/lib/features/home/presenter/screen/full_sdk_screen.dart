@@ -104,13 +104,13 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
                     ),
                   ),
                   child: YunoPaymentMethods(
-                    key: ValueKey(_uniqueKey),
-                    config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
-                    listener: (context, m, height) {
-                      setState(() {
-                        methodSelected = m;
-                      });
-                    },
+                  key: ValueKey(_uniqueKey),
+                  config: PaymentMethodConf(checkoutSession: widget.checkoutSession),
+                  listener: (context, m, height) {
+                    setState(() {
+                      methodSelected = m;
+                    });
+                  },
                   ),
                 ),
                 // Container(

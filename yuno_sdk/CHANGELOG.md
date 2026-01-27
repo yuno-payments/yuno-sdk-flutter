@@ -1,3 +1,8 @@
+## 1.0.3
+- feat: update native Android SDK to 2.10.0
+- feat: update native iOS SDK to 2.11.1
+- feat: update yuno_sdk_platform_interface to 0.7.0
+
 ## 1.0.2
 - feat: update native Android SDK to 2.8.1
 - feat: update native iOS SDK to 2.9.0
