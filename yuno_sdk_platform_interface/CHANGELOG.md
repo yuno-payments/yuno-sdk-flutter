@@ -1,3 +1,6 @@
+## 0.7.1
+- fix: Update yuno_sdk_core dependency to ^0.4.0
+
 ## 0.7.0
 - feat: Platform interface updates and improvements
 
