@@ -34,9 +34,22 @@ final class YunoPaymentMethodChannel implements YunoPaymentMethodPlatform {
           break;
 
         case 'onSelected':
-          if (call.arguments is! bool) return;
-          final isSelected = call.arguments as bool;
-          selectController.isSelectedUpdate(isSelected);
+          if (call.arguments is Map) {
+            final args = call.arguments as Map<dynamic, dynamic>;
+            final vaultedToken = args['vaultedToken'] as String?;
+            final paymentMethodType = args['paymentMethodType'] as String? ?? '';
+            final methodSelected = paymentMethodType.isNotEmpty
+                ? MethodSelected(
+                    vaultedToken: vaultedToken,
+                    paymentMethodType: paymentMethodType,
+                  )
+                : null;
+            selectController.methodSelectedUpdate(methodSelected);
+          } else if (call.arguments is bool) {
+            // Backward compatibility: if a boolean is sent, just update the selection state
+            final isSelected = call.arguments as bool;
+            selectController.isSelectedUpdate(isSelected);
+          }
           break;
 
         default:

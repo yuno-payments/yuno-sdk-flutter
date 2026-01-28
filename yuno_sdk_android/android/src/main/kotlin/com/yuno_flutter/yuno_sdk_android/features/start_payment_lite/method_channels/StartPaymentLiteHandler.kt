@@ -1,9 +1,10 @@
 package com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels
 import android.content.Context
+import com.yuno.sdk.payments.startPaymentLite
+import com.yuno.sdk.payments.updateCheckoutSession
+import com.yuno.presentation.core.components.PaymentSelected
+import com.yuno_flutter.yuno_sdk_android.core.config.PaymentConfig
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.models.toStartPaymentLite
-import com.yuno.payments.features.payment.startPaymentLite
-import com.yuno.payments.features.payment.ui.views.PaymentSelected
-import com.yuno.payments.features.payment.updateCheckoutSession
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
@@ -14,6 +15,10 @@ class StartPaymentLiteHandler {
             val argument = call.arguments<Map<String, Any>>()
             val either = argument?.toStartPaymentLite()
             either?.onSuccess { model ->
+                // Reset the payment config when starting a new payment
+                PaymentConfig.reset()
+                // Save the showPaymentStatus for potential deeplink handling
+                PaymentConfig.setShowPaymentStatus(model.showPaymentStatus)
                 activity.updateCheckoutSession(
                     checkoutSession = model.checkoutSession,
                     countryCode = model.countryCode

@@ -1,3 +1,23 @@
+## 1.0.4
+- fix: Resolve dependency conflicts and version alignment
+
+## 1.0.3
+- feat: update native iOS SDK to 2.11.1
+
+## 1.0.2
+- feat: update native iOS SDK to 2.9.0
+
+## 1.0.1
+- chore: Bump version to match Android release
+
+## 1.0.0
+- feat: Yuno SDK upgrade
+## 0.9.1
+- feat: Yuno SDK upgrade
+## 0.8.0
+- feat: Yuno SDK upgrade
+## 0.7.0
+- feat: Yuno SDK upgrade
 ## 0.6.0
 - feat: Yuno SDK upgrade
 ## 0.5.0

@@ -8,7 +8,6 @@ void main() {
       const conf = PaymentMethodConf(
         checkoutSession: 'session_123',
         countryCode: 'CA',
-        iosViewType: IOSViewType.all,
       );
 
       final result = conf.toMap(currentWidth: 320.0);
@@ -17,14 +16,12 @@ void main() {
         'checkoutSession': 'session_123',
         'countryCode': 'CA', // Explicitly provided countryCode
         'width': 320.0,
-        'viewType': IOSViewType.all.index,
       });
     });
 
     test('should correctly use default countryCode if not provided', () {
       const conf = PaymentMethodConf(
         checkoutSession: 'session_456',
-        iosViewType: IOSViewType.separated,
         countryCode: 'US',
       );
 
@@ -34,7 +31,6 @@ void main() {
         'checkoutSession': 'session_456',
         'countryCode': 'US', // Default from YunoSharedSingleton
         'width': 480.0,
-        'viewType': IOSViewType.separated.index,
       });
     });
 
@@ -42,7 +38,6 @@ void main() {
       const conf = PaymentMethodConf(
         checkoutSession: 'session_789',
         countryCode: 'UK',
-        iosViewType: IOSViewType.all,
       );
 
       final result = conf.toMap(currentWidth: 1024.0);
@@ -51,14 +46,12 @@ void main() {
         'checkoutSession': 'session_789',
         'countryCode': 'UK',
         'width': 1024.0,
-        'viewType': IOSViewType.all.index,
       });
     });
 
     test('should handle missing countryCode and no default value', () {
       const conf = PaymentMethodConf(
         checkoutSession: 'session_000',
-        iosViewType: IOSViewType.separated,
       );
 
       final result = conf.toMap(currentWidth: 200.0);
@@ -67,7 +60,6 @@ void main() {
         'checkoutSession': 'session_000',
         'countryCode': null, // No default available
         'width': 200.0,
-        'viewType': IOSViewType.separated.index,
       });
     });
   });

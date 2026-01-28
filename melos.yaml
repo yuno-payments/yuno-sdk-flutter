@@ -17,6 +17,7 @@ command:
         - ../yuno_sdk_foundation
         - ../yuno_sdk_platform_interface       
 packages:
+  - ./example
   - ./yuno_sdk*
 ignore:
   - examples

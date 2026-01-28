@@ -36,10 +36,10 @@ public class PaymentMetthodFactory: NSObject, FlutterPlatformViewFactory {
     }
 }
 
-class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate {
+class PaymentMethodView: NSObject, FlutterPlatformView {
+
     private var yunoMethod: YunoMethods
     private let channel: FlutterMethodChannel
-    private lazy var generator: MethodsView? = nil
     var localView: UIView = UIView()
     init(
         frame: CGRect,
@@ -51,33 +51,35 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
         self.yunoMethod = yunoMethod
         channel = FlutterMethodChannel(
             name: "yuno/payment_methods_view/\(viewId)", binaryMessenger: messenger)
+        self.yunoMethod.setPaymentMethodsViewChannel(channel)
         super.init()
         generatorView(args: args)
     }
     func generatorView(args: Any?) {
-        guard let arg = args as? [String: Any] else {
-             return
-        }
-        do {
-            let decoder = JSONDecoder()
-            let arguments = try decoder.decode(ViewArguments.self, from: arg)
-            self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode, cs: arguments.checkoutSession)
-            generator = nil
-            generator = Yuno.methodsView(delegate: self)
-            self.generator?.getPaymentMethodsView(checkoutSession: arguments.checkoutSession,
-                                                  viewType: arguments.viewType) { [weak self] (view: UIView) in
-                view.translatesAutoresizingMaskIntoConstraints = false
-                guard let self = self else {
-                    return
-                }
-                NSLayoutConstraint.activate([
-                    view.widthAnchor.constraint(equalToConstant: arguments.width)
-                ])
-                self.localView.addSubview(view)
-            }
-        } catch {
-            handleError(error)
-        }
+       guard let arg = args as? [String: Any] else {
+            return
+       }
+       do {
+           let decoder = JSONDecoder()
+           let arguments = try decoder.decode(ViewArguments.self, from: arg)
+           self.yunoMethod.startCheckoutUpdate(cc: arguments.countryCode, cs: arguments.checkoutSession)
+           
+           Task { @MainActor [weak self] in
+               guard let self = self else { return }
+               let methodsList: UIView = await Yuno.getPaymentMethodViewAsync(delegate: self.yunoMethod)
+               methodsList.translatesAutoresizingMaskIntoConstraints = false
+               localView.addSubview(methodsList)
+               NSLayoutConstraint.activate([
+                 methodsList.topAnchor.constraint(equalTo: localView.topAnchor),
+                 methodsList.leadingAnchor.constraint(equalTo: localView.leadingAnchor),
+                 methodsList.trailingAnchor.constraint(equalTo: localView.trailingAnchor),
+                 methodsList.bottomAnchor.constraint(equalTo: localView.bottomAnchor),
+               ])
+              
+           }
+       } catch {
+           handleError(error)
+       }
     }
     func handleError(_ error: Error) {
         let errorLabel = UILabel()
@@ -87,17 +89,7 @@ class PaymentMethodView: NSObject, FlutterPlatformView, YunoMethodsViewDelegate 
         errorLabel.frame = localView.bounds
         localView.addSubview(errorLabel)
     }
-    func yunoDidSelect(paymentMethod: any YunoSDK.PaymentMethodSelected) {
-        channel.invokeMethod("onSelected", arguments: !paymentMethod.paymentMethodType.isEmpty)
-    }
 
-    func yunoDidSelect(enrollmentMethod: any YunoSDK.EnrollmentMethodSelected) {
-    }
-    func yunoUpdatePaymentMethodsViewHeight(_ height: CGFloat) {
-        channel.invokeMethod("onHeightChange", arguments: height)
-    }
-    func yunoUpdateEnrollmentMethodsViewHeight(_ height: CGFloat) {
-    }
 
     func view() -> UIView {
         return localView

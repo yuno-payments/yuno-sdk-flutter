@@ -1,6 +1,7 @@
 package com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel
 import android.content.Context
-import com.yuno.payments.features.enrollment.startEnrollment
+import com.yuno.sdk.enrollment.startEnrollment
+import com.yuno_flutter.yuno_sdk_android.core.config.PaymentConfig
 import com.yuno_flutter.yuno_sdk_android.features.enrollment.models.toEnrollment
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
@@ -22,6 +23,8 @@ class EnrollmentHandler {
                             "CustomerSession must be necessary for startEnrollment Method"
                         )
                     }
+                    // Save the showPaymentStatus value in memory for later use in deeplink handling
+                    PaymentConfig.setShowPaymentStatus(model.showPaymentStatus)
                     activity.startEnrollment(
                         countryCode = model.countryCode,
                         customerSession = model.customerSession,

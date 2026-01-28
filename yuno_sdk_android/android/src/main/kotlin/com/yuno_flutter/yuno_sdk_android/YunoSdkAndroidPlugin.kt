@@ -1,7 +1,7 @@
 package com.yuno_flutter.yuno_sdk_android
 import android.app.Application
 import android.content.Context
-import com.yuno.payments.features.payment.startCheckout
+import com.yuno.sdk.payments.startCheckout
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -9,8 +9,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.yuno.payments.core.Yuno
-import com.yuno.payments.features.enrollment.initEnrollment
+import com.yuno.sdk.Yuno
+import com.yuno.sdk.enrollment.initEnrollment
+import android.util.Log
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
@@ -18,6 +19,7 @@ import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.Init
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.enrollment.method_channel.EnrollmentHandler
 import com.yuno_flutter.yuno_sdk_android.features.payment_methods.views.PaymentMethodFactory
+import com.yuno_flutter.yuno_sdk_android.features.receive_deeplink.method_channel.ReceiveDeeplinkHandler
 import com.yuno_flutter.yuno_sdk_android.features.seamless.method_channel.SeamlessHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel.StartPaymentHandler
 import com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels.StartPaymentLiteHandler
@@ -30,6 +32,15 @@ class YunoSdkAndroidPlugin :
     MethodCallHandler,
     ActivityAware,
     DefaultLifecycleObserver {
+    companion object {
+        private const val TAG = "YunoSdkAndroidPlugin"
+        
+        @JvmStatic
+        fun initSdk(application: Application, androidApiKey: String) {
+           Yuno.initialize(application,androidApiKey)
+        }
+    }
+    
     private var initializationError: String? = null
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
@@ -42,12 +53,6 @@ class YunoSdkAndroidPlugin :
                callbackPaymentState = this::onPaymentStateChange
            )
         activity.initEnrollment(callbackEnrollmentState = this::onEnrollmentStateChange)
-    }
-    companion object {
-        @JvmStatic
-        fun initSdk(application: Application, androidApiKey: String) {
-           Yuno.initialize(application,androidApiKey)
-        }
     }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -122,6 +127,16 @@ If you continue to have trouble, follow this discussion to get some support """,
                     activity = activity
                 )
             }
+            Key.receiveDeeplink -> {
+                val receiveDeeplinkHandler = ReceiveDeeplinkHandler()
+                receiveDeeplinkHandler.handler(
+                    call = call,
+                    result = result,
+                    context = context,
+                    activity = activity,
+                    channel = channel
+                )
+            }
             else -> {
                 result.notImplemented()
             }
@@ -164,14 +179,27 @@ If you continue to have trouble, follow this discussion to get some support """,
     }
 
     fun onTokenUpdated(token: String?) {
+        Log.d(TAG, "onTokenUpdated called with token: $token")
         channel.invokeMethod(Key.ott, token)
     }
 
     fun onEnrollmentStateChange(enrollmentState: String?) {
-        channel.invokeMethod(Key.enrollmentStatus, enrollmentState?.statusEnrollmentConverter())
+        val convertedStatus = enrollmentState?.statusEnrollmentConverter()
+        Log.d(TAG, "onEnrollmentStateChange called")
+        Log.d(TAG, "  - Raw enrollmentState: $enrollmentState")
+        Log.d(TAG, "  - Converted status: $convertedStatus")
+        channel.invokeMethod(Key.enrollmentStatus, convertedStatus)
     }
-    fun onPaymentStateChange(paymentState: String?) {
-       channel.invokeMethod(Key.status, paymentState?.statusConverter())
+    
+    fun onPaymentStateChange(paymentState: String?, data: String?) {
+        val convertedStatus = paymentState?.statusConverter()
+        Log.d(TAG, "=== onPaymentStateChange called (after continuePayment) ===")
+        Log.d(TAG, "  - Raw paymentState: $paymentState")
+        Log.d(TAG, "  - Data: $data")
+        Log.d(TAG, "  - Converted status index: $convertedStatus")
+        Log.d(TAG, "  - Sending status to Flutter via method channel")
+        channel.invokeMethod(Key.status, convertedStatus)
+        Log.d(TAG, "=== onPaymentStateChange completed ===")
     }
 
 }

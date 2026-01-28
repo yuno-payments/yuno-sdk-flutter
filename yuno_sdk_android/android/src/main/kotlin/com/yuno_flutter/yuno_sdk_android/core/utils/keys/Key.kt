@@ -12,4 +12,5 @@ object Key {
     const val onHeightChange = "onHeightChange"
     const val enrollmentPayment = "enrollmentPayment"
     const val startPaymentSeamless = "startPaymentSeamless"
+    const val receiveDeeplink = "receiveDeeplink"
 }

@@ -1,7 +1,8 @@
 package com.yuno_flutter.yuno_sdk_android.features.start_payment.method_channel
 
 import android.content.Context
-import com.yuno.payments.features.payment.startPayment
+import com.yuno.sdk.payments.startPayment
+import com.yuno_flutter.yuno_sdk_android.core.config.PaymentConfig
 import com.yuno_flutter.yuno_sdk_android.features.start_payment.models.toStartPayment
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
@@ -12,7 +13,12 @@ class StartPaymentHandler {
         try {
             val argument = call.arguments<Map<String, Any>>()
             val model = argument?.toStartPayment()
-            activity.startPayment(showPaymentStatus = model?.showPaymentStatus ?: true)
+            val showPaymentStatus = model?.showPaymentStatus ?: true
+            // Reset the payment config when starting a new payment
+            PaymentConfig.reset()
+            // Save the showPaymentStatus for potential deeplink handling
+            PaymentConfig.setShowPaymentStatus(showPaymentStatus)
+            activity.startPayment(showPaymentStatus = showPaymentStatus)
         } catch (e: Exception) {
             return result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
         }

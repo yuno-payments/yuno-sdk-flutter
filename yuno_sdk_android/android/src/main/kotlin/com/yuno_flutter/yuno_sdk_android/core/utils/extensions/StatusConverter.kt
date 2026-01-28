@@ -1,16 +1,16 @@
 package com.yuno_flutter.yuno_sdk_android.core.utils.extensions
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_CANCELED_BY_USER
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_FAIL
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_INTERNAL_ERROR
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_PROCESSING
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_REJECT
-import com.yuno.payments.features.enrollment.ENROLLMENT_STATE_SUCCEEDED
-import com.yuno.payments.features.payment.PAYMENT_STATE_FAIL
-import com.yuno.payments.features.payment.PAYMENT_STATE_INTERNAL_ERROR
-import com.yuno.payments.features.payment.PAYMENT_STATE_PROCESSING
-import com.yuno.payments.features.payment.PAYMENT_STATE_REJECT
-import com.yuno.payments.features.payment.PAYMENT_STATE_STATE_CANCELED_BY_USER
-import com.yuno.payments.features.payment.PAYMENT_STATE_SUCCEEDED
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_CANCELED_BY_USER
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_FAIL
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_INTERNAL_ERROR
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_PROCESSING
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_REJECT
+import com.yuno.sdk.enrollment.ENROLLMENT_STATE_SUCCEEDED
+import com.yuno.sdk.payments.PAYMENT_STATE_FAIL
+import com.yuno.sdk.payments.PAYMENT_STATE_INTERNAL_ERROR
+import com.yuno.sdk.payments.PAYMENT_STATE_PROCESSING
+import com.yuno.sdk.payments.PAYMENT_STATE_REJECT
+import com.yuno.sdk.payments.PAYMENT_STATE_STATE_CANCELED_BY_USER
+import com.yuno.sdk.payments.PAYMENT_STATE_SUCCEEDED
 
 fun String.statusConverter(): Int {
     return when (this) {

@@ -1,3 +1,50 @@
+## 1.0.4
+- fix: Update all dependencies to resolve conflicts
+- fix: Update yuno_sdk_core to ^0.4.0
+- fix: Update yuno_sdk_platform_interface to ^0.7.1
+- fix: Update yuno_sdk_android to ^1.0.4
+- fix: Update yuno_sdk_foundation to ^1.0.4
+
+## 1.0.3
+- feat: update native Android SDK to 2.10.0
+- feat: update native iOS SDK to 2.11.1
+- feat: update yuno_sdk_platform_interface to 0.7.0
+
+## 1.0.2
+- feat: update native Android SDK to 2.8.1
+- feat: update native iOS SDK to 2.9.0
+- fix: support Kotlin 2.x and Compose Compiler plugin compatibility on Android
+
+## 1.0.1
+- fix: Update Android native SDK to 2.6.5 (corrects version from 1.0.0)
+
+## 1.0.0
+- feat: upgrade native sdks
+
+## 0.9.1
+- feat: upgrade native sdks
+
+## 0.8.0
+ - feat: upgrade native sdks
+
+## 0.7.1
+  - fix: upgrade yuno_sdk_platform_interfaces
+## 0.7.0
+- fix: grammar error
+
+    Instead of:
+
+  ```dart
+    var status = YunoStatus.succeded
+  ```
+
+  Do:
+
+  ```dart
+   var status = YunoStatus.succeeded
+  ```
+- feat: Yuno SDK upgraded
+- feat: Readme Updated
 ## 0.6.0
 - feat: Yuno SDK upgrade
 ## 0.5.1
@@ -30,4 +77,3 @@
 - feat: Yuno create payment
 - feat: Yuno payment result
 - feat: Yuno start payment
-- feat: Yuno payment methods widget

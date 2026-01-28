@@ -1,3 +1,16 @@
+## 0.7.1
+- fix: Update yuno_sdk_core dependency to ^0.4.0
+
+## 0.7.0
+- feat: Platform interface updates and improvements
+
+## 0.6.0
+- feat: Enhanced platform interface compatibility
+- feat: Updated method channels for improved stability
+
+## 0.5.0
+- feat: Platform interface improvements
+- feat: Additional type safety enhancements
 ## 0.4.0
 - feat: Yuno SDK Seamless Supported
 ## 0.3.0 - Interface

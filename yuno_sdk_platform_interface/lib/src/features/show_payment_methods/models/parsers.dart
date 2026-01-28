@@ -9,8 +9,7 @@ extension PaymentMethodsParser on PaymentMethodConf {
       'checkoutSession': checkoutSession,
       'countryCode': countryCode ??
           YunoSharedSingleton.getValue(KeysSingleton.countryCode.name),
-      'width': currentWidth,
-      'viewType': iosViewType.index
+      'width': currentWidth
     };
   }
 }

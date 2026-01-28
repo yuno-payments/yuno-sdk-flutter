@@ -1,3 +1,24 @@
+## 1.0.4
+- fix: Resolve dependency conflicts and version alignment
+
+## 1.0.3
+- feat: update native Android SDK to 2.10.0
+
+## 1.0.2
+- feat: update native Android SDK to 2.8.1
+- fix: support Kotlin 2.x and Compose Compiler plugin compatibility
+
+## 1.0.1
+- fix: Update Android native SDK to 2.6.5
+
+## 1.0.0
+- feat: Yuno SDK upgrade
+## 0.9.1
+- feat: Yuno SDK upgrade
+## 0.8.0
+- feat: Yuno SDK upgrade
+## 0.7.0
+- feat: Yuno SDK upgrade
 ## 0.6.0
 - feat: Yuno SDK upgrade
 ## 0.5.0

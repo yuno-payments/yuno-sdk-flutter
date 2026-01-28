@@ -1,6 +1,6 @@
 package com.yuno_flutter.yuno_sdk_android.features.app_config.models
 
-import com.yuno.payments.core.YunoLanguage
+import com.yuno.sdk.YunoLanguage
 
 data class AppConfigModel(
     val apiKey: String,
@@ -86,6 +86,7 @@ val languageMap = mapOf(
     "PT" to YunoLanguage.PORTUGUESE,
     "ID" to YunoLanguage.INDONESIAN,
     "MS" to YunoLanguage.MALAYSIAN,
+    "AR" to YunoLanguage.ARABIC,
 )
 
 
