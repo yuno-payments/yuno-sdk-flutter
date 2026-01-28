@@ -1,3 +1,9 @@
+## 1.0.4
+- fix: Resolve dependency conflicts and version alignment
+
+## 1.0.3
+- feat: update native Android SDK to 2.10.0
+
 ## 1.0.2
 - feat: update native Android SDK to 2.8.1
 - fix: support Kotlin 2.x and Compose Compiler plugin compatibility

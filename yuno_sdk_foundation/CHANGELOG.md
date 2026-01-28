@@ -1,3 +1,9 @@
+## 1.0.4
+- fix: Resolve dependency conflicts and version alignment
+
+## 1.0.3
+- feat: update native iOS SDK to 2.11.1
+
 ## 1.0.2
 - feat: update native iOS SDK to 2.9.0
 

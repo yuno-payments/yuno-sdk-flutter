@@ -1,0 +1,141 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+
+default_platform(:android)
+
+platform :android do
+  desc "Build APK and upload to Firebase App Tester and LambdaTest"
+  lane :build_and_upload do
+    version_data = get_version_from_pubspec
+    version_name = version_data[:version_name]
+    build_number = version_data[:version_code].to_i
+    app_id = ENV["FIREBASE_APP_ID"]
+    token = ENV["FIREBASE_TOKEN"]
+
+    UI.message("📦 Building version #{version_name} (#{build_number}) from pubspec.yaml")
+
+    fastlane_dir = File.dirname(__FILE__)
+    project_root = File.expand_path('../..', fastlane_dir)
+
+    Dir.chdir(project_root) do
+      sh("flutter build apk --release --target-platform android-arm64 --no-tree-shake-icons --build-name=#{version_name} --build-number=#{build_number}")
+    end
+
+    apk_path = File.join(project_root, 'build/app/outputs/flutter-apk/app-release.apk')
+
+    firebase_app_distribution(
+      app: app_id,
+      apk_path: apk_path,
+      groups: "qa-testers",
+      release_notes: "QA Build - #{version_name} (#{build_number})",
+      firebase_cli_token: token
+    )
+
+    upload_to_lambdatest(apk_path, {version_name: version_name, version_code: build_number})
+
+    # Send Slack notification
+   #slack_message slack_message(version_name: version_name, build_number: build_number)
+  end
+
+  desc "Slack message for Firebase App Distribution upload"
+  lane :slack_message do |options|
+    require_env!("SLACK_BOTH_API_TOKEN")
+    
+    version_name = options[:version_name]
+    build_number = options[:build_number]
+    slack_channel = "core-mobile-versions"
+    git_branch = `git rev-parse --abbrev-ref HEAD`.strip
+    
+    version_number = "#{version_name} (#{build_number})"
+    message = "Example App version #{version_number} successfully uploaded to Firebase App Distribution"
+    
+    sh("
+    curl -X POST https://slack.com/api/chat.postMessage \
+         -H 'Authorization: Bearer #{ENV["SLACK_BOTH_API_TOKEN"]}' \
+         -H 'Content-type: application/json' \
+         --data '{
+           \"channel\": \"#{slack_channel}\",
+           \"text\": \"#{message}\",
+           \"attachments\": [
+             {
+               \"title\": \"Version Details\",
+               \"fields\": [
+                 {
+                   \"title\": \"Version Number\",
+                   \"value\": \"#{version_number}\",
+                   \"short\": true
+                 },
+                 {
+                  \"title\": \"Git Branch\",
+                  \"value\": \"#{git_branch}\",
+                  \"short\": true
+                }
+               ],
+               \"color\": \"#36a64f\"
+             }
+           ]
+         }'
+  ")
+  end
+  
+  def upload_to_lambdatest(apk_path, version_data)
+    require_env!("LAMBDATEST_API_TOKEN")
+    
+    sh <<-EOF
+    curl -u "yuno_android:#{ENV['LAMBDATEST_API_TOKEN']}" \
+    -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" \
+    -F "appFile=@#{apk_path}" \
+    -F "name=#{version_data[:version_name]} (#{version_data[:version_code]})" \
+    -F "visibility=team"
+    EOF
+  end
+  
+  def require_env!(key)
+    value = ENV[key]
+    UI.user_error!("Missing #{key} environment variable") if value.to_s.strip.empty?
+    value
+  end
+
+  def get_version_from_pubspec
+    require 'yaml'
+    fastlane_dir = File.dirname(__FILE__)
+    pubspec_path = File.expand_path('../../pubspec.yaml', fastlane_dir)
+    pubspec = YAML.load_file(pubspec_path)
+    version_full = pubspec['version']
+    
+    version_name = version_full.split('+')[0]
+    version_code = version_full.split('+')[1] || "1"
+    
+    { version_name: version_name, version_code: version_code }
+  end
+
+  def get_version_and_build_number
+    version_data = get_version_from_pubspec
+    version_name = version_data[:version_name]
+    app_id = ENV["FIREBASE_APP_ID"]
+    token = ENV["FIREBASE_TOKEN"]
+
+    # Get the build number that was used (same logic as build_and_upload)
+    begin
+      latest_release = firebase_app_distribution_get_latest_release(
+        app: app_id,
+        firebase_cli_token: token
+      )
+      
+      if latest_release && latest_release[:display_version] == version_name
+        build_number = latest_release[:build_version].to_i + 1
+      else
+        build_number = 1
+      end
+    rescue => e
+      UI.important("Could not fetch latest release from Firebase: #{e.message}")
+      UI.important("Using version code from pubspec.yaml")
+      build_number = version_data[:version_code].to_i
+    end
+
+    {
+      version: version_name,
+      build_number: build_number
+    }
+  end
+end
