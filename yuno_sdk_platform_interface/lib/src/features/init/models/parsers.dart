@@ -25,19 +25,19 @@ extension ParserAppearance on Appearance {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'fontFamily': fontFamily,
-      'accentColor': accentColor?.value,
-      'buttonBackgrounColor': buttonBackgrounColor?.value,
-      'buttonTitleBackgrounColor': buttonTitleBackgrounColor?.value,
-      'buttonBorderBackgrounColor': buttonBorderBackgrounColor?.value,
-      'secondaryButtonBackgrounColor': secondaryButtonBackgrounColor?.value,
+      'accentColor': accentColor?.toARGB32(),
+      'buttonBackgrounColor': buttonBackgrounColor?.toARGB32(),
+      'buttonTitleBackgrounColor': buttonTitleBackgrounColor?.toARGB32(),
+      'buttonBorderBackgrounColor': buttonBorderBackgrounColor?.toARGB32(),
+      'secondaryButtonBackgrounColor': secondaryButtonBackgrounColor?.toARGB32(),
       'secondaryButtonTitleBackgrounColor':
-          secondaryButtonTitleBackgrounColor?.value,
+          secondaryButtonTitleBackgrounColor?.toARGB32(),
       'secondaryButtonBorderBackgrounColor':
-          secondaryButtonBorderBackgrounColor?.value,
-      'disableButtonBackgrounColor': disableButtonBackgrounColor?.value,
+          secondaryButtonBorderBackgrounColor?.toARGB32(),
+      'disableButtonBackgrounColor': disableButtonBackgrounColor?.toARGB32(),
       'disableButtonTitleBackgrounColor':
-          disableButtonTitleBackgrounColor?.value,
-      'checkboxColor': checkboxColor?.value,
+          disableButtonTitleBackgrounColor?.toARGB32(),
+      'checkboxColor': checkboxColor?.toARGB32(),
     };
   }
 }
