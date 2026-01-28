@@ -1,4 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
+
+/// Helper function to convert Color to ARGB32 integer value
+int _colorToInt(Color? color) {
+  if (color == null) return 0;
+  return (color.alpha << 24) | (color.red << 16) | (color.green << 8) | color.blue;
+}
 
 extension ParserIosConfig on IosConfig {
   Map<String, dynamic> toMap() {
@@ -25,19 +32,19 @@ extension ParserAppearance on Appearance {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'fontFamily': fontFamily,
-      'accentColor': accentColor?.value,
-      'buttonBackgrounColor': buttonBackgrounColor?.value,
-      'buttonTitleBackgrounColor': buttonTitleBackgrounColor?.value,
-      'buttonBorderBackgrounColor': buttonBorderBackgrounColor?.value,
-      'secondaryButtonBackgrounColor': secondaryButtonBackgrounColor?.value,
+      'accentColor': _colorToInt(accentColor),
+      'buttonBackgrounColor': _colorToInt(buttonBackgrounColor),
+      'buttonTitleBackgrounColor': _colorToInt(buttonTitleBackgrounColor),
+      'buttonBorderBackgrounColor': _colorToInt(buttonBorderBackgrounColor),
+      'secondaryButtonBackgrounColor': _colorToInt(secondaryButtonBackgrounColor),
       'secondaryButtonTitleBackgrounColor':
-          secondaryButtonTitleBackgrounColor?.value,
+          _colorToInt(secondaryButtonTitleBackgrounColor),
       'secondaryButtonBorderBackgrounColor':
-          secondaryButtonBorderBackgrounColor?.value,
-      'disableButtonBackgrounColor': disableButtonBackgrounColor?.value,
+          _colorToInt(secondaryButtonBorderBackgrounColor),
+      'disableButtonBackgrounColor': _colorToInt(disableButtonBackgrounColor),
       'disableButtonTitleBackgrounColor':
-          disableButtonTitleBackgrounColor?.value,
-      'checkboxColor': checkboxColor?.value,
+          _colorToInt(disableButtonTitleBackgrounColor),
+      'checkboxColor': _colorToInt(checkboxColor),
     };
   }
 }

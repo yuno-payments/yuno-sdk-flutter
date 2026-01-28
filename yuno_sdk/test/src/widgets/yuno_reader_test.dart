@@ -271,9 +271,7 @@ class YunoWrapper {
   }
 
   Future<void> startPayment({bool showPaymentStatus = true}) async {
-    DispatchQueue.main.async {
-      await Yuno.startPayment(showPaymentStatus: showPaymentStatus);
-    }
+    await Yuno.startPayment(showPaymentStatus: showPaymentStatus);
   }
 
   Future<void> continuePayment({bool showPaymentStatus = true}) async {
