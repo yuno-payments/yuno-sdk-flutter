@@ -1,6 +1,6 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
+import 'package:yuno/src/platform_interface/src.dart';
 
 import '../widgets/yuno_enrollment_listener_test.dart';
 import '../widgets/yuno_payment_listener_test.dart';

@@ -24,17 +24,13 @@
 
 This repository contains the Yuno Flutter SDK, which enables seamless payment integration in Flutter applications for both Android and iOS platforms.
 
-## 📦 Packages
+## 📦 Package
 
-This monorepo contains the following packages:
+This repository contains a single consolidated Flutter SDK package:
 
 | Package | Description | Version |
 |---------|-------------|---------|
-| [`yuno_sdk`](./yuno_sdk) | Main Flutter SDK package | [![pub package](https://img.shields.io/pub/v/yuno.svg)](https://pub.dev/packages/yuno) |
-| [`yuno_sdk_android`](./yuno_sdk_android) | Android platform implementation | - |
-| [`yuno_sdk_foundation`](./yuno_sdk_foundation) | iOS platform implementation | - |
-| [`yuno_sdk_core`](./yuno_sdk_core) | Core shared functionality | - |
-| [`yuno_sdk_platform_interface`](./yuno_sdk_platform_interface) | Platform interface definitions | - |
+| [`yuno_sdk`](./yuno_sdk) | Complete Flutter SDK package with Android, iOS, and core functionality | [![pub package](https://img.shields.io/pub/v/yuno.svg)](https://pub.dev/packages/yuno) |
 
 ## 📚 Documentation
 
@@ -94,7 +90,7 @@ The Yuno Flutter SDK wraps native Android and iOS SDKs. If you need to update th
 
 To update the Android native SDK version:
 
-1. Navigate to `yuno_sdk_android/android/build.gradle`
+1. Navigate to `yuno_sdk/android/build.gradle`
 2. Update the Yuno Android SDK version in the dependencies section:
 ```gradle
 dependencies {
@@ -108,7 +104,7 @@ dependencies {
 
 To update the iOS native SDK version:
 
-1. Navigate to `yuno_sdk_foundation/ios/yuno_sdk_foundation.podspec`
+1. Navigate to `yuno_sdk/ios/yuno_sdk.podspec`
 2. Update the Yuno iOS SDK version in the dependencies section:
 ```ruby
 s.dependency 'YunoSDK', 'x.x.x'
@@ -168,11 +164,15 @@ melos publish
 
 ```
 yuno-sdk-flutter/
-├── yuno_sdk/                      # Main Flutter SDK package
-├── yuno_sdk_android/              # Android platform-specific code
-├── yuno_sdk_foundation/           # iOS platform-specific code
-├── yuno_sdk_core/                 # Core shared functionality
-├── yuno_sdk_platform_interface/   # Platform interface definitions
+├── yuno_sdk/                      # Main Flutter SDK package (consolidated)
+│   ├── lib/                       # Dart code
+│   │   └── src/
+│   │       ├── core/              # Core shared functionality
+│   │       ├── platform_interface/# Platform interface definitions
+│   │       ├── channels/          # Method channels
+│   │       └── widgets/           # Flutter widgets
+│   ├── android/                   # Android platform-specific code
+│   └── ios/                       # iOS platform-specific code
 ├── example/                       # Example Flutter app
 ├── melos.yaml                     # Melos configuration
 └── README.md                      # This file

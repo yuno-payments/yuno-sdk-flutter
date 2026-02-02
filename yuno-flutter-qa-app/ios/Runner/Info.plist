@@ -17,7 +17,12 @@
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
-		<string>en</string>
+		<string>es</string>
+		<string>pt</string>
+		<string>ar</string>
+		<string>id</string>
+		<string>th</string>
+		<string>ms</string>
 	</array>
 	<key>CFBundleName</key>
 	<string>example</string>

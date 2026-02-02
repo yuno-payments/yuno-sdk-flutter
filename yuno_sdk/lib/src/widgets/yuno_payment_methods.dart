@@ -145,7 +145,10 @@ Widget build(BuildContext context) {
               onCreatePlatformView: (params) {
                 YunoPaymentMethodPlatform.init(params.id);
                 final Map<String, dynamic> creationParams =
-                    widget.config.toMap(currentWidth: currentWidth);
+                    widget.config.toMap(
+                      currentWidth: currentWidth,
+                      isRTL: Directionality.of(context) == TextDirection.rtl,
+                    );
                 switch (widget.androidPlatformViewRenderType) {
                   case AndroidPlatformViewRenderType.expensiveAndroidView:
                     return PlatformViewsService.initExpensiveAndroidView(
@@ -188,6 +191,7 @@ Widget build(BuildContext context) {
                           creationParamsCodec: const StandardMessageCodec(),
                           creationParams: widget.config.toMap(
                             currentWidth: currentWidth,
+                            isRTL: Directionality.of(context) == TextDirection.rtl,
                           ),
                           viewType: YunoPaymentMethodPlatform.viewType,
                         ),

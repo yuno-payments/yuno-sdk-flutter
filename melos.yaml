@@ -2,23 +2,11 @@ name: yuno
 
 command:
    bootstrap:
-     dependencyOverrides:
-       yuno_sdk_core:
-        path: ../yuno_sdk_core
-        yuno_sdk_android:
-         path: ../yuno_sdk_android
-        yuno_sdk_foundation:
-         path: ../yuno_sdk_foundation
-        yuno_sdk_platform_interface:
-         path: ../yuno_sdk_platform_interface
-     dependencyOverridePaths: 
-        - ../yuno_sdk_core
-        - ../yuno_sdk_android
-        - ../yuno_sdk_foundation
-        - ../yuno_sdk_platform_interface       
+     dependencyOverrides: {}
+     dependencyOverridePaths: []       
 packages:
   - ./example
-  - ./yuno_sdk*
+  - ./yuno_sdk
 ignore:
   - examples
 
@@ -30,7 +18,7 @@ scripts:
       # Generate Flutter test coverage
       flutter test --coverage
     packageFilters:
-      ignore: [yuno_sdk_android, yuno_sdk_foundation]
+      ignore: []
   test:
     description: Generate test, badge, and open the report
     exec: |
@@ -49,4 +37,4 @@ scripts:
       fi
     
     packageFilters:
-      ignore: [yuno_sdk_android, yuno_sdk_foundation]
+      ignore: []

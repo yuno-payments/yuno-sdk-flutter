@@ -341,7 +341,7 @@ The Yuno Flutter SDK wraps native Android and iOS SDKs. If you need to update th
 
 To update the Android native SDK version:
 
-1. Navigate to `yuno_sdk_android/android/build.gradle`
+1. Navigate to `android/build.gradle`
 2. Update the Yuno Android SDK version in the dependencies section:
 ```gradle
 dependencies {
@@ -355,7 +355,7 @@ dependencies {
 
 To update the iOS native SDK version:
 
-1. Navigate to `yuno_sdk_foundation/ios/yuno_sdk_foundation.podspec`
+1. Navigate to `ios/yuno_sdk.podspec`
 2. Update the Yuno iOS SDK version in the dependencies section:
 ```ruby
 s.dependency 'YunoSDK', 'x.x.x'
