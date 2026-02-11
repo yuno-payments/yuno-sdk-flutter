@@ -1,3 +1,8 @@
+## 1.0.5
+- fix: Button colors appearing as clear/transparent when not explicitly configured
+- fix: Update yuno_sdk_platform_interface to ^0.7.2
+- fix: Update yuno_sdk_foundation to ^1.0.5
+
 ## 1.0.4
 - fix: Update all dependencies to resolve conflicts
 - fix: Update yuno_sdk_core to ^0.4.0

@@ -1,3 +1,6 @@
+## 0.7.2
+- fix: Return null instead of 0 for null colors in Appearance toMap conversion
+
 ## 0.7.1
 - fix: Update yuno_sdk_core dependency to ^0.4.0
 

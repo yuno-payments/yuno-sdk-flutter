@@ -1,7 +1,7 @@
 name: example
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.0.3+13
+version: 1.0.5+1
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -18,8 +18,10 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   country_code_picker: ^3.0.0
   package_info_plus: ^4.0.0
-  yuno:
-   path: ../yuno_sdk/
+  yuno: ^1.0.5
+  # Local development
+  # yuno:
+  #   path: ../yuno_sdk/
   firebase_core: ^3.4.1
   app_links: ^6.3.1
 
