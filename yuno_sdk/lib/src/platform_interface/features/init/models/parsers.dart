@@ -3,7 +3,7 @@ import '../../../src.dart';
 
 /// Helper function to convert Color to ARGB32 integer value
 int _colorToInt(Color? color) {
-  if (color == null) return 0;
+  if (color == null) return null;
   return (color.alpha << 24) | (color.red << 16) | (color.green << 8) | color.blue;
 }
 
