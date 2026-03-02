@@ -99,18 +99,6 @@ class _AutomationScreenState extends ConsumerState<AutomationScreen> {
           );
         }
 
-        // Card type / Card flow
-        if (options['cardType'] != null) {
-          final cardType = options['cardType'] as String;
-          final cardFlow = cardType == 'ONE_STEP'
-              ? CardFlow.oneStep
-              : CardFlow.multiStep;
-          await storage.write(
-            key: Keys.cardFlow.name,
-            value: cardFlow.name,
-          );
-        }
-
         // Saved card enable
         if (options['savedCardEnable'] != null) {
           await storage.writeBool(
@@ -125,7 +113,6 @@ class _AutomationScreenState extends ConsumerState<AutomationScreen> {
       ref.invalidate(credentialsListNotifier);
       ref.invalidate(countryCodeFuture);
       ref.invalidate(langNotifier);
-      ref.invalidate(cardFlowNotifier);
       ref.invalidate(saveCardNotifier);
       ref.invalidate(showPaymentStatusProvider);
       ref.invalidate(yunoProvider);

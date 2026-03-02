@@ -18,10 +18,10 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   country_code_picker: ^3.0.0
   package_info_plus: ^4.0.0
-  yuno: ^1.0.5
+  # yuno: ^1.0.5
   # Local development
-  # yuno:
-  #   path: ../yuno_sdk/
+  yuno:
+    path: ../yuno_sdk/
   firebase_core: ^3.4.1
   app_links: ^6.3.1
 

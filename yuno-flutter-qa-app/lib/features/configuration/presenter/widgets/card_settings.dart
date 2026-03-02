@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
-import 'package:example/core/feature/utils/yuno_dialogs.dart';
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yuno/yuno.dart';
 
 class CardSettings extends ConsumerWidget {
   const CardSettings({super.key});
@@ -15,7 +13,6 @@ class CardSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cardFormDeployedController = ref.watch(cardFormDeployedNotifier);
     final saveCardController = ref.watch(saveCardNotifier);
-    final cardFlowController = ref.watch(cardFlowNotifier);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,32 +34,6 @@ class CardSettings extends ConsumerWidget {
             width: double.infinity,
             child: Column(
               children: [
-                ListTile(
-                  minVerticalPadding: 10,
-                  minTileHeight: 10,
-                  title: cardFlowController.when(
-                      data: (data) => Text(
-                          'Mode - ${data == CardFlow.oneStep ? 'ONE STEP' : 'STEP BY STEP'}'),
-                      error: (err, stck) => ErrorWidget(err),
-                      loading: () => const CircularProgressIndicator()),
-                  leading: const Icon(Icons.credit_card),
-                  onTap: () async {
-                    final cardFlow =
-                        await YunoDiaglos.showCardStep(context: context);
-                    if (cardFlow != null) {
-                      await ref.read(providerStorage).write(
-                            key: Keys.cardFlow.name,
-                            value: cardFlow.name,
-                          );
-                      ref.invalidate(cardFlowNotifier);
-                      ref.invalidate(yunoProvider);
-                    }
-                  },
-                ),
-                const Divider(
-                  thickness: 0.5,
-                  height: 0,
-                ),
                 ListTile(
                   minVerticalPadding: 10,
                   minTileHeight: 10,

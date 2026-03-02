@@ -45,13 +45,11 @@ class YunoMethods: YunoPaymentFullDelegate {
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
         let yunoConfig = app.yunoConfig
-        let cardFormType = CardFlow(rawValue: yunoConfig.cardFlow ?? String(describing: CardFormType.oneStep))
         self.countryCode = app.countryCode
         // Note: checkoutSession will be set when YunoPaymentMethods is created or when startPaymentLite is called
         Yuno.initialize(
             apiKey: app.apiKey,
             config: YunoConfig(
-                cardFormType: cardFormType?.toCardFormType ?? .oneStep,
                 appearance: Yuno.Appearance(
                     fontFamily: appearance?.fontFamily,
                     accentColor: appearance?.accentColor,

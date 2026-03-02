@@ -8,7 +8,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
   final apiKey = await ref.watch(providerStorage).read(key: Keys.apiKey.name);
   final countryCode = await ref.watch(countryCodeFuture.future);
   final lang = await ref.watch(langNotifier.future);
-  final cardFlow = await ref.watch(cardFlowNotifier.future);
   final appearance = await ref.watch(appearanceNotifier.future);
   final saveCard = await ref.watch(saveCardNotifier.future);
   final keepLoader = await ref.watch(keepLoaderNotifier.future);
@@ -23,7 +22,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
       countryCode: countryCode,
       yunoConfig: YunoConfig(
         lang: lang ?? YunoLanguage.en,
-        cardFlow: cardFlow,
         keepLoader: keepLoader,
         saveCardEnable: saveCard,
         cardFormDeployed: cardForm,

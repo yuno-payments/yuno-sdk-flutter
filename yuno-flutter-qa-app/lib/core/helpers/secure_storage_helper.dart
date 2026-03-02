@@ -230,15 +230,6 @@ final appearanceNotifier = FutureProvider<Appearance>(
   },
 );
 
-final cardFlowNotifier = FutureProvider<CardFlow>(
-  (ref) async {
-    final cardFlow =
-        await ref.watch(providerStorage).read(key: Keys.cardFlow.name);
-    return Converter.fromJson(
-        cardFlow.isEmpty ? CardFlow.oneStep.name : cardFlow);
-  },
-);
-
 final langNotifier = FutureProvider<YunoLanguage?>(
   (ref) async {
     return await ref.watch(providerStorage).getLang(key: Keys.language.name);
@@ -269,15 +260,3 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-extension Converter on Never {
-  static CardFlow fromJson(String value) {
-    switch (value) {
-      case 'oneStep':
-        return CardFlow.oneStep;
-      case 'multiStep':
-        return CardFlow.multiStep;
-      default:
-        return CardFlow.oneStep;
-    }
-  }
-}

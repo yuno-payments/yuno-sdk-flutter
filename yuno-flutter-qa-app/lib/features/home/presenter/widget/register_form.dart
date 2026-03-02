@@ -288,15 +288,3 @@ class CountryCodeNotiifer extends Notifier<CountryCode?> {
   }
 }
 
-extension Converter on Never {
-  static CardFlow fromJson(String value) {
-    switch (value) {
-      case 'oneStep':
-        return CardFlow.oneStep;
-      case 'multiStep':
-        return CardFlow.multiStep;
-      default:
-        return CardFlow.oneStep;
-    }
-  }
-}

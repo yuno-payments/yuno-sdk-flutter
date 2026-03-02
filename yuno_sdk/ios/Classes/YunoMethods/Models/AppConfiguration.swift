@@ -72,7 +72,6 @@ struct Configuration: Codable, Sendable {
 
 struct YunoConfiguration: Codable, Sendable {
     let lang: String
-    let cardFlow: String?
     let saveCardEnable: Bool?
     let keepLoader: Bool?
     let cardFormDeployed: Bool?

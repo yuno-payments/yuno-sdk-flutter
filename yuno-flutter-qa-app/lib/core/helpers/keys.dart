@@ -1,6 +1,5 @@
 enum Keys {
   apiKey,
-  cardFlow,
   fontFamily,
   countryCode,
   saveCardEnable,

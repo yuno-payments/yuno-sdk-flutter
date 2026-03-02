@@ -9,7 +9,6 @@ data class AppConfigModel(
 
 data class YunoConfiguration(
     val lang: YunoLanguage,
-    val cardFlow: CardFlow,
     val saveCardEnable: Boolean,
     val keepLoader: Boolean,
     val isDynamicViewEnable: Boolean,
@@ -27,14 +26,6 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
         val yunoConfigurationMap = this["yunoConfig"] as? Map<*, *> ?: return Result.failure(
             IllegalArgumentException("Missing or invalid configuration")
         )
-        val cardflow = try {
-            CardFlow.valueOf(
-                yunoConfigurationMap["cardFlow"] as? String
-                    ?: throw IllegalArgumentException("Missing or invalid cardflow")
-            )
-        } catch (e: IllegalArgumentException) {
-            return Result.failure(e)
-        }
         val saveCardEnable =
             yunoConfigurationMap["saveCardEnable"] as? Boolean ?: return Result.failure(
                 IllegalArgumentException("Missing or invalid saveCardEnable")
@@ -61,7 +52,6 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
         val safeLang = language ?: YunoLanguage.ENGLISH;
         val yunoConfiguration = YunoConfiguration(
             lang = safeLang,
-            cardFlow = cardflow,
             saveCardEnable = saveCardEnable,
             keepLoader = keepLoader,
             isDynamicViewEnable = isDynamicViewEnable,
