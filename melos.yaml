@@ -17,8 +17,6 @@ scripts:
     exec: |
       # Generate Flutter test coverage
       flutter test --coverage
-    packageFilters:
-      ignore: []
   test:
     description: Generate test, badge, and open the report
     exec: |
@@ -36,5 +34,3 @@ scripts:
         open coverage/html/index.html
       fi
     
-    packageFilters:
-      ignore: []
