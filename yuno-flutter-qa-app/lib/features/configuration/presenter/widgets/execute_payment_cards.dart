@@ -143,7 +143,12 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
           final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
 
           if (isAutomaticPayment) {
-            // Automatic payment: create payment via API if possible, then continue
+            if (!context.mounted) return;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(child: CircularProgressIndicator()),
+            );
             try {
               if (_customerId != null) {
                 final apiService = await ref.read(yunoApiServiceProvider.future);
@@ -166,11 +171,17 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                   );
                 }
               }
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
               final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
               if (context.mounted) {
                 await context.continuePayment(showPaymentStatus: showPaymentStatus);
               }
             } catch (e) {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -423,6 +434,12 @@ class _PaymentMethodsModalState extends ConsumerState<_PaymentMethodsModal> {
           final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
 
           if (isAutomaticPayment) {
+            if (!context.mounted) return;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(child: CircularProgressIndicator()),
+            );
             try {
               if (widget.customerId != null) {
                 final apiService = await ref.read(yunoApiServiceProvider.future);
@@ -445,11 +462,17 @@ class _PaymentMethodsModalState extends ConsumerState<_PaymentMethodsModal> {
                   );
                 }
               }
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
               final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
               if (context.mounted) {
                 await context.continuePayment(showPaymentStatus: showPaymentStatus);
               }
             } catch (e) {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
