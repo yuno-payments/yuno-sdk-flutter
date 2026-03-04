@@ -18,6 +18,8 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _aliasController = TextEditingController();
   final _apiController = TextEditingController();
+  final _privateKeyController = TextEditingController();
+  final _accountIdController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -52,6 +54,26 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your api key';
                 }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            YunoInput(
+              title: 'Private Secret Key',
+              controller: _privateKeyController,
+              validator: (value) {
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            YunoInput(
+              title: 'Account Code',
+              controller: _accountIdController,
+              validator: (value) {
                 return null;
               },
             ),
@@ -147,6 +169,8 @@ class _RegisterFormState extends State<RegisterForm> {
         alias: _aliasController.text.trim(),
         apiKey: _apiController.text.trim(),
         countryCode: countryCodeString,
+        privateSecretKey: _privateKeyController.text.trim(),
+        accountId: _accountIdController.text.trim(),
       );
 
       // Get existing credentials
@@ -177,6 +201,8 @@ class _RegisterFormState extends State<RegisterForm> {
       _formKey.currentState!.reset();
       _aliasController.clear();
       _apiController.clear();
+      _privateKeyController.clear();
+      _accountIdController.clear();
 
       if (!mounted) return;
 

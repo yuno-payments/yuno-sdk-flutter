@@ -66,27 +66,35 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
         enrollmentListener: (context, state) {
           // Handle enrollment if needed
         },
-        paymentListener: (context, state) {
-          // Show OTT modal when received
-          // Only show if token is not empty and token is different from last processed
+        paymentListener: (context, state) async {
           if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
             _lastProcessedToken = state.token;
-            OttModal.show(
-              context: context,
-              ott: state.token,
-              onContinue: () async {
-                final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+            final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
+
+            if (isAutomaticPayment) {
+              final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+              if (context.mounted) {
                 await context.continuePayment(showPaymentStatus: showPaymentStatus);
-              },
-              onDismissed: () {
-                // Reset token to allow showing new OTT
-                if (mounted) {
-                  setState(() {
-                    _lastProcessedToken = null;
-                  });
-                }
-              },
-            );
+              }
+            } else if (context.mounted) {
+              OttModal.show(
+                context: context,
+                ott: state.token,
+                onContinue: () async {
+                  final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                  if (context.mounted) {
+                    await context.continuePayment(showPaymentStatus: showPaymentStatus);
+                  }
+                },
+                onDismissed: () {
+                  if (mounted) {
+                    setState(() {
+                      _lastProcessedToken = null;
+                    });
+                  }
+                },
+              );
+            }
           }
         },
         child: Padding(
@@ -124,7 +132,9 @@ class _SDKLayoutState extends ConsumerState<_SDKLayout> {
                   onPressed: methodSelected != null 
                       ? () async {
                           final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
-                          await context.startPayment(showPaymentStatus: showPaymentStatus);
+                          if (context.mounted) {
+                            await context.startPayment(showPaymentStatus: showPaymentStatus);
+                          }
                         }
                       : null,
                   child: Text(

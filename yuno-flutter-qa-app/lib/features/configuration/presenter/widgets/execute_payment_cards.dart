@@ -1,3 +1,4 @@
+import 'package:example/core/feature/api_service/yuno_api_service.dart';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:example/core/feature/utils/ott_modal.dart';
@@ -21,8 +22,90 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
   final _paymentType = TextEditingController(text: 'CARD');
   final _formKey = GlobalKey<FormState>();
   String? _lastProcessedToken;
+  String? _customerId;
+  bool _isGenerating = false;
+  bool _isModalOpen = false;
+
+  Future<void> _generateCheckoutSession(WidgetRef ref) async {
+    setState(() => _isGenerating = true);
+    try {
+      final apiService = await ref.read(yunoApiServiceProvider.future);
+      final accountId = await ref.read(accountIdProvider.future);
+      final countryCode = await ref.read(countryCodeFuture.future);
+      final amount = await ref.read(paymentAmountProvider.future);
+      final currency = await ref.read(paymentCurrencyProvider.future);
+
+      if (apiService == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Missing private key. Configure it in credentials.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      if (accountId.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Missing account code. Configure it in credentials.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      final country = countryCode.isEmpty ? 'CO' : countryCode;
+
+      final customer = await apiService.createCustomer(country: country);
+      final customerId = customer['id'] as String;
+      _customerId = customerId;
+
+      final session = await apiService.createCheckoutSession(
+        accountId: accountId,
+        customerId: customerId,
+        country: country,
+        amount: amount,
+        currency: currency,
+      );
+      final checkoutSession = session['checkout_session'] as String;
+
+      if (mounted) {
+        _checkoutSession.text = checkoutSession;
+        ref.read(formNotifier.notifier).changeValue(
+            value: _formKey.currentState?.validate() ?? false);
+      }
+    } on ApiException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('API Error: ${e.message}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isGenerating = false);
+      }
+    }
+  }
 
   void _showPaymentMethodsModal(BuildContext context, String checkoutSession) {
+    _isModalOpen = true;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -33,6 +116,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
       builder: (context) => _PaymentMethodsModal(
         key: ValueKey('payment_modal_${DateTime.now().millisecondsSinceEpoch}'),
         checkoutSession: checkoutSession,
+        customerId: _customerId,
         onPayment: () async {
           final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
           await context.startPayment(showPaymentStatus: showPaymentStatus);
@@ -42,8 +126,7 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
         },
       ),
     ).then((_) {
-      // Ensure complete cleanup when modal is dismissed
-      // This helps prevent issues on iOS real devices
+      _isModalOpen = false;
     });
   }
 
@@ -53,26 +136,69 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
       enrollmentListener: (context, state) {
         // Handle enrollment if needed
       },
-      paymentListener: (context, state) {
-        // Show OTT modal for payment lite (full payment navigates to another screen)
+      paymentListener: (context, state) async {
+        if (_isModalOpen) return;
         if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
           _lastProcessedToken = state.token;
-          OttModal.show(
-            context: context,
-            ott: state.token,
-            onContinue: () async {
-              final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
-              await context.continuePayment(showPaymentStatus: showPaymentStatus);
-            },
-            onDismissed: () {
-              // Reset token to allow showing new OTT
-              if (mounted) {
-                setState(() {
-                  _lastProcessedToken = null;
-                });
+          final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
+
+          if (isAutomaticPayment) {
+            // Automatic payment: create payment via API if possible, then continue
+            try {
+              if (_customerId != null) {
+                final apiService = await ref.read(yunoApiServiceProvider.future);
+                final accountId = await ref.read(accountIdProvider.future);
+                final countryCode = await ref.read(countryCodeFuture.future);
+                final country = countryCode.isEmpty ? 'CO' : countryCode;
+                final amount = await ref.read(paymentAmountProvider.future);
+                final currency = await ref.read(paymentCurrencyProvider.future);
+
+                if (apiService != null) {
+                  await apiService.createPayment(
+                    accountId: accountId,
+                    checkoutSession: _checkoutSession.text,
+                    token: state.token,
+                    customerId: _customerId!,
+                    merchantOrderId: 'order_${DateTime.now().millisecondsSinceEpoch}',
+                    country: country,
+                    amount: amount,
+                    currency: currency,
+                  );
+                }
               }
-            },
-          );
+              final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+              if (context.mounted) {
+                await context.continuePayment(showPaymentStatus: showPaymentStatus);
+              }
+            } catch (e) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Auto payment error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                _lastProcessedToken = null;
+              }
+            }
+          } else {
+            // Manual flow: show OTT modal
+            OttModal.show(
+              context: context,
+              ott: state.token,
+              onContinue: () async {
+                final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                await context.continuePayment(showPaymentStatus: showPaymentStatus);
+              },
+              onDismissed: () {
+                if (mounted) {
+                  setState(() {
+                    _lastProcessedToken = null;
+                  });
+                }
+              },
+            );
+          }
         }
       },
       child: Column(
@@ -139,6 +265,32 @@ class _ExecutePaymentsState extends ConsumerState<ExecutePayments> {
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: _isGenerating
+                            ? null
+                            : () => _generateCheckoutSession(ref),
+                        child: _isGenerating
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('Generate'),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -232,10 +384,12 @@ class _PaymentMethodsModal extends ConsumerStatefulWidget {
     super.key,
     required this.checkoutSession,
     required this.onPayment,
+    this.customerId,
   });
 
   final String checkoutSession;
   final VoidCallback onPayment;
+  final String? customerId;
 
   @override
   ConsumerState<_PaymentMethodsModal> createState() => _PaymentMethodsModalState();
@@ -263,26 +417,68 @@ class _PaymentMethodsModalState extends ConsumerState<_PaymentMethodsModal> {
       enrollmentListener: (context, state) {
         // Handle enrollment if needed
       },
-      paymentListener: (context, state) {
-        // Show OTT modal when received
+      paymentListener: (context, state) async {
         if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
           _lastProcessedToken = state.token;
-          OttModal.show(
-            context: context,
-            ott: state.token,
-            onContinue: () async {
+          final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
+
+          if (isAutomaticPayment) {
+            try {
+              if (widget.customerId != null) {
+                final apiService = await ref.read(yunoApiServiceProvider.future);
+                final accountId = await ref.read(accountIdProvider.future);
+                final countryCode = await ref.read(countryCodeFuture.future);
+                final country = countryCode.isEmpty ? 'CO' : countryCode;
+                final amount = await ref.read(paymentAmountProvider.future);
+                final currency = await ref.read(paymentCurrencyProvider.future);
+
+                if (apiService != null) {
+                  await apiService.createPayment(
+                    accountId: accountId,
+                    checkoutSession: widget.checkoutSession,
+                    token: state.token,
+                    customerId: widget.customerId!,
+                    merchantOrderId: 'order_${DateTime.now().millisecondsSinceEpoch}',
+                    country: country,
+                    amount: amount,
+                    currency: currency,
+                  );
+                }
+              }
               final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
-              await context.continuePayment(showPaymentStatus: showPaymentStatus);
-            },
-            onDismissed: () {
-              // Reset token to allow showing new OTT
+              if (context.mounted) {
+                await context.continuePayment(showPaymentStatus: showPaymentStatus);
+              }
+            } catch (e) {
               if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Auto payment error: $e'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
                 setState(() {
                   _lastProcessedToken = null;
                 });
               }
-            },
-          );
+            }
+          } else {
+            OttModal.show(
+              context: context,
+              ott: state.token,
+              onContinue: () async {
+                final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                await context.continuePayment(showPaymentStatus: showPaymentStatus);
+              },
+              onDismissed: () {
+                if (mounted) {
+                  setState(() {
+                    _lastProcessedToken = null;
+                  });
+                }
+              },
+            );
+          }
         }
       },
       child: AnimatedContainer(

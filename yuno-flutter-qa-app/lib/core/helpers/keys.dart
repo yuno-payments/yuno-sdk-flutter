@@ -20,4 +20,9 @@ enum Keys {
   disableButtonTitleBackgrounColor,
   checkboxColor,
   showPaymentStatus,
+  automaticPayment,
+  paymentAmount,
+  paymentCurrency,
+  privateSecretKey,
+  accountId,
 }

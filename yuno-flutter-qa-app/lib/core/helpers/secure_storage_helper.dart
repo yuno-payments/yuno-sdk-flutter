@@ -93,6 +93,8 @@ class SecureStorage {
                 alias: json['alias'] ?? '',
                 apiKey: json['apiKey'] ?? '',
                 countryCode: json['countryCode'] ?? '',
+                privateSecretKey: json['privateSecretKey'] ?? '',
+                accountId: json['accountId'] ?? '',
               ))
           .toList();
     } catch (e) {
@@ -106,6 +108,8 @@ class SecureStorage {
               'alias': cred.alias,
               'apiKey': cred.apiKey,
               'countryCode': cred.countryCode,
+              'privateSecretKey': cred.privateSecretKey,
+              'accountId': cred.accountId,
             })
         .toList();
     await storage.setString('saved_credentials', jsonEncode(jsonList));
@@ -116,6 +120,9 @@ class SecureStorage {
     await write(key: Keys.alias.name, value: credential.alias);
     await write(key: Keys.apiKey.name, value: credential.apiKey);
     await write(key: Keys.countryCode.name, value: credential.countryCode);
+    await write(
+        key: Keys.privateSecretKey.name, value: credential.privateSecretKey);
+    await write(key: Keys.accountId.name, value: credential.accountId);
   }
 }
 
@@ -130,10 +137,18 @@ final credentialNotifier = FutureProvider<Credential>(
           key: Keys.alias.name,
         );
 
+    final privateSecretKey = await ref
+        .watch(providerStorage)
+        .read(key: Keys.privateSecretKey.name);
+    final accountId =
+        await ref.watch(providerStorage).read(key: Keys.accountId.name);
+
     return Credential(
       apiKey: apiKey,
       countryCode: countryCode,
       alias: alias,
+      privateSecretKey: privateSecretKey,
+      accountId: accountId,
     );
   },
 );
@@ -241,6 +256,29 @@ final showPaymentStatusProvider = FutureProvider<bool>(
     return await ref
         .watch(providerStorage)
         .getBool(key: Keys.showPaymentStatus.name);
+  },
+);
+
+final automaticPaymentProvider = FutureProvider<bool>(
+  (ref) async {
+    await ref.watch(providerStorage).storage.reload();
+    final value = ref.watch(providerStorage).storage.getBool(Keys.automaticPayment.name);
+    return value ?? true;
+  },
+);
+
+final paymentAmountProvider = FutureProvider<num>(
+  (ref) async {
+    final value = await ref.watch(providerStorage).read(key: Keys.paymentAmount.name);
+    if (value.isEmpty) return 10000;
+    return num.tryParse(value) ?? 10000;
+  },
+);
+
+final paymentCurrencyProvider = FutureProvider<String>(
+  (ref) async {
+    final value = await ref.watch(providerStorage).read(key: Keys.paymentCurrency.name);
+    return value.isEmpty ? 'COP' : value;
   },
 );
 
