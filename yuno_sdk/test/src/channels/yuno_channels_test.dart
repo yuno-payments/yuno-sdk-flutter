@@ -12,7 +12,6 @@ void main() {
     YunoPlatform.instance = mockPlatform;
     registerFallbackValue(const IosConfig());
     registerFallbackValue(const AndroidConfig());
-    registerFallbackValue(CardFlow.multiStep);
     registerFallbackValue(YunoLanguage.en);
     registerFallbackValue(const YunoConfig());
     registerFallbackValue(const PaymentMethodConf(checkoutSession: '1234'));
