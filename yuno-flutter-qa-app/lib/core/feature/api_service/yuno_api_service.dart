@@ -1,21 +1,52 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:example/core/helpers/keys.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
-const _yunoApiBaseUrl = 'https://api-staging.y.uno/v1';
+enum YunoEnvironment {
+  dev,
+  sandbox,
+  prod,
+  staging;
+
+  String get baseUrl => switch (this) {
+        YunoEnvironment.dev => 'https://api-dev.y.uno/v1',
+        YunoEnvironment.sandbox => 'https://api-sandbox.y.uno/v1',
+        YunoEnvironment.prod => 'https://api.y.uno/v1',
+        YunoEnvironment.staging => 'https://api-staging.y.uno/v1',
+      };
+
+  static YunoEnvironment fromPublicApiKey(String publicApiKey) {
+    final prefix = publicApiKey.split('_').firstOrNull ?? '';
+    return switch (prefix) {
+      'dev' => YunoEnvironment.dev,
+      'sandbox' => YunoEnvironment.sandbox,
+      'prod' => YunoEnvironment.prod,
+      'staging' => YunoEnvironment.staging,
+      _ => YunoEnvironment.staging,
+    };
+  }
+}
 
 class YunoApiService {
   YunoApiService({
     required this.publicApiKey,
     required this.privateSecretKey,
-  });
+  }) : _environment = YunoEnvironment.fromPublicApiKey(publicApiKey);
 
   String publicApiKey;
   String privateSecretKey;
+  final YunoEnvironment _environment;
+
+  HttpClient _createHttpClient() {
+    final client = HttpClient();
+    client.findProxy = HttpClient.findProxyFromEnvironment;
+    client.badCertificateCallback = (cert, host, port) => true;
+    return client;
+  }
 
   Future<Map<String, dynamic>> _request(
     String endpoint, {
@@ -23,40 +54,63 @@ class YunoApiService {
     Map<String, dynamic>? body,
     Map<String, String> additionalHeaders = const {},
   }) async {
-    final uri = Uri.parse('$_yunoApiBaseUrl$endpoint');
+    final uri = Uri.parse('${_environment.baseUrl}$endpoint');
+    final client = _createHttpClient();
 
-    final headers = {
-      'Content-Type': 'application/json',
-      'public-api-key': publicApiKey,
-      'private-secret-key': privateSecretKey,
-      ...additionalHeaders,
-    };
+    try {
+      final request = await client.openUrl(method, uri);
 
-    final http.Response response;
-    switch (method) {
-      case 'GET':
-        response = await http.get(uri, headers: headers);
-      case 'POST':
-        response = await http.post(
-          uri,
-          headers: headers,
-          body: body != null ? jsonEncode(body) : null,
+      request.headers.set('Content-Type', 'application/json');
+      request.headers.set('public-api-key', publicApiKey);
+      request.headers.set('private-secret-key', privateSecretKey);
+      for (final entry in additionalHeaders.entries) {
+        request.headers.set(entry.key, entry.value);
+      }
+
+      if (body != null) {
+        request.write(jsonEncode(body));
+      }
+
+      // Log request
+      final requestHeaders = <String, String>{};
+      request.headers.forEach((name, values) {
+        requestHeaders[name] = values.join(', ');
+      });
+      // ignore: avoid_print
+      print('[YunoApiService] >>> $method $uri');
+      // ignore: avoid_print
+      print('[YunoApiService] >>> Headers: ${const JsonEncoder.withIndent('  ').convert(requestHeaders)}');
+      // ignore: avoid_print
+      print('[YunoApiService] >>> Body: ${body != null ? const JsonEncoder.withIndent('  ').convert(body) : 'null'}');
+
+      final response = await request.close();
+      final responseBody = await response.transform(utf8.decoder).join();
+      final data = jsonDecode(responseBody) as Map<String, dynamic>;
+
+      // Log response
+      final responseHeaders = <String, String>{};
+      response.headers.forEach((name, values) {
+        responseHeaders[name] = values.join(', ');
+      });
+      // ignore: avoid_print
+      print('[YunoApiService] <<< ${response.statusCode} $method $uri');
+      // ignore: avoid_print
+      print('[YunoApiService] <<< Headers: ${const JsonEncoder.withIndent('  ').convert(responseHeaders)}');
+      // ignore: avoid_print
+      print('[YunoApiService] <<< Body: ${const JsonEncoder.withIndent('  ').convert(data)}');
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw ApiException(
+          message: data['message'] as String? ?? 'API Error: ${response.statusCode}',
+          statusCode: response.statusCode,
+          data: data,
         );
-      default:
-        throw UnsupportedError('HTTP method $method not supported');
+      }
+
+      return data;
+    } finally {
+      client.close();
     }
-
-    final data = jsonDecode(response.body) as Map<String, dynamic>;
-
-    if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(
-        message: data['message'] as String? ?? 'API Error: ${response.statusCode}',
-        statusCode: response.statusCode,
-        data: data,
-      );
-    }
-
-    return data;
   }
 
   Future<Map<String, dynamic>> createCustomer({

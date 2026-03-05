@@ -1,4 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:example/core/feature/api_service/yuno_api_service.dart';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/feature/credential/domain/entity/credential/credential.dart';
 import 'package:example/core/helpers/keys.dart';
@@ -214,6 +215,8 @@ class _RegisterFormState extends State<RegisterForm> {
       if (mounted) {
         ref.refresh(credentialNotifier.future);
         ref.refresh(credentialsListNotifier.future);
+        ref.invalidate(yunoApiServiceProvider);
+        ref.invalidate(accountIdProvider);
       }
     } catch (e) {
       if (mounted) {
