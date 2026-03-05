@@ -153,7 +153,7 @@ class YunoApiService {
     required String currency,
     required num amount,
     String? merchantOrderId,
-    String callbackUrl = 'yunoexample://payment',
+    String callbackUrl = 'yuno://payment',
     String paymentDescription = 'Test payment',
   }) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
