@@ -261,9 +261,10 @@ final showPaymentStatusProvider = FutureProvider<bool>(
 
 final automaticPaymentProvider = FutureProvider<bool>(
   (ref) async {
-    await ref.watch(providerStorage).storage.reload();
-    final value = ref.watch(providerStorage).storage.getBool(Keys.automaticPayment.name);
-    return value ?? true;
+    final isAutomatic = await ref
+        .watch(providerStorage)
+        .getBool(key: Keys.automaticPayment.name);
+    return isAutomatic;
   },
 );
 
