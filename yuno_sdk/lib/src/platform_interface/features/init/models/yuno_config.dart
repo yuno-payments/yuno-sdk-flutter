@@ -5,15 +5,11 @@ class YunoConfig {
     this.lang = YunoLanguage.en,
     this.saveCardEnable = false,
     this.keepLoader = false,
-    this.isDynamicViewEnable = false,
-    this.cardFormDeployed = false,
   });
 
   final YunoLanguage lang;
   final bool saveCardEnable;
   final bool keepLoader;
-  final bool isDynamicViewEnable;
-  final bool cardFormDeployed;
 
   @override
   bool operator ==(covariant YunoConfig other) {
@@ -21,7 +17,6 @@ class YunoConfig {
 
     return other.saveCardEnable == saveCardEnable &&
         other.keepLoader == keepLoader &&
-        other.isDynamicViewEnable == isDynamicViewEnable &&
         other.lang == lang;
   }
 
@@ -29,7 +24,6 @@ class YunoConfig {
   int get hashCode {
     return saveCardEnable.hashCode ^
         keepLoader.hashCode ^
-        isDynamicViewEnable.hashCode ^
         lang.hashCode;
   }
 }

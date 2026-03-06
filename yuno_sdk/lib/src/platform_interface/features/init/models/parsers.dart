@@ -26,8 +26,6 @@ extension ParserYunoConfig on YunoConfig {
       'lang': lang.rawValue.toLowerCase(),
       'saveCardEnable': saveCardEnable,
       'keepLoader': keepLoader,
-      'isDynamicViewEnable': isDynamicViewEnable,
-      'cardFormDeployed': cardFormDeployed,
     };
   }
 }

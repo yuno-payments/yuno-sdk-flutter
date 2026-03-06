@@ -142,8 +142,7 @@ await Yuno.init(
     lang: YunoLanguage.en, //supported languages: ENGLISH, SPANISH, PORTUGUESE, MALAY, INDONESIAN, THAI
     cardflow: CardFlow.multiStep, // default cardflow
     saveCardEnable: true, // default saveCardEnable
-    keepLoader: true,   // default keepLoader 
-    isDynamicViewEnable: true, // default isDynamicViewEnable
+    keepLoader: true,   // default keepLoader
   ),
   iosConfig: IosConfig(), // Optional, can use default value
 );

@@ -16,7 +16,6 @@ import '../internals.dart';
 ///     lang: YunoLanguage.en,
 ///     saveCardEnable: true,
 ///     keepLoader: true,
-///     isDynamicViewEnable: true,
 ///   ),
 ///   iosConfig: IosConfig(), // Optional, can use default value
 /// );

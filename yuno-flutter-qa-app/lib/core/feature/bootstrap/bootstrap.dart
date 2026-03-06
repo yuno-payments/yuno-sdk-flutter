@@ -11,7 +11,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
   final appearance = await ref.watch(appearanceNotifier.future);
   final saveCard = await ref.watch(saveCardNotifier.future);
   final keepLoader = await ref.watch(keepLoaderNotifier.future);
-  final cardForm = await ref.watch(cardFormDeployedNotifier.future);
 
   try {
     if (kDebugMode) {
@@ -24,7 +23,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
         lang: lang ?? YunoLanguage.en,
         keepLoader: keepLoader,
         saveCardEnable: saveCard,
-        cardFormDeployed: cardForm,
       ),
       iosConfig: IosConfig(
         appearance: appearance,

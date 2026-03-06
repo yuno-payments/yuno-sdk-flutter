@@ -3,8 +3,6 @@ enum Keys {
   fontFamily,
   countryCode,
   saveCardEnable,
-  cardFormDeployed,
-  isDynamicViewEnable,
   keepLoader,
   alias,
   checkoutSession,

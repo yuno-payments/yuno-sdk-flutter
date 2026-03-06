@@ -11,7 +11,6 @@ class CardSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cardFormDeployedController = ref.watch(cardFormDeployedNotifier);
     final saveCardController = ref.watch(saveCardNotifier);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -37,27 +36,6 @@ class CardSettings extends ConsumerWidget {
                 ListTile(
                   minVerticalPadding: 10,
                   minTileHeight: 10,
-                  title: const Text('Card Unfolded'),
-                  leading: const Icon(Icons.movie_creation_outlined),
-                  trailing: Platform.isIOS
-                      ? CupertinoSwitch(
-                          value: cardFormDeployedController.value ?? false,
-                          onChanged: (value) async =>
-                              onCardUnfolded(value: value, ref: ref),
-                        )
-                      : Switch(
-                          value: cardFormDeployedController.value ?? false,
-                          onChanged: (value) async =>
-                              onCardUnfolded(value: value, ref: ref),
-                        ),
-                ),
-                const Divider(
-                  thickness: 0.5,
-                  height: 0,
-                ),
-                ListTile(
-                  minVerticalPadding: 10,
-                  minTileHeight: 10,
                   title: const Text('Save Card'),
                   leading: const Icon(Icons.credit_score),
                   trailing: Platform.isIOS
@@ -78,18 +56,6 @@ class CardSettings extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  Future<void> onCardUnfolded({
-    required bool value,
-    required WidgetRef ref,
-  }) async {
-    await ref.read(providerStorage).writeBool(
-          key: Keys.cardFormDeployed.name,
-          value: value,
-        );
-    ref.invalidate(cardFormDeployedNotifier);
-    ref.invalidate(yunoProvider);
   }
 
   Future<void> onToggleSaveCard({

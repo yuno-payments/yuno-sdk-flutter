@@ -141,7 +141,7 @@ class _SDKSettingsState extends ConsumerState<SDKSettings> {
                       ? CupertinoSwitch(
                           value: automaticPayment.value ?? true,
                           onChanged: (value) async {
-                            await ref.watch(providerStorage).writeBool(
+                            await ref.read(providerStorage).writeBool(
                                 key: Keys.automaticPayment.name, value: value);
                             ref.invalidate(automaticPaymentProvider);
                           },
@@ -149,7 +149,7 @@ class _SDKSettingsState extends ConsumerState<SDKSettings> {
                       : Switch(
                           value: automaticPayment.value ?? true,
                           onChanged: (value) async {
-                            await ref.watch(providerStorage).writeBool(
+                            await ref.read(providerStorage).writeBool(
                                 key: Keys.automaticPayment.name, value: value);
                             ref.invalidate(automaticPaymentProvider);
                           },

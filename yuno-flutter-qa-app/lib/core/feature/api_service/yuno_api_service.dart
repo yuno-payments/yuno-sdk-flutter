@@ -76,12 +76,6 @@ class YunoApiService {
       request.headers.forEach((name, values) {
         requestHeaders[name] = values.join(', ');
       });
-      // ignore: avoid_print
-      print('[YunoApiService] >>> $method $uri');
-      // ignore: avoid_print
-      print('[YunoApiService] >>> Headers: ${const JsonEncoder.withIndent('  ').convert(requestHeaders)}');
-      // ignore: avoid_print
-      print('[YunoApiService] >>> Body: ${body != null ? const JsonEncoder.withIndent('  ').convert(body) : 'null'}');
 
       final response = await request.close();
       final responseBody = await response.transform(utf8.decoder).join();
@@ -92,12 +86,6 @@ class YunoApiService {
       response.headers.forEach((name, values) {
         responseHeaders[name] = values.join(', ');
       });
-      // ignore: avoid_print
-      print('[YunoApiService] <<< ${response.statusCode} $method $uri');
-      // ignore: avoid_print
-      print('[YunoApiService] <<< Headers: ${const JsonEncoder.withIndent('  ').convert(responseHeaders)}');
-      // ignore: avoid_print
-      print('[YunoApiService] <<< Body: ${const JsonEncoder.withIndent('  ').convert(data)}');
 
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw ApiException(
