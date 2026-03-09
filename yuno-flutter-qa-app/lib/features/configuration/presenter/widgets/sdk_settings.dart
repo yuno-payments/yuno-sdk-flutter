@@ -8,14 +8,62 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SDKSettings extends ConsumerWidget {
+class SDKSettings extends ConsumerStatefulWidget {
   const SDKSettings({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SDKSettings> createState() => _SDKSettingsState();
+}
+
+class _SDKSettingsState extends ConsumerState<SDKSettings> {
+  final _amountController = TextEditingController(text: '10000');
+  final _currencyController = TextEditingController(text: 'COP');
+  bool _initialized = false;
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _currencyController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _saveAmount(String value) async {
+    await ref.read(providerStorage).write(
+          key: Keys.paymentAmount.name,
+          value: value,
+        );
+    ref.invalidate(paymentAmountProvider);
+  }
+
+  Future<void> _saveCurrency(String value) async {
+    await ref.read(providerStorage).write(
+          key: Keys.paymentCurrency.name,
+          value: value.toUpperCase(),
+        );
+    ref.invalidate(paymentCurrencyProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final keepLoaderController = ref.watch(keepLoaderNotifier);
     final langController = ref.watch(langNotifier);
     final showPaymentStatus = ref.watch(showPaymentStatusProvider);
+    final automaticPayment = ref.watch(automaticPaymentProvider);
+    final amount = ref.watch(paymentAmountProvider);
+    final currency = ref.watch(paymentCurrencyProvider);
+
+    // Initialize controllers with stored values
+    if (!_initialized) {
+      amount.whenData((value) {
+        _amountController.text = value.toString();
+      });
+      currency.whenData((value) {
+        _currencyController.text = value;
+      });
+      if (amount.hasValue && currency.hasValue) {
+        _initialized = true;
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,18 +121,78 @@ class SDKSettings extends ConsumerWidget {
                   trailing: Platform.isIOS
                       ? CupertinoSwitch(
                           value: keepLoaderController.value ?? false,
-                          onChanged: (value) async => await onToggleKeepLoader(
+                          onChanged: (value) async => await _onToggleKeepLoader(
                             value: value,
-                            ref: ref,
                           ),
                         )
                       : Switch(
                           value: keepLoaderController.value ?? false,
-                          onChanged: (value) async => await onToggleKeepLoader(
+                          onChanged: (value) async => await _onToggleKeepLoader(
                             value: value,
-                            ref: ref,
                           ),
                         ),
+                ),
+                ListTile(
+                  minVerticalPadding: 10,
+                  minTileHeight: 10,
+                  title: const Text('Automatic Payment'),
+                  leading: const Icon(Icons.payment),
+                  trailing: Platform.isIOS
+                      ? CupertinoSwitch(
+                          value: automaticPayment.value ?? true,
+                          onChanged: (value) async {
+                            await ref.read(providerStorage).writeBool(
+                                key: Keys.automaticPayment.name, value: value);
+                            ref.invalidate(automaticPaymentProvider);
+                          },
+                        )
+                      : Switch(
+                          value: automaticPayment.value ?? true,
+                          onChanged: (value) async {
+                            await ref.read(providerStorage).writeBool(
+                                key: Keys.automaticPayment.name, value: value);
+                            ref.invalidate(automaticPaymentProvider);
+                          },
+                        ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Amount',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                          ),
+                          onChanged: _saveAmount,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          controller: _currencyController,
+                          textCapitalization: TextCapitalization.characters,
+                          decoration: InputDecoration(
+                            labelText: 'Currency',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                          ),
+                          onChanged: _saveCurrency,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 ListTile(
                   minVerticalPadding: 10,
@@ -117,21 +225,8 @@ class SDKSettings extends ConsumerWidget {
     );
   }
 
-  Future<void> onToggleDynamicSDK({
+  Future<void> _onToggleKeepLoader({
     required bool value,
-    required WidgetRef ref,
-  }) async {
-    await ref.read(providerStorage).writeBool(
-          key: Keys.isDynamicViewEnable.name,
-          value: value,
-        );
-    ref.invalidate(dynamicSDKNotifier);
-    ref.invalidate(yunoProvider);
-  }
-
-  Future<void> onToggleKeepLoader({
-    required bool value,
-    required WidgetRef ref,
   }) async {
     await ref.read(providerStorage).writeBool(
           key: Keys.keepLoader.name,

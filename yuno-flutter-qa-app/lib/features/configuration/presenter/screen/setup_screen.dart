@@ -81,41 +81,46 @@ class __HomeLayoutState extends State<_HomeLayout> {
                 },
               );
             },
-            paymentListener: (context, state) {
+            paymentListener: (context, state) async {
               ref
                   .read(checkoutSessionNotifier.notifier)
                   .recoverySession(state.token);
-              
-              // Show OTT modal instead of displaying it in the screen
-              // Only show if token is not empty and token is different from last processed
+
               if (state.token.isNotEmpty && state.token != _lastProcessedToken) {
                 _lastProcessedToken = state.token;
+                final isAutomaticPayment = await ref.read(automaticPaymentProvider.future);
+
+                if (!isAutomaticPayment && context.mounted) {
                   OttModal.show(
-                  context: context,
-                  ott: state.token,
-                  onContinue: () async {
-                    final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
-                    await context.continuePayment(showPaymentStatus: showPaymentStatus);
-                  },
-                  onDismissed: () {
-                    // Reset token to allow showing new OTT
-                    if (mounted) {
-                      setState(() {
-                        _lastProcessedToken = null;
-                      });
-                    }
+                    context: context,
+                    ott: state.token,
+                    onContinue: () async {
+                      final showPaymentStatus = await ref.read(showPaymentStatusProvider.future);
+                      if (context.mounted) {
+                        await context.continuePayment(showPaymentStatus: showPaymentStatus);
+                      }
+                    },
+                    onDismissed: () {
+                      if (mounted) {
+                        setState(() {
+                          _lastProcessedToken = null;
+                        });
+                      }
+                    },
+                  );
+                }
+              }
+              
+              if (context.mounted) {
+                YunoSnackBar.showSnackBar(
+                  context,
+                  YunoSnackbarOptions.payment,
+                  state.paymentStatus,
+                  () {
+                    ref.read(checkoutSessionNotifier.notifier).resetSession();
                   },
                 );
               }
-              
-              YunoSnackBar.showSnackBar(
-                context,
-                YunoSnackbarOptions.payment,
-                state.paymentStatus,
-                () {
-                  ref.read(checkoutSessionNotifier.notifier).resetSession();
-                },
-              );
             },
             child: const Center(
               child: Padding(

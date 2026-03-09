@@ -1,4 +1,5 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:example/core/feature/api_service/yuno_api_service.dart';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/feature/credential/domain/entity/credential/credential.dart';
 import 'package:example/core/helpers/keys.dart';
@@ -18,6 +19,8 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _aliasController = TextEditingController();
   final _apiController = TextEditingController();
+  final _privateKeyController = TextEditingController();
+  final _accountIdController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -52,6 +55,26 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your api key';
                 }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            YunoInput(
+              title: 'Private Secret Key',
+              controller: _privateKeyController,
+              validator: (value) {
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            YunoInput(
+              title: 'Account Code',
+              controller: _accountIdController,
+              validator: (value) {
                 return null;
               },
             ),
@@ -147,6 +170,8 @@ class _RegisterFormState extends State<RegisterForm> {
         alias: _aliasController.text.trim(),
         apiKey: _apiController.text.trim(),
         countryCode: countryCodeString,
+        privateSecretKey: _privateKeyController.text.trim(),
+        accountId: _accountIdController.text.trim(),
       );
 
       // Get existing credentials
@@ -177,6 +202,8 @@ class _RegisterFormState extends State<RegisterForm> {
       _formKey.currentState!.reset();
       _aliasController.clear();
       _apiController.clear();
+      _privateKeyController.clear();
+      _accountIdController.clear();
 
       if (!mounted) return;
 
@@ -188,6 +215,8 @@ class _RegisterFormState extends State<RegisterForm> {
       if (mounted) {
         ref.refresh(credentialNotifier.future);
         ref.refresh(credentialsListNotifier.future);
+        ref.invalidate(yunoApiServiceProvider);
+        ref.invalidate(accountIdProvider);
       }
     } catch (e) {
       if (mounted) {
@@ -288,15 +317,3 @@ class CountryCodeNotiifer extends Notifier<CountryCode?> {
   }
 }
 
-extension Converter on Never {
-  static CardFlow fromJson(String value) {
-    switch (value) {
-      case 'oneStep':
-        return CardFlow.oneStep;
-      case 'multiStep':
-        return CardFlow.multiStep;
-      default:
-        return CardFlow.oneStep;
-    }
-  }
-}

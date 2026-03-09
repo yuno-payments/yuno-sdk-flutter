@@ -1,14 +1,13 @@
 export 'widgets/widgets.dart';
 export './channels/channels.dart';
-export 'package:yuno_sdk_core/commons/external.dart';
-export 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart'
+export 'core/external.dart';
+export 'core/commons.dart';
+export 'platform_interface/src.dart'
     hide YunoMethodChannel,
         YunoPaymentMethodChannel,
         YunoPaymentMethodPlatform,
-        YunoPaymentSelectNotifier,
         YunoPaymentMethodState,
         YunoPaymentSelectState,
-        YunoPaymentMethodSelectNotifier,
         YunoPlatform,
         YunoPaymentState,
         ParserIosConfig,
@@ -18,3 +17,6 @@ export 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart'
         YunoPaymentNotifier,
         PaymentMethodsParser,
         Parser;
+export 'platform_interface/utils/yuno_payment_method_select_notifier.dart';
+export 'platform_interface/utils/yuno_payment_select_notifier.dart';
+export 'platform_interface/features/show_payment_methods/yuno_payment_method_channel.dart' show YunoPaymentMethodChannelFactory;

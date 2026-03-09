@@ -1,3 +1,4 @@
+import 'package:example/core/feature/api_service/yuno_api_service.dart';
 import 'package:example/core/feature/utils/yuno_bottom_sheets.dart';
 import 'package:example/core/feature/credential/domain/entity/credential/credential.dart';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
@@ -119,6 +120,8 @@ class HomeScreen extends StatelessWidget {
                                     }
                                     ref.refresh(credentialsListNotifier.future);
                                     ref.refresh(credentialNotifier.future);
+                                    ref.invalidate(yunoApiServiceProvider);
+                                    ref.invalidate(accountIdProvider);
                                   },
                                   backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
@@ -142,6 +145,8 @@ class HomeScreen extends StatelessWidget {
                                       .setCurrentCredential(credential);
                                   ref.invalidate(credentialNotifier);
                                   ref.invalidate(yunoProvider);
+                                  ref.invalidate(yunoApiServiceProvider);
+                                  ref.invalidate(accountIdProvider);
                                   if (context.mounted) {
                                     Navigator.push(
                                       context,
@@ -198,6 +203,8 @@ class HomeScreen extends StatelessWidget {
                                     }
                                     ref.refresh(credentialsListNotifier.future);
                                     ref.refresh(credentialNotifier.future);
+                                    ref.invalidate(yunoApiServiceProvider);
+                                    ref.invalidate(accountIdProvider);
                                   }
                                 },
                                 title: Text(

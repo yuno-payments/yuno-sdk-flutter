@@ -93,6 +93,8 @@ class SecureStorage {
                 alias: json['alias'] ?? '',
                 apiKey: json['apiKey'] ?? '',
                 countryCode: json['countryCode'] ?? '',
+                privateSecretKey: json['privateSecretKey'] ?? '',
+                accountId: json['accountId'] ?? '',
               ))
           .toList();
     } catch (e) {
@@ -106,6 +108,8 @@ class SecureStorage {
               'alias': cred.alias,
               'apiKey': cred.apiKey,
               'countryCode': cred.countryCode,
+              'privateSecretKey': cred.privateSecretKey,
+              'accountId': cred.accountId,
             })
         .toList();
     await storage.setString('saved_credentials', jsonEncode(jsonList));
@@ -116,6 +120,9 @@ class SecureStorage {
     await write(key: Keys.alias.name, value: credential.alias);
     await write(key: Keys.apiKey.name, value: credential.apiKey);
     await write(key: Keys.countryCode.name, value: credential.countryCode);
+    await write(
+        key: Keys.privateSecretKey.name, value: credential.privateSecretKey);
+    await write(key: Keys.accountId.name, value: credential.accountId);
   }
 }
 
@@ -130,10 +137,18 @@ final credentialNotifier = FutureProvider<Credential>(
           key: Keys.alias.name,
         );
 
+    final privateSecretKey = await ref
+        .watch(providerStorage)
+        .read(key: Keys.privateSecretKey.name);
+    final accountId =
+        await ref.watch(providerStorage).read(key: Keys.accountId.name);
+
     return Credential(
       apiKey: apiKey,
       countryCode: countryCode,
       alias: alias,
+      privateSecretKey: privateSecretKey,
+      accountId: accountId,
     );
   },
 );
@@ -152,23 +167,6 @@ final keepLoaderNotifier = FutureProvider<bool>(
   },
 );
 
-final dynamicSDKNotifier = FutureProvider<bool>(
-  (ref) async {
-    final isDynamic = await ref
-        .watch(providerStorage)
-        .getBool(key: Keys.isDynamicViewEnable.name);
-    return isDynamic;
-  },
-);
-
-final cardFormDeployedNotifier = FutureProvider<bool>(
-  (ref) async {
-    final cardFormDeployed = await ref
-        .watch(providerStorage)
-        .getBool(key: Keys.cardFormDeployed.name);
-    return cardFormDeployed;
-  },
-);
 
 final saveCardNotifier = FutureProvider<bool>(
   (ref) async {
@@ -230,15 +228,6 @@ final appearanceNotifier = FutureProvider<Appearance>(
   },
 );
 
-final cardFlowNotifier = FutureProvider<CardFlow>(
-  (ref) async {
-    final cardFlow =
-        await ref.watch(providerStorage).read(key: Keys.cardFlow.name);
-    return Converter.fromJson(
-        cardFlow.isEmpty ? CardFlow.oneStep.name : cardFlow);
-  },
-);
-
 final langNotifier = FutureProvider<YunoLanguage?>(
   (ref) async {
     return await ref.watch(providerStorage).getLang(key: Keys.language.name);
@@ -250,6 +239,30 @@ final showPaymentStatusProvider = FutureProvider<bool>(
     return await ref
         .watch(providerStorage)
         .getBool(key: Keys.showPaymentStatus.name);
+  },
+);
+
+final automaticPaymentProvider = FutureProvider<bool>(
+  (ref) async {
+    final isAutomatic = await ref
+        .watch(providerStorage)
+        .getBool(key: Keys.automaticPayment.name);
+    return isAutomatic;
+  },
+);
+
+final paymentAmountProvider = FutureProvider<num>(
+  (ref) async {
+    final value = await ref.watch(providerStorage).read(key: Keys.paymentAmount.name);
+    if (value.isEmpty) return 10000;
+    return num.tryParse(value) ?? 10000;
+  },
+);
+
+final paymentCurrencyProvider = FutureProvider<String>(
+  (ref) async {
+    final value = await ref.watch(providerStorage).read(key: Keys.paymentCurrency.name);
+    return value.isEmpty ? 'COP' : value;
   },
 );
 
@@ -269,15 +282,3 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError();
 });
 
-extension Converter on Never {
-  static CardFlow fromJson(String value) {
-    switch (value) {
-      case 'oneStep':
-        return CardFlow.oneStep;
-      case 'multiStep':
-        return CardFlow.multiStep;
-      default:
-        return CardFlow.oneStep;
-    }
-  }
-}

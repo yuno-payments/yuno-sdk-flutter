@@ -14,10 +14,8 @@ import '../internals.dart';
 ///   countryCode: 'your_country_code',
 ///   yunoConfig: YunoConfig(
 ///     lang: YunoLanguage.en,
-///     cardflow: CardFlow.multiStep,
 ///     saveCardEnable: true,
 ///     keepLoader: true,
-///     isDynamicViewEnable: true,
 ///   ),
 ///   iosConfig: IosConfig(), // Optional, can use default value
 /// );
@@ -36,7 +34,6 @@ abstract interface class Yuno {
   ///
   /// ### Optional Parameters:
   /// - `lang`: The language for the SDK's user interface. Defaults to `YunoLanguage.en` (English).
-  /// - `CardFlow`: The card flow configuration for the payment process. Defaults to `CARDFLOW.oneStep`.
   /// - `saveCardEnable`: A boolean flag indicating whether the option to save card details is enabled. Defaults to `false`.
   /// - `keepLoader`: A boolean flag indicating whether to keep the loader visible during SDK operations. Defaults to `false`.
   /// - `iosConfig`: The configuration for iOS, allowing customization of the SDK's behavior on iOS devices. Defaults to `IosConfig()`.
@@ -49,7 +46,6 @@ abstract interface class Yuno {
   ///   countryCode: 'your_country_code',
   ///   yunoConfig: YunoConfig(
   ///     lang: YunoLanguage.en,
-  ///     cardflow: CardFlow.multiStep,
   ///     saveCardEnable: true,
   ///     keepLoader: true,
   ///   ),

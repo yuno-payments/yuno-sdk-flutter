@@ -52,7 +52,6 @@ class ShowBottomDialog {
                     ],
                   ),
                 ),
-                const Spacer(),
               ],
             ),
           ),

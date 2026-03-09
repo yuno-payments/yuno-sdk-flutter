@@ -1,4 +1,0 @@
-enum CardFlow {
-  oneStep,
-  multiStep,
-}

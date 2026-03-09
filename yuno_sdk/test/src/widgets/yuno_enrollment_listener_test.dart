@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:yuno/yuno.dart';
-import 'package:yuno_sdk_platform_interface/yuno_sdk_platform_interface.dart';
+import 'package:yuno/src/platform_interface/src.dart';
 import '../utils/mock_yuno_platform.dart';
 
 class MockYunoEnrollmentNotifier extends Mock
