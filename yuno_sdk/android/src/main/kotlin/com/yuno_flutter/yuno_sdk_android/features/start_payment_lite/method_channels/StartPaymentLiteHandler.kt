@@ -1,6 +1,8 @@
 package com.yuno_flutter.yuno_sdk_android.features.start_payment_lite.method_channels
 import android.content.Context
 import com.yuno.sdk.payments.startPaymentLite
+import com.yuno.sdk.Yuno
+import com.yuno.sdk.YunoPlatform
 import com.yuno.sdk.payments.updateCheckoutSession
 import com.yuno.presentation.core.components.PaymentSelected
 import com.yuno_flutter.yuno_sdk_android.core.config.PaymentConfig
@@ -23,6 +25,7 @@ class StartPaymentLiteHandler {
                     checkoutSession = model.checkoutSession,
                     countryCode = model.countryCode
                 )
+                Yuno.setPlatform(YunoPlatform.FLUTTER)
                 activity.startPaymentLite(
                     paymentSelected = PaymentSelected(
                         paymentMethodType = model.paymentMethodSelected.paymentMethodType,
