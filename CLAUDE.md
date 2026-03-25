@@ -2,7 +2,7 @@
 
 ## What is this repo?
 
-Monorepo del **Yuno Flutter SDK** (`yuno` en pub.dev). Permite integrar pagos nativos (Android/iOS) en apps Flutter. Wrappea los SDKs nativos de Yuno (Android SDK 2.11.0, iOS SDK 2.12.0).
+Monorepo del **Yuno Flutter SDK** (`yuno` en pub.dev). Permite integrar pagos nativos (Android/iOS) en apps Flutter. Wrappea los SDKs nativos de Yuno (Android SDK 2.12.0, iOS SDK 2.13.1).
 
 ## Estructura del repo
 

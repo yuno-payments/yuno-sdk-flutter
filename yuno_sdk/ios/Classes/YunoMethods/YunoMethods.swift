@@ -166,6 +166,7 @@ extension YunoMethods {
                 // The SDK native layer needs these values to be set before startPayment
                 // They should be set when YunoPaymentMethods widget calls getPaymentMethodViewAsync
                 // If they're not set, the SDK will fail when trying to get payment methods
+                Yuno.setPlatform(.flutter)
                 Yuno.startPayment(
                     showPaymentStatus: startPayment.showPaymentStatus
                 )
@@ -202,6 +203,7 @@ extension YunoMethods {
                     return
                 }
                  NSLog("YUNO iOS -> Starting Payment FULL with language: %@", self.language ?? "nil")
+                Yuno.setPlatform(.flutter)
                 Yuno.startPaymentLite(
                     with: self,
                     paymentSelected: startPayment.paymentMethodSelected,

@@ -2,6 +2,8 @@ package com.yuno_flutter.yuno_sdk_android.features.seamless.method_channel
 
 import android.content.Context
 import com.yuno.sdk.payments.startPaymentSeamlessLite
+import com.yuno.sdk.Yuno
+import com.yuno.sdk.YunoPlatform
 import com.yuno.sdk.payments.updateCheckoutSession
 import com.yuno.presentation.core.components.PaymentSelected
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
@@ -21,6 +23,7 @@ class SeamlessHandler {
                     checkoutSession = model.checkoutSession,
                     countryCode = model.countryCode
                 )
+                Yuno.setPlatform(YunoPlatform.FLUTTER)
                 activity.startPaymentSeamlessLite(
                     paymentSelected = PaymentSelected(
                         paymentMethodType = model.paymentMethodSelected.paymentMethodType,
