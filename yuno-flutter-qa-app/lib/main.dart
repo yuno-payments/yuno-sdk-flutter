@@ -167,6 +167,10 @@ class _MainAppState extends ConsumerState<MainApp> {
             Locale('id'),
             Locale('th'),
             Locale('ms'),
+            Locale('hi'),
+            Locale('bn'),
+            Locale('ml'),
+            Locale('ur'),
           ],
         );
       },
