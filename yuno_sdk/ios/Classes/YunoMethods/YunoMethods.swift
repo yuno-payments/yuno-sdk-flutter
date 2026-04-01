@@ -17,9 +17,12 @@ class YunoMethods: YunoPaymentFullDelegate {
     var language: String?
     let methodChannel: FlutterMethodChannel
     private var paymentMethodsViewChannel: FlutterMethodChannel?
-    private lazy var window: UIWindow? = {
-        return UIApplication.shared.windows.first { $0.isKeyWindow }
-    }()
+    private var window: UIWindow? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }
+    }
     var viewController: UIViewController? {
         window?.rootViewController
     }
