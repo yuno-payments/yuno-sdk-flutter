@@ -1,3 +1,8 @@
+## 1.0.9
+- feat: update native Android SDK to 2.13.0
+- feat: update native iOS SDK to 2.14.1
+- feat: add language support for Hindi, Bengali, Malayalam, and Urdu
+
 ## 1.0.5
 - fix: Button colors appearing as clear/transparent when not explicitly configured
 - fix: Update yuno_sdk_platform_interface to ^0.7.2

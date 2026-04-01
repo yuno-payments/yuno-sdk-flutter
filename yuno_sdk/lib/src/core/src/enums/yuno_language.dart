@@ -47,7 +47,19 @@ enum YunoLanguage {
   th('TH'),
 
   /// Arabic language.
-  ar('AR');
+  ar('AR'),
+
+  /// Hindi language.
+  hi('HI'),
+
+  /// Bengali language.
+  bn('BN'),
+
+  /// Malayalam language.
+  ml('ML'),
+
+  /// Urdu language.
+  ur('UR');
 
   /// The raw value of the language code.
   final String rawValue;

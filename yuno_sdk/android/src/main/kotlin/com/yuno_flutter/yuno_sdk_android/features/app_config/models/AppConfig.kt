@@ -63,6 +63,10 @@ val languageMap = mapOf(
     "ID" to YunoLanguage.INDONESIAN,
     "MS" to YunoLanguage.MALAYSIAN,
     "AR" to YunoLanguage.ARABIC,
+    "HI" to YunoLanguage.HINDI,
+    "BN" to YunoLanguage.BENGALI,
+    "ML" to YunoLanguage.MALAYALAM,
+    "UR" to YunoLanguage.URDU,
 )
 
 
