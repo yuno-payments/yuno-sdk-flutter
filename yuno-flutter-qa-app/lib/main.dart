@@ -118,8 +118,23 @@ class _MainAppState extends ConsumerState<MainApp> {
             locale = const Locale('ms');
             textDirection = TextDirection.ltr;
             break;
+          case YunoLanguage.hi:
+            locale = const Locale('hi');
+            textDirection = TextDirection.ltr;
+            break;
+          case YunoLanguage.bn:
+            locale = const Locale('bn');
+            textDirection = TextDirection.ltr;
+            break;
+          case YunoLanguage.ml:
+            locale = const Locale('ml');
+            textDirection = TextDirection.ltr;
+            break;
+          case YunoLanguage.ur:
+            locale = const Locale('ur');
+            textDirection = TextDirection.rtl;
+            break;
           case YunoLanguage.en:
-          default:
             locale = const Locale('en');
             textDirection = TextDirection.ltr;
             break;
