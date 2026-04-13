@@ -27,6 +27,9 @@ final yunoProvider = FutureProvider<void>((ref) async {
       iosConfig: IosConfig(
         appearance: appearance,
       ),
+      androidConfig: AndroidConfig(
+        appearance: appearance,
+      ),
     );
   } catch (e) {
     throw Exception();

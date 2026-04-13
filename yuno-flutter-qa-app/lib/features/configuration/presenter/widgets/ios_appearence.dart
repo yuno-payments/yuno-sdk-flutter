@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:example/core/feature/bootstrap/bootstrap.dart';
 import 'package:example/core/feature/utils/yuno_bottom_sheets.dart';
 import 'package:example/core/helpers/secure_storage_helper.dart';
@@ -12,8 +11,7 @@ class IOSAppearence extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Platform.isIOS
-        ? Column(
+    return Column(
             children: [
               const SizedBox(
                 height: 30,
@@ -63,7 +61,6 @@ class IOSAppearence extends ConsumerWidget {
                 ),
               ),
             ],
-          )
-        : const SizedBox.shrink();
+          );
   }
 }

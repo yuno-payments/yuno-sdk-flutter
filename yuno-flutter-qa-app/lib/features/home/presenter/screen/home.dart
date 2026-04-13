@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:example/core/feature/api_service/yuno_api_service.dart';
 import 'package:example/core/feature/utils/yuno_bottom_sheets.dart';
 import 'package:example/core/feature/credential/domain/entity/credential/credential.dart';
@@ -430,7 +431,7 @@ class _FontListNameState extends ConsumerState<FontListName> {
   }
 }
 
-List<String> fontNames = [
+List<String> fontNamesIOS = [
   "Academy Engraved LET",
   "Al Nile",
   "American Typewriter",
@@ -508,3 +509,15 @@ List<String> fontNames = [
   "Zapf Dingbats",
   "Zapfino"
 ];
+
+List<String> fontNamesAndroid = [
+  "roboto",
+  "montserrat",
+  "lato",
+  "opensans",
+  "poppins",
+  "dancingscript",
+];
+
+List<String> get fontNames =>
+    Platform.isIOS ? fontNamesIOS : fontNamesAndroid;

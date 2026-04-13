@@ -5,6 +5,7 @@ import com.yuno.sdk.YunoLanguage
 data class AppConfigModel(
     val apiKey: String,
     val yunoConfiguration: YunoConfiguration,
+    val appearance: AppearanceModel? = null,
 )
 
 data class YunoConfiguration(
@@ -13,9 +14,22 @@ data class YunoConfiguration(
     val keepLoader: Boolean,
 )
 
+data class AppearanceModel(
+    val fontFamily: String? = null,
+    val accentColor: Int? = null,
+    val buttonBackgroundColor: Int? = null,
+    val buttonTitleColor: Int? = null,
+    val buttonBorderColor: Int? = null,
+    val secondaryButtonBackgroundColor: Int? = null,
+    val secondaryButtonTitleColor: Int? = null,
+    val secondaryButtonBorderColor: Int? = null,
+    val disableButtonBackgroundColor: Int? = null,
+    val disableButtonTitleColor: Int? = null,
+    val checkboxColor: Int? = null,
+)
+
 fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
     return try {
-        // Extracting and casting values
         val apiKey = this["apiKey"] as? String
             ?: return Result.failure(IllegalArgumentException("Missing or invalid apiKey"))
 
@@ -44,10 +58,29 @@ fun Map<String, Any>.toApiConfig(): Result<AppConfigModel> {
             keepLoader = keepLoader,
         )
 
+        val configurationMap = this["configuration"] as? Map<*, *>
+        val appearanceMap = configurationMap?.get("appearance") as? Map<*, *>
+        val appearance = appearanceMap?.let {
+            AppearanceModel(
+                fontFamily = it["fontFamily"] as? String,
+                accentColor = it["accentColor"] as? Int,
+                buttonBackgroundColor = it["buttonBackgrounColor"] as? Int,
+                buttonTitleColor = it["buttonTitleBackgrounColor"] as? Int,
+                buttonBorderColor = it["buttonBorderBackgrounColor"] as? Int,
+                secondaryButtonBackgroundColor = it["secondaryButtonBackgrounColor"] as? Int,
+                secondaryButtonTitleColor = it["secondaryButtonTitleBackgrounColor"] as? Int,
+                secondaryButtonBorderColor = it["secondaryButtonBorderBackgrounColor"] as? Int,
+                disableButtonBackgroundColor = it["disableButtonBackgrounColor"] as? Int,
+                disableButtonTitleColor = it["disableButtonTitleBackgrounColor"] as? Int,
+                checkboxColor = it["checkboxColor"] as? Int,
+            )
+        }
+
         Result.success(
             AppConfigModel(
                 apiKey = apiKey,
                 yunoConfiguration = yunoConfiguration,
+                appearance = appearance,
             )
         )
 

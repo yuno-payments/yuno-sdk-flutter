@@ -82,6 +82,19 @@ extension ParserAppearance on Appearance {
   }
 }
 
+extension ParserAndroidConfig on AndroidConfig {
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{};
+    if (appearance != null) {
+      final appearanceMap = appearance!.toMap();
+      if (appearanceMap.isNotEmpty) {
+        map['appearance'] = appearanceMap;
+      }
+    }
+    return map;
+  }
+}
+
 extension Parser on Never {
   static Map<String, dynamic> toMap({
     required String apiKey,
