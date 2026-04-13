@@ -1,3 +1,9 @@
+## 1.0.12
+- feat: update native Android SDK to 2.13.4
+- feat: add cross-platform appearance support via `YunoConfig.appearance`
+- feat: Android font resolution normalizes font names automatically (e.g. "Dancing Script" resolves to "dancingscript" resource)
+- feat: platform-specific configs (`IosConfig.appearance` / `AndroidConfig.appearance`) take priority over shared `YunoConfig.appearance`
+
 ## 1.0.9
 - feat: update native Android SDK to 2.13.0
 - feat: update native iOS SDK to 2.14.1

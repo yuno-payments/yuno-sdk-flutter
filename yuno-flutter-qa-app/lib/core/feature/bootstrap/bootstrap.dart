@@ -23,11 +23,6 @@ final yunoProvider = FutureProvider<void>((ref) async {
         lang: lang ?? YunoLanguage.en,
         keepLoader: keepLoader,
         saveCardEnable: saveCard,
-      ),
-      iosConfig: IosConfig(
-        appearance: appearance,
-      ),
-      androidConfig: AndroidConfig(
         appearance: appearance,
       ),
     );

@@ -131,19 +131,27 @@ final class YunoMethodChannel implements YunoPlatform {
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
-    final Map<String, dynamic>? platformConfig;
+    // Platform-specific appearance takes priority over shared YunoConfig.appearance.
+    final Appearance? appearance;
     if (_platformIsIos) {
-      platformConfig = iosConfig?.toMap();
+      appearance = iosConfig?.appearance ?? yunoConfig.appearance;
     } else if (_platformIsAndroid) {
-      platformConfig = androidConfig?.toMap();
+      appearance = androidConfig?.appearance ?? yunoConfig.appearance;
     } else {
-      platformConfig = null;
+      appearance = yunoConfig.appearance;
+    }
+    Map<String, dynamic>? configuration;
+    if (appearance != null) {
+      final appearanceMap = appearance.toMap();
+      if (appearanceMap.isNotEmpty) {
+        configuration = {'appearance': appearanceMap};
+      }
     }
     final mapper = Parser.toMap(
       apiKey: apiKey,
       countryCode: countryCode,
       yunoConfig: yunoConfig,
-      configuration: platformConfig,
+      configuration: configuration,
     );
     YunoSharedSingleton.setValue(KeysSingleton.countryCode.name, countryCode);
     await _methodChannel.invokeMethod('initialize', mapper);

@@ -432,6 +432,7 @@ class _FontListNameState extends ConsumerState<FontListName> {
 }
 
 List<String> fontNamesIOS = [
+  "Dancing Script",
   "Academy Engraved LET",
   "Al Nile",
   "American Typewriter",

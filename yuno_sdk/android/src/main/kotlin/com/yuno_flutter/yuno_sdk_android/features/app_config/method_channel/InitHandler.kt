@@ -66,9 +66,18 @@ class InitHandler {
     }
 
     private fun resolveFontFamily(context: Context, fontName: String): FontFamily? {
-        val fontResId = context.resources.getIdentifier(fontName, "font", context.packageName)
+        // Try the name as-is first (e.g. "dancingscript")
+        var fontResId = context.resources.getIdentifier(fontName, "font", context.packageName)
         if (fontResId != 0) {
             return FontFamily(Font(fontResId, FontWeight.Normal))
+        }
+        // Normalize: lowercase + remove spaces (e.g. "Dancing Script" -> "dancingscript")
+        val normalized = fontName.lowercase().replace(" ", "")
+        if (normalized != fontName) {
+            fontResId = context.resources.getIdentifier(normalized, "font", context.packageName)
+            if (fontResId != 0) {
+                return FontFamily(Font(fontResId, FontWeight.Normal))
+            }
         }
         return null
     }
