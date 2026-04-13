@@ -96,6 +96,13 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>DancingScript-Regular.ttf</string>
+		<string>DancingScript-Medium.ttf</string>
+		<string>DancingScript-SemiBold.ttf</string>
+		<string>DancingScript-Bold.ttf</string>
+	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 </dict>
