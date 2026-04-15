@@ -57,6 +57,7 @@ abstract interface class Yuno {
     required String countryCode,
     YunoConfig yunoConfig = const YunoConfig(),
     IosConfig iosConfig = const IosConfig(),
+    AndroidConfig androidConfig = const AndroidConfig(),
   }) async {
     _YunoChannels.setValues(countryCode, yunoConfig.lang);
     const yuno = _YunoChannels();
@@ -66,7 +67,7 @@ abstract interface class Yuno {
       countryCode: countryCode,
       yunoConfig: yunoConfig,
       iosConfig: iosConfig,
-      androidConfig: const AndroidConfig(),
+      androidConfig: androidConfig,
     );
   }
 

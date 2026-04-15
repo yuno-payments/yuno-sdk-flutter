@@ -131,20 +131,27 @@ final class YunoMethodChannel implements YunoPlatform {
     IosConfig? iosConfig,
     AndroidConfig? androidConfig,
   }) async {
-    /// Initializes the native side of the Yuno SDK.
-    ///
-    /// Parameters:
-    /// - [apiKey]: The Yuno API key.
-    /// - [countryCode]: The ISO code of the country in which the payment occurs.
-    /// - [yunoConfig]: Configuration object for the Yuno SDK.
-    /// - [iosConfig] and [androidConfig]: Platform-specific configurations.
-    ///
-    /// This method sends a map of parameters to the native side to establish initial state.
+    // Platform-specific appearance takes priority over shared YunoConfig.appearance.
+    final Appearance? appearance;
+    if (_platformIsIos) {
+      appearance = iosConfig?.appearance ?? yunoConfig.appearance;
+    } else if (_platformIsAndroid) {
+      appearance = androidConfig?.appearance ?? yunoConfig.appearance;
+    } else {
+      appearance = yunoConfig.appearance;
+    }
+    Map<String, dynamic>? configuration;
+    if (appearance != null) {
+      final appearanceMap = appearance.toMap();
+      if (appearanceMap.isNotEmpty) {
+        configuration = {'appearance': appearanceMap};
+      }
+    }
     final mapper = Parser.toMap(
       apiKey: apiKey,
       countryCode: countryCode,
       yunoConfig: yunoConfig,
-      configuration: iosConfig?.toMap(),
+      configuration: configuration,
     );
     YunoSharedSingleton.setValue(KeysSingleton.countryCode.name, countryCode);
     await _methodChannel.invokeMethod('initialize', mapper);
