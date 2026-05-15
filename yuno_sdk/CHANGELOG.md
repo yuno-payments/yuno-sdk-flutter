@@ -1,3 +1,7 @@
+## 1.0.13
+- feat: update native Android SDK to 2.15.0
+- feat: update native iOS SDK to 2.16.0
+
 ## 1.0.12
 - feat: update native Android SDK to 2.13.4
 - feat: add cross-platform appearance support via `YunoConfig.appearance`
