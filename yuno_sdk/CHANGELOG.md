@@ -1,3 +1,6 @@
+## 1.0.14
+- fix: update native Android SDK to 2.15.1
+
 ## 1.0.13
 - feat: update native Android SDK to 2.15.0
 - feat: update native iOS SDK to 2.16.0
