@@ -109,7 +109,8 @@ If you continue to have trouble, follow this discussion to get some support """,
                     call = call,
                     result = result,
                     context = context,
-                    activity = activity
+                    activity = activity,
+                    onState = this::onPaymentStateChange,
                 )
             }
             Key.enrollmentPayment -> {
