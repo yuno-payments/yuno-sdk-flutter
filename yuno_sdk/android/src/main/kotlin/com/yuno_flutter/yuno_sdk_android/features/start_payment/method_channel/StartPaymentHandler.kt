@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
 class StartPaymentHandler {
-    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity){
+    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity, onOtt: (String?) -> Unit){
         try {
             val argument = call.arguments<Map<String, Any>>()
             val model = argument?.toStartPayment()
@@ -21,7 +21,8 @@ class StartPaymentHandler {
             // Save the showPaymentStatus for potential deeplink handling
             PaymentConfig.setShowPaymentStatus(showPaymentStatus)
             Yuno.setPlatform(YunoPlatform.FLUTTER)
-            activity.startPayment(showPaymentStatus = showPaymentStatus)
+            // Re-register the OTT callback per payment: Yuno.init() clears it via clearPaymentFlowCallbacks() (native SDK >= 2.14.0)
+            activity.startPayment(showPaymentStatus = showPaymentStatus, callbackOTT = onOtt)
         } catch (e: Exception) {
             return result.error("SOMETHING_WENT_WRONG", "Failure", e.message)
         }
