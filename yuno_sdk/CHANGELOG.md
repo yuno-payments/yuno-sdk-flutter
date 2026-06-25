@@ -1,7 +1,7 @@
 ## 1.0.15
 
-- fix: Android one-time token (OTT) was not returned to the app after `startPayment`/`startPaymentLite` when running on native Android SDK 2.15.0 or newer
-- fix: Android payment status was not delivered after `continuePayment` when running on native Android SDK 2.15.0 or newer
+- fix: Android one-time token (OTT) and payment status were not delivered to the app when running on native Android SDK 2.15.0 or newer
+- feat: update native Android SDK to 2.17.1 and iOS SDK to 2.18.0
 
 ## 1.0.14
 
