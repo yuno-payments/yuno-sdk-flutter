@@ -88,9 +88,7 @@ If you continue to have trouble, follow this discussion to get some support """,
                 init.handler(
                     call = call,
                     result = result,
-                    context = context,
-                    activity = activity,
-                    onOtt = this::onTokenUpdated,
+                    context = context, activity,
                 )
             }
             Key.startPaymentLite -> {
@@ -99,8 +97,7 @@ If you continue to have trouble, follow this discussion to get some support """,
                         call = call,
                         result = result,
                         context = context,
-                        activity = activity,
-                        onOtt = this::onTokenUpdated,
+                        activity = activity
                     )
             }
             Key.continuePayment -> {
@@ -109,8 +106,7 @@ If you continue to have trouble, follow this discussion to get some support """,
                     call = call,
                     result = result,
                     context = context,
-                    activity = activity,
-                    onState = this::onPaymentStateChange,
+                    activity = activity
                 )
             }
             Key.enrollmentPayment -> {

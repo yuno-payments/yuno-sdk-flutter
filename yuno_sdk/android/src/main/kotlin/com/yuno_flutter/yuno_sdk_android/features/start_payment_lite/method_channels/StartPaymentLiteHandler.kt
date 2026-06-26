@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 
 class StartPaymentLiteHandler {
-    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity, onOtt: (String?) -> Unit){
+    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity){
         try {
             val argument = call.arguments<Map<String, Any>>()
             val either = argument?.toStartPaymentLite()
@@ -26,14 +26,12 @@ class StartPaymentLiteHandler {
                     countryCode = model.countryCode
                 )
                 Yuno.setPlatform(YunoPlatform.FLUTTER)
-                // Re-register the OTT callback per payment: Yuno.init() clears it via clearPaymentFlowCallbacks() (native SDK >= 2.14.0)
                 activity.startPaymentLite(
                     paymentSelected = PaymentSelected(
                         paymentMethodType = model.paymentMethodSelected.paymentMethodType,
                         vaultedToken = model.paymentMethodSelected.vaultedToken,
                     ),
-                    showPaymentStatus = model.showPaymentStatus,
-                    callbackOTT = onOtt,
+                    showPaymentStatus = model.showPaymentStatus
                 )
             }?.onFailure { exception ->  return result.error(
                 "5",
