@@ -13,18 +13,17 @@ class ContinuePaymentHandler {
         private const val TAG = "ContinuePaymentHandler"
     }
     
-    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity, onState: (String?, String?) -> Unit){
+    fun handler(call: MethodCall, result: Result, context: Context, activity: FlutterFragmentActivity){
        try {
            val showPaymentStatus = call.arguments<Boolean>() ?: true
-
+           
            // Get current saved value before updating
            val previousShowPaymentStatus = PaymentConfig.getShowPaymentStatus()
-
+           
            // Save the showPaymentStatus value in memory for later use in deeplink handling
            PaymentConfig.setShowPaymentStatus(showPaymentStatus)
-
-           // Re-register the payment-state callback per call: Yuno.init() clears it via clearPaymentFlowCallbacks() (native SDK >= 2.14.0)
-           activity.continuePayment(showPaymentStatus = showPaymentStatus, callbackPaymentState = onState)
+           
+           activity.continuePayment(showPaymentStatus = showPaymentStatus)
        } catch (e:Exception){
            result.error("4",e.message ?: "Unexpected Error",e.cause)
        }
