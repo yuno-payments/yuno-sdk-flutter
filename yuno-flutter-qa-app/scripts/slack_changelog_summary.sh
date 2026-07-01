@@ -47,14 +47,17 @@ CHANGELOG_SUMMARY=$(cat "$SUMMARY_FILE")
 print_message $GREEN "📝 Changelog summary generated successfully"
 SLACK_SUMMARY=$(echo "$CHANGELOG_SUMMARY" | sed 's/\*\*/*/g')
 
-SLACK_CHANNEL="new-releases-product"
+SLACK_CHANNELS=("new-releases-product" "r5_yuno")
 MESSAGE="New Flutter SDK version released: $VERSION_BITRISE"
 
 ESCAPED_SUMMARY=$(echo "$SLACK_SUMMARY" | sed 's/"/\\"/g; s/$/\\n/' | tr -d '\n')
 
-print_message $BLUE "📤 Sending changelog summary to Slack..."
+FAILED_CHANNELS=()
 
-SLACK_PAYLOAD=$(cat <<EOF
+for SLACK_CHANNEL in "${SLACK_CHANNELS[@]}"; do
+    print_message $BLUE "📤 Sending changelog summary to #$SLACK_CHANNEL..."
+
+    SLACK_PAYLOAD=$(cat <<EOF
 {
   "channel": "$SLACK_CHANNEL",
   "text": "$MESSAGE",
@@ -70,16 +73,22 @@ SLACK_PAYLOAD=$(cat <<EOF
 EOF
 )
 
-RESPONSE=$(curl -s -X POST https://slack.com/api/chat.postMessage \
-    -H "Authorization: Bearer $SLACK_BOTH_API_TOKEN" \
-    -H "Content-type: application/json" \
-    --data "$SLACK_PAYLOAD")
+    RESPONSE=$(curl -s -X POST https://slack.com/api/chat.postMessage \
+        -H "Authorization: Bearer $SLACK_BOTH_API_TOKEN" \
+        -H "Content-type: application/json" \
+        --data "$SLACK_PAYLOAD")
 
-if echo "$RESPONSE" | grep -q '"ok":true'; then
-    print_message $GREEN "✅ Changelog summary sent to Slack successfully!"
-else
-    print_message $RED "❌ Failed to send message to Slack"
-    print_message $YELLOW "Response: $RESPONSE"
+    if echo "$RESPONSE" | grep -q '"ok":true'; then
+        print_message $GREEN "✅ Changelog summary sent to #$SLACK_CHANNEL successfully!"
+    else
+        print_message $RED "❌ Failed to send message to #$SLACK_CHANNEL"
+        print_message $YELLOW "Response: $RESPONSE"
+        FAILED_CHANNELS+=("$SLACK_CHANNEL")
+    fi
+done
+
+if [ ${#FAILED_CHANNELS[@]} -ne 0 ]; then
+    print_message $RED "❌ Failed to send message to: ${FAILED_CHANNELS[*]}"
     exit 1
 fi
 
