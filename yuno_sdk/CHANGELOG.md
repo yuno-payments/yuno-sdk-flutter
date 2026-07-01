@@ -1,3 +1,8 @@
+## 1.0.17
+
+- feat: update native Android SDK to 2.17.3
+- docs: add public repository and issue tracker links to pub.dev page
+
 ## 1.0.16
 
 - feat: update native Android SDK to 2.17.2
