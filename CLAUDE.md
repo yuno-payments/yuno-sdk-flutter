@@ -72,8 +72,8 @@ This SDK **wraps** the native SDKs — pinning is manual and lags slightly.
 
 | Platform | Version pin | File |
 |---|---|---|
-| Android native | **2.13.4** | `yuno_sdk/android/build.gradle` (dep `"com.yuno.payments:android-sdk:2.13.4"`) |
-| iOS native | **2.14.1** | `yuno_sdk/ios/yuno.podspec` (`s.dependency 'YunoSDK', '2.14.1'`) |
+| Android native | **2.21.1** | `yuno_sdk/android/build.gradle` (dep `"com.yuno.payments:android-sdk:2.21.1"`) |
+| iOS native | **2.21.2** | `yuno_sdk/ios/yuno.podspec` (`s.dependency 'YunoSDK', '2.21.2'`) |
 
 Companion repos (local dev):
 - Android → `/Users/vlass/Documents/SDKS/yuno-android-sdk` (currently on `release/2.15.0`)
@@ -191,10 +191,10 @@ cd yuno_sdk && dart format . && flutter analyze
 | Bump iOS native | `yuno_sdk/ios/yuno.podspec` `s.dependency 'YunoSDK', 'X.Y.Z'` |
 | Publish | `cd yuno_sdk && flutter pub publish` |
 
-## Current versions (as of 2026-04-24)
+## Current versions (as of 2026-08-11)
 
-- **Flutter SDK (this package)**: 1.0.12
-- **Android native pinned**: 2.13.4
-- **iOS native pinned**: 2.14.1
+- **Flutter SDK (this package)**: 1.0.18
+- **Android native pinned**: 2.21.1
+- **iOS native pinned**: 2.21.2
 - **Dart**: `>=3.6.0 <4.0.0`
 - **Flutter**: `>=3.3.0`

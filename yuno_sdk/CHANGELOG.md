@@ -1,3 +1,8 @@
+## 1.0.18
+
+- feat: update native Android SDK to 2.21.1
+- feat: update native iOS SDK to 2.21.2
+
 ## 1.0.17
 
 - feat: update native Android SDK to 2.17.3
