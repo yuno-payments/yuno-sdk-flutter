@@ -1,3 +1,11 @@
+## 1.0.19
+
+- feat: update native Android SDK to 2.22.0
+- feat: update native iOS SDK to 2.23.1
+- feat: expose the native status message to merchants via `YunoPaymentState.message`
+  and `YunoEnrollmentState.message` (new `YunoStatusMessage` with `source`, `code`,
+  `reason`, `raw`, `context`)
+
 ## 1.0.18
 
 - feat: update native Android SDK to 2.21.1

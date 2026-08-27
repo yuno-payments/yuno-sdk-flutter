@@ -72,6 +72,14 @@ class __HomeLayoutState extends State<_HomeLayout> {
         builder: (context, ref, child) {
           return YunoMultiListener(
             enrollmentListener: (context, state) {
+              final message = state.message;
+              debugPrint(
+                'YUNO enrollment status=${state.enrollmentStatus} '
+                'substatus=${state.substatus} '
+                'message=${message == null ? 'null' : '(source: ${message.source}, '
+                    'code: ${message.code}, reason: ${message.reason}, '
+                    'context: ${message.context})'}',
+              );
               YunoSnackBar.showSnackBar(
                 context,
                 YunoSnackbarOptions.enrollment,
@@ -82,6 +90,17 @@ class __HomeLayoutState extends State<_HomeLayout> {
               );
             },
             paymentListener: (context, state) async {
+              final message = state.message;
+              // A token (OTT) event has status=null; a result event has token empty.
+              debugPrint(
+                'YUNO payment '
+                'token=${state.token.isEmpty ? 'null' : state.token} '
+                'status=${state.paymentStatus} '
+                'substatus=${state.substatus} '
+                'message=${message == null ? 'null' : '(source: ${message.source}, '
+                    'code: ${message.code}, reason: ${message.reason}, '
+                    'context: ${message.context})'}',
+              );
               ref
                   .read(checkoutSessionNotifier.notifier)
                   .recoverySession(state.token);

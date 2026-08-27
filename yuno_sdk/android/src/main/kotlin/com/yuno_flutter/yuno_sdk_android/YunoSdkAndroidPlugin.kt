@@ -12,8 +12,10 @@ import androidx.lifecycle.LifecycleOwner
 import com.yuno.sdk.Yuno
 import com.yuno.sdk.enrollment.initEnrollment
 import android.util.Log
+import com.yuno.payments.features.payment.models.StatusMessage
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusEnrollmentConverter
+import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusPayload
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import com.yuno_flutter.yuno_sdk_android.features.app_config.method_channel.InitHandler
 import com.yuno_flutter.yuno_sdk_android.features.continue_payment.method_channel.ContinuePaymentHandler
@@ -183,22 +185,24 @@ If you continue to have trouble, follow this discussion to get some support """,
         channel.invokeMethod(Key.ott, token)
     }
 
-    fun onEnrollmentStateChange(enrollmentState: String?) {
+    fun onEnrollmentStateChange(enrollmentState: String?, message: StatusMessage?) {
         val convertedStatus = enrollmentState?.statusEnrollmentConverter()
         Log.d(TAG, "onEnrollmentStateChange called")
         Log.d(TAG, "  - Raw enrollmentState: $enrollmentState")
         Log.d(TAG, "  - Converted status: $convertedStatus")
-        channel.invokeMethod(Key.enrollmentStatus, convertedStatus)
+        // The native enrollment callback does not expose a substate.
+        channel.invokeMethod(Key.enrollmentStatus, statusPayload(convertedStatus, null, message))
     }
-    
-    fun onPaymentStateChange(paymentState: String?, data: String?) {
+
+    fun onPaymentStateChange(paymentState: String?, data: String?, message: StatusMessage?) {
         val convertedStatus = paymentState?.statusConverter()
         Log.d(TAG, "=== onPaymentStateChange called (after continuePayment) ===")
         Log.d(TAG, "  - Raw paymentState: $paymentState")
         Log.d(TAG, "  - Data: $data")
         Log.d(TAG, "  - Converted status index: $convertedStatus")
         Log.d(TAG, "  - Sending status to Flutter via method channel")
-        channel.invokeMethod(Key.status, convertedStatus)
+        // `data` is the native PaymentSubStates value (substatus).
+        channel.invokeMethod(Key.status, statusPayload(convertedStatus, data, message))
         Log.d(TAG, "=== onPaymentStateChange completed ===")
     }
 

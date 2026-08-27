@@ -107,20 +107,49 @@ final class YunoMethodChannel implements YunoPlatform {
           _yunoNotifier.add(token);
           break;
         case 'status':
-          if (call.arguments is! int) return;
-          final index = call.arguments as int;
-          _yunoNotifier.addStatus(YunoStatus.values[index]);
+          final status = _parseStatus(call.arguments);
+          if (status == null) return;
+          _yunoNotifier.addStatus(status.$1, status.$2, status.$3);
           break;
         case 'enrollmentStatus':
-          if (call.arguments is! int) return;
-          final index = call.arguments as int;
-          _yunoEnrollmentNotifier.addEnrollmentStatus(YunoStatus.values[index]);
+          final status = _parseStatus(call.arguments);
+          if (status == null) return;
+          _yunoEnrollmentNotifier
+              .addEnrollmentStatus(status.$1, status.$2, status.$3);
           break;
         default:
           throw MissingPluginException(
               'Not implemented method: ${call.method}');
       }
     });
+  }
+
+  /// Parses a status callback payload coming from the native side.
+  ///
+  /// Native Android SDK `>= 2.22.0` and iOS SDK `>= 2.23.0` send a map with the
+  /// shape `{ 'status': int, 'message': Map? }`. Older payloads that carried a
+  /// bare status `int` are still supported for safety.
+  ///
+  /// Returns `null` when the payload cannot be interpreted, or when the status
+  /// index is out of range for [YunoStatus].
+  (YunoStatus, YunoStatusMessage?, String?)? _parseStatus(Object? arguments) {
+    int? index;
+    YunoStatusMessage? message;
+    String? substatus;
+    if (arguments is int) {
+      index = arguments;
+    } else if (arguments is Map) {
+      final rawStatus = arguments['status'];
+      if (rawStatus is int) index = rawStatus;
+      final rawMessage = arguments['message'];
+      if (rawMessage is Map) message = YunoStatusMessage.fromMap(rawMessage);
+      final rawSubstatus = arguments['substatus'];
+      if (rawSubstatus is String) substatus = rawSubstatus;
+    }
+    if (index == null || index < 0 || index >= YunoStatus.values.length) {
+      return null;
+    }
+    return (YunoStatus.values[index], message, substatus);
   }
 
   @override
