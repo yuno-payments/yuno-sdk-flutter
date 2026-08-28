@@ -7,6 +7,7 @@ import com.yuno.sdk.payments.continuePayment
 import com.yuno.sdk.payments.updateCheckoutSession
 import com.yuno_flutter.yuno_sdk_android.core.config.PaymentConfig
 import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusConverter
+import com.yuno_flutter.yuno_sdk_android.core.utils.extensions.statusPayload
 import com.yuno_flutter.yuno_sdk_android.core.utils.keys.Key
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugin.common.MethodCall
@@ -63,9 +64,9 @@ class ReceiveDeeplinkHandler {
                     showPaymentStatus = showPaymentStatus,
                     checkoutSession = checkoutSession,
                     countryCode = if (countryCode.isNotEmpty()) countryCode else null,
-                    callbackPaymentState = { paymentState, data ->
+                    callbackPaymentState = { paymentState, data, message ->
                         val convertedStatus = paymentState?.statusConverter()
-                        channel.invokeMethod(Key.status, convertedStatus)
+                        channel.invokeMethod(Key.status, statusPayload(convertedStatus, data, message))
                     }
                 )
                 result.success(null)

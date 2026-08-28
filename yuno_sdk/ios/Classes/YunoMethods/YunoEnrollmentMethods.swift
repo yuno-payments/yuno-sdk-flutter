@@ -9,7 +9,14 @@ import Flutter
 
 extension YunoMethods: YunoEnrollmentDelegate {
     func yunoEnrollmentResult(_ result: YunoSDK.Yuno.Result) {
-        methodChannel.invokeMethod(Keys.enrollmentStatus.rawValue, arguments: result.rawValue)
+        methodChannel.invokeMethod(
+            Keys.enrollmentStatus.rawValue,
+            arguments: statusArguments(
+                status: result.rawValue,
+                substatus: result.substatus,
+                message: result.message
+            )
+        )
     }
     func startEnrollment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
@@ -52,7 +59,14 @@ class YunoEnrollmentMethods: YunoEnrollmentDelegate {
         window?.rootViewController
     }
     func yunoEnrollmentResult(_ result: YunoSDK.Yuno.Result) {
-        methodChannel.invokeMethod(Keys.enrollmentStatus.rawValue, arguments: result.rawValue)
+        methodChannel.invokeMethod(
+            Keys.enrollmentStatus.rawValue,
+            arguments: statusArguments(
+                status: result.rawValue,
+                substatus: result.substatus,
+                message: result.message
+            )
+        )
     }
     func startEnrollment(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {

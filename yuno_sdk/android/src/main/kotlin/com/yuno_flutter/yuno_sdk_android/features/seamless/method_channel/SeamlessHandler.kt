@@ -30,7 +30,10 @@ class SeamlessHandler {
                         vaultedToken = model.paymentMethodSelected.vaultedToken,
                     ),
                     showPaymentStatus = model.showPaymentStatus,
-                    callbackPaymentState = { paymentState, _ ->
+                    // Seamless-lite returns the status synchronously as the method
+                    // result (Future<YunoStatus> on the Dart side). The StatusMessage
+                    // is ignored here to keep that contract non-breaking.
+                    callbackPaymentState = { paymentState, _, _ ->
                         result.success(paymentState?.statusConverter())
                     },
                 )
