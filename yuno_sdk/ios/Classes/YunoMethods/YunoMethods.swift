@@ -39,8 +39,12 @@ class YunoMethods: YunoPaymentFullDelegate {
     
     func yunoPaymentResult(_ result: YunoSDK.Yuno.Result) {
         NSLog("YUNO iOS Result -> selected=%@", "\(result.rawValue)")
-        
-        handleStatus(status: result.rawValue)
+
+        handleStatus(
+            status: result.rawValue,
+            substatus: result.substatus,
+            message: result.message
+        )
     }
     private func initialize(app: AppConfiguration) {
         let appearance = app.configuration?.appearance
@@ -103,8 +107,11 @@ extension YunoMethods {
         checkoutSession = cs
     }
 
-    func handleStatus(status: Int) {
-        methodChannel.invokeMethod(Keys.status.rawValue, arguments: status)
+    func handleStatus(status: Int, substatus: String?, message: YunoSDK.Yuno.Result.Message?) {
+        methodChannel.invokeMethod(
+            Keys.status.rawValue,
+            arguments: statusArguments(status: status, substatus: substatus, message: message)
+        )
     }
     func handleReceiveDeeplink(call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? String,
@@ -234,4 +241,31 @@ extension YunoMethods {
             result(YunoError.somethingWentWrong())
         }
     }
+}
+
+extension YunoSDK.Yuno.Result.Message {
+    /// Serializes the native status message into the map shape expected by the
+    /// Flutter side (`YunoStatusMessage`). Optional fields are only included when
+    /// present so absent values arrive as `null` on Dart.
+    func toMap() -> [String: Any] {
+        var map: [String: Any] = ["source": source]
+        if let code = code { map["code"] = code }
+        if let reason = reason { map["reason"] = reason }
+        if let raw = raw { map["raw"] = raw }
+        if let context = context { map["context"] = context }
+        return map
+    }
+}
+
+/// Builds the `{ status, message }` payload delivered to Flutter for a payment or
+/// enrollment status change.
+func statusArguments(status: Int, substatus: String?, message: YunoSDK.Yuno.Result.Message?) -> [String: Any] {
+    var arguments: [String: Any] = [Keys.status.rawValue: status]
+    if let substatus = substatus {
+        arguments[Keys.substatus.rawValue] = substatus
+    }
+    if let message = message {
+        arguments[Keys.message.rawValue] = message.toMap()
+    }
+    return arguments
 }

@@ -7,6 +7,8 @@ object Key {
     const val continuePayment = "continuePayment"
     const val ott = "ott"
     const val status = "status"
+    const val substatus = "substatus"
+    const val message = "message"
     const val enrollmentStatus = "enrollmentStatus"
     const val onSelected = "onSelected"
     const val onHeightChange = "onHeightChange"
