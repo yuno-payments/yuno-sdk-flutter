@@ -89,10 +89,13 @@ Channel name: `"yuno/payments"`. Dart → native method keys (raw strings, must 
 
 This SDK **wraps** the native SDKs — pinning is manual and lags slightly.
 
-| Platform | Version pin | File |
-|---|---|---|
-| Android native | **2.22.0** | `yuno_sdk/android/build.gradle` (dep `"com.yuno.payments:android-sdk:2.22.0"`) |
-| iOS native | **2.23.1** | `yuno_sdk/ios/yuno.podspec` (`s.dependency 'YunoSDK', '2.23.1'`) |
+Pinned versions live only in these files; read them there rather than copying them into docs:
+
+| What | Source of truth |
+|---|---|
+| Android native | `yuno_sdk/android/build.gradle` (dependency `"com.yuno.payments:android-sdk:X.Y.Z"`) |
+| iOS native | `yuno_sdk/ios/yuno.podspec` (`s.dependency 'YunoSDK', 'X.Y.Z'`) |
+| This package | `yuno_sdk/pubspec.yaml` (`version:`) |
 
 Companion repos: the native Android SDK and the native iOS SDK (`yuno-payments` org). Clone them next to this repo when you need to debug native behaviour.
 
@@ -138,7 +141,7 @@ Every method channel method has 4 parallel implementations:
 
 - Follow [Effective Dart](https://dart.dev/effective-dart) (style, documentation, usage, design) and `package:flutter_lints/flutter.yaml` (`yuno_sdk/analysis_options.yaml`). Analyzer warnings fail CI.
 - Null safety on (Dart `>=3.6.0 <4.0.0`, Flutter `>=3.3.0`, per `yuno_sdk/pubspec.yaml`).
-- Every feature has: **handler + models + parsers + keys** as separate files.
+- New features must have **handler + models + parsers + keys** as separate files. Existing features do not all follow this yet: most method keys are still inlined (known debt, see "Code rules").
 - Platform-interface plugin: `plugin_platform_interface: ^2.1.8`.
 - `abstract interface class` for public abstractions (`Yuno`, `YunoPlatform`), `final class` for internals.
 - Public API is documented with dartdoc (`///`, `{@template}`); test-only accessors use `@visibleForTesting`.
@@ -174,12 +177,13 @@ dart format yuno_sdk/
 # Publish dry-run (pub.dev package checks)
 cd yuno_sdk && flutter pub publish --dry-run
 
-# Native Android unit tests (Gradle, from yuno_sdk/android)
-cd yuno_sdk/android && ./gradlew test
-
-# Example app: put a sandbox key in example/.env as YUNO_API_KEY (git-ignored), then
-cd example && flutter run --dart-define-from-file=.env
+# Example app (example/lib/environments.dart reads YUNO_API_KEY via String.fromEnvironment)
+cd example && flutter run --dart-define=YUNO_API_KEY=<sandbox key>
 ```
+
+Notes:
+- `example/.env` is **tracked** in git and holds only the placeholder `YUNO_API_KEY=your_api_key_here`. Never put a real key in it. If you prefer a file, use an untracked copy (for example `example/.env.local` with `--dart-define-from-file=.env.local`) and check `git status` before committing.
+- Native Android code has a single unit test (`yuno_sdk/android/src/test/kotlin/.../YunoSdkAndroidPluginTest.kt`). No Gradle wrapper script is committed in `yuno_sdk/android/` and CI does not run it; verify native changes through `example/` and `yuno-flutter-qa-app/` on a device.
 
 | File | Purpose |
 |---|---|
@@ -232,7 +236,7 @@ cd example && flutter run --dart-define-from-file=.env
 - **Channel-key drift**: adding a method on Dart side but forgetting Android/iOS → silent `MissingPluginException` at runtime. Always ship all 4 layers in the same PR.
 - **Android handler lifecycle**: `YunoSdkAndroidPlugin` implements `ActivityAware` + `DefaultLifecycleObserver` and requires a `FlutterFragmentActivity`. Handlers that launch activities need the attached Activity reference — don't call from `onAttachedToEngine` directly.
 - **iOS deeplinks**: must be routed via `Yuno.receiveDeeplink()` from the merchant's `AppDelegate` or the iOS payment flow hangs.
-- **Secrets**: never commit an API key. `example/.env` is git-ignored; the example reads it through `--dart-define-from-file`.
+- **Secrets**: never commit an API key. `example/.env` is tracked and must only ever hold the placeholder; pass real keys with `--dart-define` or an untracked file.
 
 ## Quick reference
 
@@ -248,10 +252,7 @@ cd example && flutter run --dart-define-from-file=.env
 | Bump iOS native | `yuno_sdk/ios/yuno.podspec` `s.dependency 'YunoSDK', 'X.Y.Z'` |
 | Publish | `cd yuno_sdk && flutter pub publish` |
 
-## Current versions (as of 2026-11-02)
+## Supported toolchain
 
-- **Flutter SDK (this package)**: 1.0.19
-- **Android native pinned**: 2.22.0
-- **iOS native pinned**: 2.23.1
-- **Dart**: `>=3.6.0 <4.0.0`
-- **Flutter**: `>=3.3.0`
+- **Dart / Flutter constraints**: `environment:` in `yuno_sdk/pubspec.yaml` (Dart `>=3.6.0 <4.0.0`, Flutter `>=3.3.0`).
+- **Package and native versions**: read the files listed in "Native sync"; do not copy them here.

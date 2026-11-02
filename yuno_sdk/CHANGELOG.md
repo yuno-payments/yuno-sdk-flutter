@@ -1,3 +1,7 @@
+## Unreleased
+
+- docs: add a contributor guide (`AGENTS.md`) covering how to build, test and change the SDK
+
 ## 1.0.19
 
 - feat: update native Android SDK to 2.22.0
