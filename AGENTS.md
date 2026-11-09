@@ -211,13 +211,13 @@ Notes:
 - **Main branch**: `master` — PRs merge here.
 - **PR template**: `.github/PULL_REQUEST_TEMPLATE.md` — Purpose, Description, Related Issue, Checklist, Additional Information, Screenshots, Types of Changes, Reviewers. Fill every section; write N/A where one does not apply.
 - **PRs are in English.**
-- **Changelog**: Danger (`Dangerfile`) fails the PR unless `yuno_sdk/CHANGELOG.md` is modified. Entries go under the new version as `- feat: <user-facing description>` or `- fix: <user-facing description>`. The file is public on pub.dev: no ticket IDs, internal names or implementation details.
+- **Changelog**: Danger (`Dangerfile`) fails the PR unless `yuno_sdk/CHANGELOG.md` is modified. Entries go under the new version as `- feat: <user-facing description>` or `- fix: <user-facing description>`. A change that does not affect merchants (for example documentation only) goes under a `## Unreleased` heading at the top as `- docs: <description>`; never invent a version for it. The file is public on pub.dev: no ticket IDs, internal names or implementation details.
 - **Commit style** (from recent history): plain-English descriptions, semver-aware. Example: `"feat(sdk): bump native SDKs (Android 2.22.0, iOS 2.23.1) and surface status detail"`.
 - **CI**: Bitrise (configured outside this repo). The PR workflow runs the Danger changelog check, `dart analyze`, a publish dry-run and the tests. `.github/` holds only `dependabot.yml` (weekly pub updates) and the PR template; there is no GitHub Actions workflow.
 - **Release**:
   1. Bump native versions (see "Native sync" above).
   2. Bump `yuno_sdk/pubspec.yaml` `version:`.
-  3. Update `yuno_sdk/CHANGELOG.md`.
+  3. Update `yuno_sdk/CHANGELOG.md`: rename `## Unreleased` (if present) to the new version and add the `feat:` / `fix:` entries.
   4. Release branch `release-v<x.y.z>`, PR to `master`, then tag `v<x.y.z>` and push.
   5. Publish to pub.dev (`cd yuno_sdk && flutter pub publish`; the Bitrise deploy workflow runs on the tag).
   6. Verify at https://pub.dev/packages/yuno.
